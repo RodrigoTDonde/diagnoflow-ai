@@ -59,6 +59,26 @@ O trabalho foi dividido em etapas:
 - revisao visual da interface com banners de mock;
 - checagem explicita de ausencia de integracao real com LLM.
 
+### Iteracao 5 - Versao Streamlit paralela
+
+- decisao de criar uma segunda interface sem substituir FastAPI + React;
+- reaproveitamento do conceito de equipamentos, ocorrencias, diagnosticos e relatorio tecnico;
+- implementacao de `streamlit_app.py` com `st.session_state` e dados mockados iniciais;
+- manutencao explicita da restricao: nenhum LLM real integrado nesta fase;
+- preparacao de documentacao especifica para entrega online simplificada.
+
+## Prompt atual para esta etapa
+
+O agente recebeu uma nova orientacao para criar uma versao Streamlit paralela do projeto, com as seguintes exigencias:
+
+- nao apagar, renomear ou substituir a versao full stack existente;
+- usar apenas diagnostico simulado/mockado;
+- criar `streamlit_app.py`;
+- criar `requirements-streamlit.txt`;
+- criar documentacao de apoio para a entrega online;
+- atualizar `README.md` e este arquivo com a justificativa da nova versao;
+- validar a app Streamlit e garantir ausencia de integracao com LLM real.
+
 ## Erros encontrados
 
 - `npm install` falhou inicialmente por indisponibilidade de cache/rede no ambiente restrito.
@@ -66,6 +86,10 @@ O trabalho foi dividido em etapas:
 - `npm run build` falhou com o erro `Property 'env' does not exist on type 'ImportMeta'`.
 - `pytest` falhou porque o banco nao era inicializado quando o `lifespan` da app nao era acionado no teste.
 - O build do frontend gerou arquivos derivados que nao deveriam permanecer versionados.
+
+## Nova decisao de arquitetura
+
+Foi adicionada uma versao Streamlit paralela para reduzir o risco de deploy da primeira entrega. A decisao nao substitui a arquitetura principal; ela cria uma trilha de entrega online mais simples, adequada ao prazo e ao criterio de endpoint publico.
 
 ## Correcao feita
 
@@ -103,6 +127,14 @@ npm install
 npm run build
 ```
 
+### Streamlit
+
+```powershell
+python -m py_compile streamlit_app.py
+pip install -r requirements-streamlit.txt
+git grep -n "<unicode-escapes>" -- README.md docs prompts streamlit_app.py frontend/src backend/app
+```
+
 ### Git
 
 ```powershell
@@ -120,6 +152,7 @@ O agente foi util para:
 
 - acelerar a construcao do projeto end-to-end;
 - manter consistencia entre frontend e backend;
+- criar uma segunda interface mais simples sem desmontar a versao principal;
 - documentar a futura integracao com IA sem ferir a restricao de nao usar LLM nesta fase;
 - identificar e corrigir problemas de validacao antes da entrega.
 

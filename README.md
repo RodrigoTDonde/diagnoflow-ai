@@ -23,6 +23,7 @@ A solucao entregue foi uma aplicacao com:
 - Interacoes de cadastro, listagem, historico e geracao de diagnostico mockado.
 - Avisos explicitos na interface e na API de que nao ha LLM integrado nesta etapa.
 - Suporte para publicacao em endpoint unico, com FastAPI servindo o build do frontend.
+- Versao paralela em Streamlit para entrega online simplificada.
 
 ## O que nao existe nesta fase
 
@@ -30,6 +31,33 @@ A solucao entregue foi uma aplicacao com:
 - Nenhuma inferencia real com modelo generativo.
 - Nenhuma autenticacao.
 - Nenhum deploy com Docker.
+
+## Versoes disponiveis
+
+O repositorio agora possui duas formas de entrega da mesma proposta:
+
+1. **Full stack FastAPI + React + SQLite**
+   - versao principal e mais completa;
+   - inclui API, frontend separado, testes e preparo para deploy publico.
+
+2. **Streamlit para entrega online simplificada**
+   - versao paralela em `streamlit_app.py`;
+   - usa `st.session_state` e dados mockados iniciais;
+   - reduz o risco de deploy para um endpoint publico unico na primeira entrega.
+
+## Por que Streamlit foi adicionado
+
+A versao Streamlit foi criada para reduzir risco operacional na publicacao online da primeira entrega. Em vez de depender da combinacao entre build React, API FastAPI e configuracao de deploy em producao, a banca pode acessar uma versao unica e simples com:
+
+- dashboard;
+- cadastro de equipamentos;
+- registro de ocorrencias;
+- diagnostico simulado;
+- historico;
+- relatorio tecnico;
+- pagina de futura integracao com IA.
+
+Essa decisao atende ao objetivo de colocar a entrega em um endpoint publico rapidamente, sem mudar o escopo funcional e sem integrar LLM real.
 
 ## Arquitetura
 
@@ -128,6 +156,15 @@ npm install
 npm run dev
 ```
 
+## Como rodar a versao Streamlit
+
+```powershell
+pip install -r requirements-streamlit.txt
+streamlit run streamlit_app.py
+```
+
+Essa versao nao substitui a full stack. Ela existe apenas como alternativa de publicacao online simplificada para a avaliacao intermediaria.
+
 ## Como rodar em modo producao local
 
 1. Gere o build do frontend:
@@ -216,6 +253,13 @@ cd frontend
 npm run build
 ```
 
+Streamlit:
+
+```powershell
+python -m py_compile streamlit_app.py
+pip install -r requirements-streamlit.txt
+```
+
 Smoke test de producao local:
 
 ```powershell
@@ -269,6 +313,7 @@ O uso do agente de codificacao esta documentado em [docs/agent-prompts.md](docs/
 - Aplicacao funcional localmente.
 - Backend validado com `pytest`.
 - Frontend validado com `npm run build`.
+- Versao Streamlit criada para publicacao online simplificada.
 - Repositorio organizado e documentado.
 - Mensagem explicita de que nao ha LLM nesta fase.
 - Endpoint unico pronto para demonstracao publica.
