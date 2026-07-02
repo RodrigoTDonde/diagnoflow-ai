@@ -148,7 +148,7 @@ def build_mock_diagnostic(incident: dict[str, Any], equipment: dict[str, Any]) -
     )
 
     return {
-        "id": len(st.session_state.diagnostics) + 1,
+        "id": len(st.session_state.get("diagnostics", [])) + 1,
         "incident_id": incident["id"],
         "probable_cause": probable_cause,
         "confidence_level": round(confidence, 2),
@@ -189,9 +189,13 @@ def create_seed_incident(equipment: dict[str, Any]) -> tuple[dict[str, Any], dic
 
 
 def init_state() -> None:
-    if "equipment" not in st.session_state:
-        st.session_state.equipment = seed_equipment()
-    if "incidents" not in st.session_state:
+    st.session_state.setdefault("equipment", seed_equipment())
+    st.session_state.setdefault("incidents", [])
+    st.session_state.setdefault("diagnostics", [])
+    st.session_state.setdefault("latest_diagnostic", None)
+    st.session_state.setdefault("selected_incident_id", None)
+
+    if not st.session_state.incidents:
         incident, diagnostic = create_seed_incident(st.session_state.equipment[0])
         st.session_state.incidents = [incident]
         st.session_state.diagnostics = [diagnostic]
@@ -199,6 +203,7 @@ def init_state() -> None:
             "incident": deepcopy(incident),
             "diagnostic": deepcopy(diagnostic),
         }
+        st.session_state.selected_incident_id = incident["id"]
 
 
 def find_equipment(equipment_id: int) -> dict[str, Any]:
@@ -420,8 +425,16 @@ def render_technical_report() -> None:
     for incident in st.session_state.incidents:
         options.append(f"#{incident['id']} - {incident['equipment_name']} - {incident['main_symptom']}")
 
-    selected = st.selectbox("Selecione um registro", options)
+    default_index = 0
+    if st.session_state.selected_incident_id is not None:
+        for index, incident in enumerate(st.session_state.incidents):
+            if incident["id"] == st.session_state.selected_incident_id:
+                default_index = index
+                break
+
+    selected = st.selectbox("Selecione um registro", options, index=default_index)
     selected_id = int(selected.split(" - ")[0].replace("#", ""))
+    st.session_state.selected_incident_id = selected_id
     incident = next(item for item in st.session_state.incidents if item["id"] == selected_id)
     diagnostic = next(item for item in st.session_state.diagnostics if item["incident_id"] == selected_id)
 
