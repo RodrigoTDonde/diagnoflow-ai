@@ -256,10 +256,14 @@ def render_dashboard() -> None:
     critical_alerts = sum(1 for item in st.session_state.diagnostics if item["priority"] == "critical")
     simulated_diagnostics = len(st.session_state.diagnostics)
 
-    with st.container(horizontal=True):
+    col1, col2, col3, col4 = st.columns(4)
+    with col1:
         st.metric("Equipamentos cadastrados", total_equipment, border=True)
+    with col2:
         st.metric("Ocorrencias abertas", open_incidents, border=True)
+    with col3:
         st.metric("Alertas criticos", critical_alerts, border=True)
+    with col4:
         st.metric("Diagnosticos simulados", simulated_diagnostics, border=True)
 
     with st.container(border=True):
