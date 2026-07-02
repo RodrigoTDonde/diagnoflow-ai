@@ -8,6 +8,7 @@ import streamlit as st
 
 
 APP_NOTICE = "Diagnóstico simulado - nenhum LLM foi integrado nesta fase."
+APP_SUBTITLE = "Protótipo de triagem técnica com diagnóstico simulado"
 SYMPTOM_FIELDS = [
     ("abnormal_noise", "Ruído anormal"),
     ("vibration", "Vibração"),
@@ -19,6 +20,80 @@ SYMPTOM_FIELDS = [
 ]
 
 
+def inject_css() -> None:
+    st.markdown(
+        """
+        <style>
+            .stApp {
+                background: linear-gradient(180deg, #f4f7f8 0%, #eef3f5 100%);
+            }
+            .hero-card {
+                padding: 1.4rem 1.6rem;
+                border-radius: 18px;
+                border: 1px solid rgba(21, 56, 67, 0.12);
+                background: linear-gradient(135deg, #0f2d36 0%, #1d4c59 100%);
+                color: #f6fbfc;
+                margin-bottom: 1rem;
+                box-shadow: 0 12px 30px rgba(11, 35, 43, 0.12);
+            }
+            .hero-card h1 {
+                margin: 0;
+                font-size: 2.1rem;
+            }
+            .hero-card p {
+                margin: 0.35rem 0 0 0;
+                color: #d9ebef;
+                font-size: 1rem;
+            }
+            .notice-pill {
+                display: inline-block;
+                margin-top: 0.9rem;
+                padding: 0.45rem 0.8rem;
+                border-radius: 999px;
+                background: rgba(255, 255, 255, 0.12);
+                border: 1px solid rgba(255, 255, 255, 0.16);
+                font-weight: 600;
+                font-size: 0.92rem;
+            }
+            .flow-card {
+                padding: 1rem 1.1rem;
+                border-radius: 14px;
+                background: #ffffff;
+                border: 1px solid rgba(21, 56, 67, 0.10);
+                margin-top: 0.75rem;
+            }
+            .status-card {
+                padding: 0.9rem 1rem;
+                border-radius: 14px;
+                background: rgba(15, 45, 54, 0.06);
+                border: 1px solid rgba(15, 45, 54, 0.12);
+                margin-top: 0.8rem;
+            }
+            .status-card strong {
+                display: block;
+                margin-bottom: 0.45rem;
+            }
+            .mini-label {
+                color: #47626b;
+                text-transform: uppercase;
+                letter-spacing: 0.06em;
+                font-size: 0.75rem;
+                font-weight: 700;
+                margin-bottom: 0.25rem;
+            }
+            .block-card {
+                padding: 0.95rem 1rem;
+                border-radius: 14px;
+                background: #ffffff;
+                border: 1px solid rgba(21, 56, 67, 0.10);
+                min-height: 112px;
+            }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
 def now_iso() -> str:
     return datetime.now().isoformat(timespec="seconds")
 
@@ -28,22 +103,22 @@ def seed_equipment() -> list[dict[str, Any]]:
         {
             "id": 1,
             "name": "Bomba P-101",
-            "type": "Bomba centrifuga",
+            "type": "Bomba centrífuga",
             "sector": "Utilidades",
             "manufacturer": "WEG",
             "model": "CPX-400",
             "criticality": "alta",
-            "status": "operando com restricao",
+            "status": "operando com restrição",
             "created_at": now_iso(),
         },
         {
             "id": 2,
             "name": "Motor M-204",
-            "type": "Motor eletrico",
+            "type": "Motor elétrico",
             "sector": "Mistura",
             "manufacturer": "Siemens",
             "model": "HT-315",
-            "criticality": "media",
+            "criticality": "média",
             "status": "operacional",
             "created_at": now_iso(),
         },
@@ -55,68 +130,92 @@ def seed_equipment() -> list[dict[str, Any]]:
             "manufacturer": "Atlas Copco",
             "model": "GA-75",
             "criticality": "alta",
-            "status": "em observacao",
+            "status": "em observação",
             "created_at": now_iso(),
         },
     ]
-
-
-def blank_symptoms() -> dict[str, bool]:
-    return {key: False for key, _ in SYMPTOM_FIELDS}
 
 
 def score_symptoms(symptoms: dict[str, bool]) -> int:
     return sum(1 for active in symptoms.values() if active)
 
 
+def format_priority(priority: str) -> str:
+    labels = {
+        "critical": "Crítica",
+        "high": "Alta",
+        "medium": "Média",
+        "low": "Baixa",
+    }
+    return labels.get(priority, priority.title())
+
+
+def format_risk(risk: str) -> str:
+    labels = {
+        "critical": "Crítico",
+        "high": "Alto",
+        "moderate": "Moderado",
+        "low": "Baixo",
+    }
+    return labels.get(risk, risk.title())
+
+
+def format_status(status: str) -> str:
+    labels = {
+        "open": "Aberta",
+        "closed": "Encerrada",
+    }
+    return labels.get(status, status.title())
+
+
 def build_mock_diagnostic(incident: dict[str, Any], equipment: dict[str, Any]) -> dict[str, Any]:
     symptoms = incident["symptoms"]
     symptom_score = score_symptoms(symptoms)
 
-    probable_cause = "Desalinhamento mecanico e desgaste progressivo"
-    involved_parts = ["acoplamento", "rolamentos", "base de fixacao"]
+    probable_cause = "Desalinhamento mecânico e desgaste progressivo"
+    involved_parts = ["acoplamento", "rolamentos", "base de fixação"]
     recommended_actions = [
         "Inspecionar alinhamento a laser e reaperto da base",
-        "Verificar condicao dos rolamentos e lubrificacao",
-        "Registrar tendencia de vibracao para comparacao na proxima rodada",
+        "Verificar condição dos rolamentos e lubrificação",
+        "Registrar tendência de vibração para comparação na próxima rodada",
     ]
     priority = "medium"
     operational_risk = "moderate"
 
-    if symptoms["electrical_failure"] or "eletr" in incident["main_symptom"].lower():
-        probable_cause = "Intermitencia eletrica no conjunto de acionamento"
-        involved_parts = ["painel de comando", "inversor de frequencia", "cabos de potencia"]
+    if symptoms["electrical_failure"] or "elétr" in incident["main_symptom"].lower() or "eletr" in incident["main_symptom"].lower():
+        probable_cause = "Intermitência elétrica no conjunto de acionamento"
+        involved_parts = ["painel de comando", "inversor de frequência", "cabos de potência"]
         recommended_actions = [
             "Bloquear equipamento e medir continuidade dos circuitos",
             "Inspecionar bornes, contatores e aquecimento no painel",
-            "Validar parametros do inversor antes do retorno operacional",
+            "Validar parâmetros do inversor antes do retorno operacional",
         ]
         priority = "high"
         operational_risk = "high"
     elif symptoms["overheating"] and symptoms["vibration"]:
-        probable_cause = "Rolamento em degradacao com geracao de calor e vibracao"
-        involved_parts = ["rolamentos", "mancais", "sistema de lubrificacao"]
+        probable_cause = "Rolamento em degradação com geração de calor e vibração"
+        involved_parts = ["rolamentos", "mancais", "sistema de lubrificação"]
         recommended_actions = [
-            "Executar inspecao termografica e coleta de vibracao",
-            "Planejar troca de rolamentos no menor intervalo possivel",
-            "Verificar contaminacao ou falta de lubrificante",
+            "Executar inspeção termográfica e coleta de vibração",
+            "Planejar troca de rolamentos no menor intervalo possível",
+            "Verificar contaminação ou falta de lubrificante",
         ]
         priority = "high"
         operational_risk = "high"
     elif symptoms["leakage"]:
-        probable_cause = "Falha de vedacao ou desgaste em retentor"
-        involved_parts = ["selos", "retentores", "tubulacoes de vedacao"]
+        probable_cause = "Falha de vedação ou desgaste em retentor"
+        involved_parts = ["selos", "retentores", "tubulações de vedação"]
         recommended_actions = [
             "Identificar ponto exato do vazamento",
-            "Verificar integridade de selos, juntas e conexoes",
-            "Avaliar impacto do vazamento sobre seguranca e processo",
+            "Verificar integridade de selos, juntas e conexões",
+            "Avaliar impacto do vazamento sobre segurança e processo",
         ]
     elif symptoms["total_stop"]:
-        probable_cause = "Parada total associada a protecao operacional ou falha critica"
-        involved_parts = ["sistema de protecao", "motor", "acoplamento"]
+        probable_cause = "Parada total associada a proteção operacional ou falha crítica"
+        involved_parts = ["sistema de proteção", "motor", "acoplamento"]
         recommended_actions = [
-            "Manter equipamento indisponivel ate liberacao tecnica",
-            "Executar checklist de retorno com foco em protecao e acionamento",
+            "Manter equipamento indisponível até liberação técnica",
+            "Executar checklist de retorno com foco em proteção e acionamento",
             "Documentar causa raiz preliminar antes da retomada",
         ]
         priority = "critical"
@@ -128,23 +227,23 @@ def build_mock_diagnostic(incident: dict[str, Any], equipment: dict[str, Any]) -
 
     confidence = min(0.52 + (symptom_score * 0.06), 0.93)
     observations = (
-        f"Diagnostico simulado para {equipment['name']} ({equipment['type']}). "
-        "A inferencia foi baseada em regras estaticas de sintomas, sem uso de LLM."
+        f"Diagnóstico simulado para {equipment['name']} ({equipment['type']}). "
+        "A inferência foi baseada em regras estáticas de sintomas, sem uso de LLM."
     )
     technical_report = (
-        "Relatorio tecnico preliminar\n\n"
+        "Relatório técnico preliminar\n\n"
         f"Equipamento: {equipment['name']}\n"
         f"Tipo: {equipment['type']}\n"
         f"Sintoma principal: {incident['main_symptom']}\n"
-        f"Descricao operacional: {incident['description']}\n"
+        f"Descrição operacional: {incident['description']}\n"
         f"Turno informado: {incident['shift']}\n"
-        f"Urgencia percebida: {incident['perceived_urgency']}\n\n"
-        f"Causa provavel: {probable_cause}\n"
-        f"Prioridade: {priority}\n"
-        f"Risco operacional: {operational_risk}\n"
-        f"Pecas potencialmente envolvidas: {', '.join(involved_parts)}\n"
-        f"Acoes recomendadas: {'; '.join(recommended_actions)}\n\n"
-        "Observacao: diagnostico simulado, sem integracao com modelo de IA nesta fase."
+        f"Urgência percebida: {incident['perceived_urgency']}\n\n"
+        f"Causa provável: {probable_cause}\n"
+        f"Prioridade: {format_priority(priority)}\n"
+        f"Risco operacional: {format_risk(operational_risk)}\n"
+        f"Peças potencialmente envolvidas: {', '.join(involved_parts)}\n"
+        f"Ações recomendadas: {'; '.join(recommended_actions)}\n\n"
+        "Observação: diagnóstico simulado, sem integração com modelo de IA nesta fase."
     )
 
     return {
@@ -168,9 +267,9 @@ def create_seed_incident(equipment: dict[str, Any]) -> tuple[dict[str, Any], dic
         "equipment_id": equipment["id"],
         "equipment_name": equipment["name"],
         "equipment_criticality": equipment["criticality"],
-        "main_symptom": "Vibracao crescente com aquecimento",
-        "description": "Operador relatou aumento de vibracao nas ultimas 6 horas e temperatura acima do padrao.",
-        "shift": "manha",
+        "main_symptom": "Vibração crescente com aquecimento",
+        "description": "Operador relatou aumento de vibração nas últimas 6 horas e temperatura acima do padrão.",
+        "shift": "manhã",
         "perceived_urgency": "alta",
         "status": "open",
         "symptoms": {
@@ -210,7 +309,7 @@ def find_equipment(equipment_id: int) -> dict[str, Any]:
     for item in st.session_state.equipment:
         if item["id"] == equipment_id:
             return item
-    raise ValueError("Equipamento nao encontrado.")
+    raise ValueError("Equipamento não encontrado.")
 
 
 def latest_incident_rows(limit: int = 5) -> list[dict[str, Any]]:
@@ -232,66 +331,101 @@ def history_rows() -> list[dict[str, Any]]:
             {
                 "Equipamento": incident["equipment_name"],
                 "Sintoma": incident["main_symptom"],
-                "Criticidade": incident["equipment_criticality"],
-                "Status": incident["status"],
-                "Prioridade": diagnostic["priority"],
-                "Risco": diagnostic["operational_risk"],
+                "Criticidade": incident["equipment_criticality"].title(),
+                "Status": format_status(incident["status"]),
+                "Prioridade": format_priority(diagnostic["priority"]),
                 "Data": incident["created_at"].replace("T", " "),
             }
         )
     return list(reversed(rows))
 
 
-def render_notice() -> None:
-    st.warning(APP_NOTICE, icon=":material/warning:")
+def render_hero() -> None:
+    st.markdown(
+        f"""
+        <div class="hero-card">
+            <div class="mini-label">Entrega intermediária</div>
+            <h1>DiagnoFlow AI</h1>
+            <p>{APP_SUBTITLE}</p>
+            <div class="notice-pill">{APP_NOTICE}</div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
+def render_sidebar_status() -> None:
+    st.markdown(
+        """
+        <div class="status-card">
+            <strong>Status da entrega</strong>
+            <div>• Sem LLM real</div>
+            <div>• Mocks ativos</div>
+            <div>• Preparado para fase 2</div>
+            <div>• Versão Streamlit para endpoint público</div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
 
 def render_dashboard() -> None:
-    st.title("DiagnoFlow AI")
-    st.caption("Dashboard operacional simplificado para publicacao online da primeira entrega.")
-    render_notice()
+    render_hero()
+    st.caption("Visão geral da demonstração funcional da triagem técnica industrial.")
 
     total_equipment = len(st.session_state.equipment)
     open_incidents = sum(1 for item in st.session_state.incidents if item["status"] == "open")
-    critical_alerts = sum(1 for item in st.session_state.diagnostics if item["priority"] == "critical")
     simulated_diagnostics = len(st.session_state.diagnostics)
+    high_criticality = sum(1 for item in st.session_state.equipment if item["criticality"] == "alta")
 
     col1, col2, col3, col4 = st.columns(4)
     with col1:
-        st.metric("Equipamentos cadastrados", total_equipment, border=True)
+        st.metric("Equipamentos", total_equipment, border=True)
     with col2:
-        st.metric("Ocorrencias abertas", open_incidents, border=True)
+        st.metric("Ocorrências abertas", open_incidents, border=True)
     with col3:
-        st.metric("Alertas criticos", critical_alerts, border=True)
+        st.metric("Diagnósticos", simulated_diagnostics, border=True)
     with col4:
-        st.metric("Diagnosticos simulados", simulated_diagnostics, border=True)
+        st.metric("Ativos críticos", high_criticality, border=True)
+
+    st.markdown(
+        """
+        <div class="flow-card">
+            <strong>Fluxo principal</strong><br>
+            Registrar sintomas → gerar diagnóstico simulado → emitir relatório técnico.
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
     with st.container(border=True):
-        st.subheader("Ultimas ocorrencias")
+        st.subheader("Últimas ocorrências")
         for row in latest_incident_rows():
             incident = row["incident"]
             diagnostic = row["diagnostic"]
             st.markdown(f"**{incident['equipment_name']}**")
-            st.write(f"{incident['main_symptom']} | prioridade {diagnostic['priority']} | risco {diagnostic['operational_risk']}")
+            st.write(
+                f"{incident['main_symptom']} | prioridade {format_priority(diagnostic['priority'])} | risco {format_risk(diagnostic['operational_risk'])}"
+            )
             st.caption(diagnostic["probable_cause"])
 
 
 def render_equipment() -> None:
-    st.title("Equipamentos")
-    render_notice()
+    render_hero()
+    st.subheader("Equipamentos")
 
     left, right = st.columns([1.4, 1], gap="large")
     with left:
         with st.container(border=True):
-            st.subheader("Ativos cadastrados")
+            st.markdown("**Ativos cadastrados**")
             st.dataframe(
                 [
                     {
                         "Nome": item["name"],
                         "Tipo": item["type"],
                         "Setor": item["sector"],
-                        "Criticidade": item["criticality"],
-                        "Status": item["status"],
+                        "Criticidade": item["criticality"].title(),
+                        "Status": item["status"].title(),
                     }
                     for item in st.session_state.equipment
                 ],
@@ -300,14 +434,14 @@ def render_equipment() -> None:
             )
     with right:
         with st.form("equipment_form", border=True):
-            st.subheader("Novo equipamento")
+            st.markdown("**Novo equipamento**")
             name = st.text_input("Nome do equipamento")
             equipment_type = st.text_input("Tipo")
             sector = st.text_input("Setor")
             manufacturer = st.text_input("Fabricante")
             model = st.text_input("Modelo")
-            criticality = st.selectbox("Criticidade", ["baixa", "media", "alta"])
-            status = st.selectbox("Status", ["operacional", "em observacao", "operando com restricao", "parado"])
+            criticality = st.selectbox("Criticidade", ["baixa", "média", "alta"])
+            status = st.selectbox("Status", ["operacional", "em observação", "operando com restrição", "parado"])
             submitted = st.form_submit_button("Cadastrar equipamento", use_container_width=True)
             if submitted:
                 new_equipment = {
@@ -326,20 +460,20 @@ def render_equipment() -> None:
 
 
 def render_new_incident() -> None:
-    st.title("Nova ocorrencia")
-    render_notice()
+    render_hero()
+    st.subheader("Nova ocorrência")
 
-    left, right = st.columns([1.25, 1], gap="large")
+    left, right = st.columns([1.2, 1], gap="large")
     with left:
         with st.form("incident_form", border=True):
-            st.subheader("Registrar ocorrencia")
+            st.markdown("**Registrar ocorrência**")
             equipment_options = {item["name"]: item["id"] for item in st.session_state.equipment}
             selected_equipment_name = st.selectbox("Equipamento", list(equipment_options.keys()))
             main_symptom = st.text_input("Sintoma principal")
-            description = st.text_area("Descricao operacional", height=140)
-            shift = st.selectbox("Turno", ["manha", "tarde", "noite"])
-            urgency = st.selectbox("Urgencia percebida", ["baixa", "media", "alta"])
-            status = st.selectbox("Status da ocorrencia", ["open", "closed"])
+            description = st.text_area("Descrição operacional", height=140)
+            shift = st.selectbox("Turno", ["manhã", "tarde", "noite"])
+            urgency = st.selectbox("Urgência percebida", ["baixa", "média", "alta"])
+            status = st.selectbox("Status da ocorrência", ["open", "closed"])
 
             st.markdown("**Sintomas observados**")
             symptom_values: dict[str, bool] = {}
@@ -348,7 +482,7 @@ def render_new_incident() -> None:
                 with cols[index % 2]:
                     symptom_values[key] = st.checkbox(label, key=f"symptom_{key}")
 
-            submitted = st.form_submit_button("Gerar diagnostico simulado", use_container_width=True)
+            submitted = st.form_submit_button("Gerar diagnóstico simulado", use_container_width=True)
             if submitted:
                 equipment = find_equipment(equipment_options[selected_equipment_name])
                 incident = {
@@ -368,66 +502,115 @@ def render_new_incident() -> None:
                 st.session_state.incidents.append(incident)
                 st.session_state.diagnostics.append(diagnostic)
                 st.session_state.latest_diagnostic = {"incident": incident, "diagnostic": diagnostic}
-                st.success("Ocorrencia registrada e diagnostico simulado gerado.", icon=":material/analytics:")
+                st.session_state.selected_incident_id = incident["id"]
+                st.success("Ocorrência registrada e diagnóstico simulado gerado.", icon=":material/analytics:")
 
     with right:
         with st.container(border=True):
-            st.subheader("Diagnostico simulado")
+            st.markdown("**Diagnóstico simulado**")
             current = st.session_state.get("latest_diagnostic")
             if not current:
-                st.caption("Registre uma ocorrencia para ver o resultado.")
+                st.caption("Registre uma ocorrência para ver o resultado.")
                 return
 
             incident = current["incident"]
             diagnostic = current["diagnostic"]
+
             st.badge("Sem LLM nesta fase", icon=":material/warning:", color="orange")
             st.write(f"**Equipamento:** {incident['equipment_name']}")
-            st.write(f"**Causa provavel:** {diagnostic['probable_cause']}")
-            st.write(f"**Confianca simulada:** {int(diagnostic['confidence_level'] * 100)}%")
-            st.write(f"**Prioridade:** {diagnostic['priority']}")
-            st.write(f"**Risco operacional:** {diagnostic['operational_risk']}")
-            st.write(f"**Observacoes:** {diagnostic['observations']}")
-            st.write("**Acoes recomendadas**")
-            for action in diagnostic["recommended_actions"]:
-                st.markdown(f"- {action}")
-            st.write("**Pecas possivelmente envolvidas**")
-            st.caption(", ".join(diagnostic["involved_parts"]))
+
+            stat1, stat2 = st.columns(2)
+            with stat1:
+                st.markdown(
+                    f"""
+                    <div class="block-card">
+                        <div class="mini-label">Causa provável</div>
+                        <strong>{diagnostic['probable_cause']}</strong>
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
+                )
+            with stat2:
+                st.markdown(
+                    f"""
+                    <div class="block-card">
+                        <div class="mini-label">Prioridade</div>
+                        <strong>{format_priority(diagnostic['priority'])}</strong>
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
+                )
+
+            stat3, stat4 = st.columns(2)
+            with stat3:
+                st.markdown(
+                    f"""
+                    <div class="block-card">
+                        <div class="mini-label">Risco operacional</div>
+                        <strong>{format_risk(diagnostic['operational_risk'])}</strong>
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
+                )
+            with stat4:
+                st.markdown(
+                    f"""
+                    <div class="block-card">
+                        <div class="mini-label">Confiança simulada</div>
+                        <strong>{int(diagnostic['confidence_level'] * 100)}%</strong>
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
+                )
+                st.progress(diagnostic["confidence_level"])
+
+            with st.expander("Ações recomendadas", expanded=True):
+                for action in diagnostic["recommended_actions"]:
+                    st.markdown(f"- {action}")
+
+            with st.expander("Peças possivelmente envolvidas"):
+                st.write(", ".join(diagnostic["involved_parts"]))
+
+            with st.expander("Observações"):
+                st.write(diagnostic["observations"])
 
 
 def render_history() -> None:
-    st.title("Historico")
-    render_notice()
+    render_hero()
+    st.subheader("Histórico")
 
-    equipment_filter = st.selectbox("Filtro por equipamento", ["Todos"] + [item["name"] for item in st.session_state.equipment])
-    criticality_filter = st.selectbox("Filtro por criticidade", ["Todas", "baixa", "media", "alta"])
-    status_filter = st.selectbox("Filtro por status", ["Todos", "open", "closed"])
+    filter_col1, filter_col2, filter_col3 = st.columns(3)
+    with filter_col1:
+        equipment_filter = st.selectbox("Equipamento", ["Todos"] + [item["name"] for item in st.session_state.equipment])
+    with filter_col2:
+        criticality_filter = st.selectbox("Criticidade", ["Todas", "baixa", "média", "alta"])
+    with filter_col3:
+        status_filter = st.selectbox("Status", ["Todos", "open", "closed"])
 
     filtered = []
     for row in history_rows():
         if equipment_filter != "Todos" and row["Equipamento"] != equipment_filter:
             continue
-        if criticality_filter != "Todas" and row["Criticidade"] != criticality_filter:
+        if criticality_filter != "Todas" and row["Criticidade"].lower() != criticality_filter:
             continue
-        if status_filter != "Todos" and row["Status"] != status_filter:
+        if status_filter != "Todos" and row["Status"] != format_status(status_filter):
             continue
         filtered.append(row)
 
     with st.container(border=True):
-        st.subheader("Ocorrencias registradas")
+        st.markdown("**Ocorrências registradas**")
         st.dataframe(filtered, use_container_width=True, hide_index=True)
 
 
 def render_technical_report() -> None:
-    st.title("Relatorio tecnico")
-    render_notice()
+    render_hero()
+    st.subheader("Relatório técnico")
 
     if not st.session_state.diagnostics:
-        st.info("Nenhum relatorio disponivel ainda.", icon=":material/info:")
+        st.info("Nenhum relatório disponível ainda.", icon=":material/info:")
         return
 
-    options = []
-    for incident in st.session_state.incidents:
-        options.append(f"#{incident['id']} - {incident['equipment_name']} - {incident['main_symptom']}")
+    options = [f"#{incident['id']} - {incident['equipment_name']} - {incident['main_symptom']}" for incident in st.session_state.incidents]
 
     default_index = 0
     if st.session_state.selected_incident_id is not None:
@@ -439,14 +622,13 @@ def render_technical_report() -> None:
     selected = st.selectbox("Selecione um registro", options, index=default_index)
     selected_id = int(selected.split(" - ")[0].replace("#", ""))
     st.session_state.selected_incident_id = selected_id
-    incident = next(item for item in st.session_state.incidents if item["id"] == selected_id)
     diagnostic = next(item for item in st.session_state.diagnostics if item["incident_id"] == selected_id)
 
     with st.container(border=True):
-        st.subheader("Relatorio textual")
-        st.text_area("Conteudo", diagnostic["technical_report"], height=320)
+        st.markdown("**Relatório textual**")
+        st.text_area("Conteúdo", diagnostic["technical_report"], height=320)
         st.download_button(
-            "Baixar relatorio .txt",
+            "Baixar relatório .txt",
             data=diagnostic["technical_report"],
             file_name=f"diagnoflow-relatorio-{selected_id}.txt",
             mime="text/plain",
@@ -455,27 +637,39 @@ def render_technical_report() -> None:
 
 
 def render_future_ai() -> None:
-    st.title("Futura integracao com IA")
-    render_notice()
+    render_hero()
+    st.subheader("Futura integração com IA")
 
-    with st.container(border=True):
-        st.subheader("Evolucao prevista para a segunda entrega")
-        st.markdown(
-            """
-            - substituir o motor de regras por uma orquestracao com LLM;
-            - consultar historico da maquina;
-            - consultar base de falhas conhecidas;
-            - calcular criticidade;
-            - gerar checklist tecnico;
-            - gerar relatorio estruturado.
-            """
-        )
-        st.write(
-            "A fase atual continua 100% mockada. Na segunda entrega, a integracao devera incluir system prompt, tools, validacao humana e structured outputs."
-        )
-        st.write(
-            "Riscos previstos: alucinacao, excesso de confianca e necessidade de trilha de auditoria para recomendacoes tecnicas."
-        )
+    col1, col2 = st.columns(2, gap="large")
+    with col1:
+        with st.container(border=True):
+            st.markdown("**Futuro system prompt**")
+            st.write("A segunda fase deverá incluir um system prompt técnico para orientar o modelo com foco em segurança operacional, limites de confiança e formato padronizado de resposta.")
+
+        with st.container(border=True):
+            st.markdown("**Futuras tools**")
+            st.markdown(
+                """
+                - consultar histórico da máquina;
+                - consultar base de falhas conhecidas;
+                - calcular criticidade;
+                - gerar checklist técnico;
+                - gerar relatório estruturado.
+                """
+            )
+
+        with st.container(border=True):
+            st.markdown("**Structured outputs**")
+            st.write("A saída futura deverá seguir schemas rígidos para causa provável, prioridade, risco, recomendações, checklist e relatório técnico.")
+
+    with col2:
+        with st.container(border=True):
+            st.markdown("**Validação humana**")
+            st.write("Mesmo com LLM na segunda entrega, qualquer recomendação crítica deverá passar por validação humana antes de orientar manutenção real.")
+
+        with st.container(border=True):
+            st.markdown("**Riscos de alucinação**")
+            st.write("Os riscos principais são excesso de confiança, recomendações sem evidência e omissão de contexto operacional. Por isso, a integração futura precisará de rastreabilidade e revisão.")
 
 
 def main() -> None:
@@ -484,32 +678,34 @@ def main() -> None:
         page_icon=":material/precision_manufacturing:",
         layout="wide",
     )
+    inject_css()
     init_state()
 
     with st.sidebar:
         st.title("DiagnoFlow AI")
+        st.caption("Versão Streamlit para endpoint público da entrega intermediária.")
         page = st.radio(
-            "Navegacao",
+            "Navegação",
             [
                 "Dashboard",
                 "Equipamentos",
-                "Nova Ocorrencia",
-                "Historico",
-                "Relatorio Tecnico",
-                "Futura Integracao com IA",
+                "Nova Ocorrência",
+                "Histórico",
+                "Relatório Técnico",
+                "Futura Integração com IA",
             ],
         )
-        st.caption("Versao Streamlit para entrega online simplificada.")
+        render_sidebar_status()
 
     if page == "Dashboard":
         render_dashboard()
     elif page == "Equipamentos":
         render_equipment()
-    elif page == "Nova Ocorrencia":
+    elif page == "Nova Ocorrência":
         render_new_incident()
-    elif page == "Historico":
+    elif page == "Histórico":
         render_history()
-    elif page == "Relatorio Tecnico":
+    elif page == "Relatório Técnico":
         render_technical_report()
     else:
         render_future_ai()
