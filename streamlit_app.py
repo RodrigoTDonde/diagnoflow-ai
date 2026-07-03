@@ -20,122 +20,69 @@ SYMPTOM_FIELDS = [
 ]
 
 
-def inject_css() -> None:
+def apply_custom_css() -> None:
     st.markdown(
         """
         <style>
             .stApp,
             [data-testid="stAppViewContainer"] {
-                background: linear-gradient(180deg, #f4f7f8 0%, #eef3f5 100%);
-                color: #17323a;
+                background: #f4f7f8;
             }
             [data-testid="stSidebar"] {
                 background: linear-gradient(180deg, #112b33 0%, #163843 100%);
             }
-            [data-testid="stSidebar"] * {
-                color: #edf6f8;
+            [data-testid="stSidebar"] > div:first-child {
+                padding-top: 1rem;
             }
-            [data-testid="stMainBlockContainer"] {
-                color: #17323a;
-            }
-            [data-testid="stMainBlockContainer"] h1,
-            [data-testid="stMainBlockContainer"] h2,
-            [data-testid="stMainBlockContainer"] h3,
-            [data-testid="stMainBlockContainer"] p,
-            [data-testid="stMainBlockContainer"] li,
-            [data-testid="stMainBlockContainer"] label,
-            [data-testid="stMainBlockContainer"] div,
-            [data-testid="stMainBlockContainer"] span,
-            [data-testid="stMainBlockContainer"] small {
-                color: #17323a;
-            }
-            [data-testid="stMetric"] {
+            .hero-shell {
                 background: #ffffff;
-                border: 1px solid rgba(21, 56, 67, 0.10);
-                border-radius: 16px;
-                padding: 0.9rem 1rem;
-                box-shadow: 0 10px 24px rgba(13, 37, 45, 0.06);
-            }
-            [data-testid="stMetricLabel"] {
-                color: #4d676f !important;
-                font-weight: 600;
-            }
-            [data-testid="stMetricValue"] {
-                color: #0f2d36 !important;
-            }
-            .hero-card {
-                padding: 1.15rem 1.35rem;
+                border: 1px solid #d7e1e5;
                 border-radius: 18px;
-                border: 1px solid rgba(21, 56, 67, 0.10);
-                background: linear-gradient(135deg, #eaf2f4 0%, #ffffff 100%);
-                color: #102c35;
+                padding: 1.2rem 1.3rem;
+                box-shadow: 0 10px 28px rgba(17, 43, 51, 0.06);
                 margin-bottom: 0.8rem;
-                box-shadow: 0 12px 30px rgba(11, 35, 43, 0.08);
             }
-            .hero-card h1,
-            .hero-card p,
-            .hero-card div {
-                color: #102c35 !important;
-            }
-            .hero-card h1 {
-                margin: 0;
+            .hero-shell h1 {
+                margin: 0 0 0.2rem 0;
+                color: #12313a;
                 font-size: 2rem;
+                line-height: 1.2;
             }
-            .hero-card p {
-                margin: 0.35rem 0 0 0;
+            .hero-shell p {
+                margin: 0;
+                color: #46626b;
                 font-size: 1rem;
             }
-            .notice-pill {
-                display: inline-block;
-                margin-top: 0.9rem;
-                padding: 0.45rem 0.8rem;
-                border-radius: 999px;
-                background: #143842;
-                border: 1px solid #143842;
-                color: #f4fbfc !important;
-                font-weight: 600;
-                font-size: 0.92rem;
-            }
-            .flow-card,
-            .block-card {
-                background: #ffffff;
-                color: #17323a;
-                border: 1px solid rgba(21, 56, 67, 0.10);
-                box-shadow: 0 8px 18px rgba(13, 37, 45, 0.05);
-            }
-            .flow-card {
-                padding: 1rem 1.1rem;
-                border-radius: 14px;
-                margin-top: 0.75rem;
-            }
-            .status-card {
-                padding: 0.9rem 1rem;
-                border-radius: 14px;
+            .status-box {
                 background: rgba(255, 255, 255, 0.08);
-                border: 1px solid rgba(255, 255, 255, 0.12);
+                border: 1px solid rgba(255, 255, 255, 0.14);
+                border-radius: 14px;
+                padding: 0.9rem 1rem;
                 margin-top: 0.8rem;
             }
-            .status-card strong,
-            .status-card div {
-                color: #edf6f8 !important;
+            .status-box h4 {
+                margin: 0 0 0.45rem 0;
+                color: #f3fafc;
+                font-size: 0.95rem;
             }
-            .mini-label {
-                color: #47626b !important;
-                text-transform: uppercase;
-                letter-spacing: 0.06em;
-                font-size: 0.75rem;
-                font-weight: 700;
-                margin-bottom: 0.25rem;
+            .status-box ul {
+                margin: 0;
+                padding-left: 1rem;
+                color: #deebef;
             }
-            .block-card {
-                padding: 0.95rem 1rem;
+            .status-box li {
+                margin: 0.18rem 0;
+            }
+            .flow-box {
+                background: #ffffff;
+                border: 1px solid #d7e1e5;
                 border-radius: 14px;
-                min-height: 112px;
+                padding: 0.95rem 1rem;
+                margin-top: 0.75rem;
+                color: #17323a;
             }
-            .block-card strong,
-            .block-card div,
-            .block-card span {
-                color: #17323a !important;
+            .flow-box strong {
+                color: #12313a;
             }
         </style>
         """,
@@ -392,26 +339,27 @@ def history_rows() -> list[dict[str, Any]]:
 def render_hero() -> None:
     st.markdown(
         f"""
-        <div class="hero-card">
-            <div class="mini-label">Entrega intermediária</div>
+        <div class="hero-shell">
             <h1>DiagnoFlow AI</h1>
             <p>{APP_SUBTITLE}</p>
-            <div class="notice-pill">{APP_NOTICE}</div>
         </div>
         """,
         unsafe_allow_html=True,
     )
+    st.info(APP_NOTICE, icon=":material/warning:")
 
 
 def render_sidebar_status() -> None:
     st.markdown(
         """
-        <div class="status-card">
-            <strong>Status da entrega</strong>
-            <div>• Sem LLM real</div>
-            <div>• Mocks ativos</div>
-            <div>• Preparado para fase 2</div>
-            <div>• Versão Streamlit para endpoint público</div>
+        <div class="status-box">
+            <h4>Status da entrega</h4>
+            <ul>
+                <li>Sem LLM real</li>
+                <li>Mocks ativos</li>
+                <li>Preparado para fase 2</li>
+                <li>Versão Streamlit para endpoint público</li>
+            </ul>
         </div>
         """,
         unsafe_allow_html=True,
@@ -439,7 +387,7 @@ def render_dashboard() -> None:
 
     st.markdown(
         """
-        <div class="flow-card">
+        <div class="flow-box">
             <strong>Fluxo principal</strong><br>
             Registrar sintomas → gerar diagnóstico simulado → emitir relatório técnico.
         </div>
@@ -565,53 +513,17 @@ def render_new_incident() -> None:
             incident = current["incident"]
             diagnostic = current["diagnostic"]
 
-            st.badge("Sem LLM nesta fase", icon=":material/warning:", color="orange")
             st.write(f"**Equipamento:** {incident['equipment_name']}")
-
             stat1, stat2 = st.columns(2)
             with stat1:
-                st.markdown(
-                    f"""
-                    <div class="block-card">
-                        <div class="mini-label">Causa provável</div>
-                        <strong>{diagnostic['probable_cause']}</strong>
-                    </div>
-                    """,
-                    unsafe_allow_html=True,
-                )
+                st.metric("Prioridade", format_priority(diagnostic["priority"]), border=True)
             with stat2:
-                st.markdown(
-                    f"""
-                    <div class="block-card">
-                        <div class="mini-label">Prioridade</div>
-                        <strong>{format_priority(diagnostic['priority'])}</strong>
-                    </div>
-                    """,
-                    unsafe_allow_html=True,
-                )
+                st.metric("Risco", format_risk(diagnostic["operational_risk"]), border=True)
 
-            stat3, stat4 = st.columns(2)
-            with stat3:
-                st.markdown(
-                    f"""
-                    <div class="block-card">
-                        <div class="mini-label">Risco operacional</div>
-                        <strong>{format_risk(diagnostic['operational_risk'])}</strong>
-                    </div>
-                    """,
-                    unsafe_allow_html=True,
-                )
-            with stat4:
-                st.markdown(
-                    f"""
-                    <div class="block-card">
-                        <div class="mini-label">Confiança simulada</div>
-                        <strong>{int(diagnostic['confidence_level'] * 100)}%</strong>
-                    </div>
-                    """,
-                    unsafe_allow_html=True,
-                )
-                st.progress(diagnostic["confidence_level"])
+            st.markdown(f"**Causa provável:** {diagnostic['probable_cause']}")
+            st.write("**Confiança simulada**")
+            st.progress(diagnostic["confidence_level"])
+            st.caption(f"{int(diagnostic['confidence_level'] * 100)}%")
 
             with st.expander("Ações recomendadas", expanded=True):
                 for action in diagnostic["recommended_actions"]:
@@ -693,7 +605,9 @@ def render_future_ai() -> None:
     with col1:
         with st.container(border=True):
             st.markdown("**Futuro system prompt**")
-            st.write("A segunda fase deverá incluir um system prompt técnico para orientar o modelo com foco em segurança operacional, limites de confiança e formato padronizado de resposta.")
+            st.write(
+                "A segunda fase deverá incluir um system prompt técnico para orientar o modelo com foco em segurança operacional, limites de confiança e formato padronizado de resposta."
+            )
 
         with st.container(border=True):
             st.markdown("**Futuras tools**")
@@ -709,16 +623,22 @@ def render_future_ai() -> None:
 
         with st.container(border=True):
             st.markdown("**Structured outputs**")
-            st.write("A saída futura deverá seguir schemas rígidos para causa provável, prioridade, risco, recomendações, checklist e relatório técnico.")
+            st.write(
+                "A saída futura deverá seguir schemas rígidos para causa provável, prioridade, risco, recomendações, checklist e relatório técnico."
+            )
 
     with col2:
         with st.container(border=True):
             st.markdown("**Validação humana**")
-            st.write("Mesmo com LLM na segunda entrega, qualquer recomendação crítica deverá passar por validação humana antes de orientar manutenção real.")
+            st.write(
+                "Mesmo com LLM na segunda entrega, qualquer recomendação crítica deverá passar por validação humana antes de orientar manutenção real."
+            )
 
         with st.container(border=True):
             st.markdown("**Riscos de alucinação**")
-            st.write("Os riscos principais são excesso de confiança, recomendações sem evidência e omissão de contexto operacional. Por isso, a integração futura precisará de rastreabilidade e revisão.")
+            st.write(
+                "Os riscos principais são excesso de confiança, recomendações sem evidência e omissão de contexto operacional. Por isso, a integração futura precisará de rastreabilidade e revisão."
+            )
 
 
 def main() -> None:
@@ -727,7 +647,7 @@ def main() -> None:
         page_icon=":material/precision_manufacturing:",
         layout="wide",
     )
-    inject_css()
+    apply_custom_css()
     init_state()
 
     with st.sidebar:
