@@ -24,34 +24,11 @@ def apply_custom_css() -> None:
     st.markdown(
         """
         <style>
-            .stApp,
-            [data-testid="stAppViewContainer"] {
-                background: #f4f7f8;
-            }
             [data-testid="stSidebar"] {
                 background: linear-gradient(180deg, #112b33 0%, #163843 100%);
             }
             [data-testid="stSidebar"] > div:first-child {
                 padding-top: 1rem;
-            }
-            .hero-shell {
-                background: #ffffff;
-                border: 1px solid #d7e1e5;
-                border-radius: 18px;
-                padding: 1.2rem 1.3rem;
-                box-shadow: 0 10px 28px rgba(17, 43, 51, 0.06);
-                margin-bottom: 0.8rem;
-            }
-            .hero-shell h1 {
-                margin: 0 0 0.2rem 0;
-                color: #12313a;
-                font-size: 2rem;
-                line-height: 1.2;
-            }
-            .hero-shell p {
-                margin: 0;
-                color: #46626b;
-                font-size: 1rem;
             }
             .status-box {
                 background: rgba(255, 255, 255, 0.08);
@@ -337,15 +314,8 @@ def history_rows() -> list[dict[str, Any]]:
 
 
 def render_hero() -> None:
-    st.markdown(
-        f"""
-        <div class="hero-shell">
-            <h1>DiagnoFlow AI</h1>
-            <p>{APP_SUBTITLE}</p>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
+    st.title("DiagnoFlow AI")
+    st.caption(APP_SUBTITLE)
     st.info(APP_NOTICE, icon=":material/warning:")
 
 

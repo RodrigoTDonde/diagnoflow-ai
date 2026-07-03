@@ -25,6 +25,27 @@ pip install -r requirements-streamlit.txt
 streamlit run streamlit_app.py
 ```
 
+## Como publicar rapidamente
+
+### Streamlit Community Cloud
+
+1. Enviar o estado final do projeto para o GitHub.
+2. Criar uma nova app no Streamlit Community Cloud.
+3. Apontar para este repositorio.
+4. Definir `streamlit_app.py` como arquivo principal.
+5. Usar `requirements-streamlit.txt` para as dependencias.
+6. Publicar e validar o link em janela anonima.
+
+## Checklist de validacao do endpoint
+
+- abrir a aplicacao sem erro;
+- navegar por todas as telas;
+- cadastrar um equipamento;
+- registrar uma ocorrencia;
+- confirmar o diagnostico simulado;
+- abrir historico e relatorio tecnico;
+- confirmar o aviso explicito de que nao ha LLM nesta fase.
+
 ## Limites desta versao
 
 - dados ficam em `st.session_state`, sem persistencia de banco;

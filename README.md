@@ -165,6 +165,39 @@ streamlit run streamlit_app.py
 
 Essa versao nao substitui a full stack. Ela existe apenas como alternativa de publicacao online simplificada para a avaliacao intermediaria.
 
+## Publicacao recomendada para a entrega intermediaria
+
+Para reduzir risco na avaliacao, a recomendacao e publicar a versao `Streamlit` como endpoint oficial da primeira entrega.
+
+### Opcao recomendada: Streamlit Community Cloud
+
+1. Garanta que o repositorio no GitHub esteja atualizado.
+2. Acesse o painel do Streamlit Community Cloud.
+3. Escolha `New app`.
+4. Selecione este repositorio.
+5. Configure:
+   - `Main file path`: `streamlit_app.py`
+   - `Python requirements`: `requirements-streamlit.txt`
+6. Publique a aplicacao.
+7. Abra o link gerado em janela anonima.
+8. Valide rapidamente as telas:
+   - Dashboard
+   - Equipamentos
+   - Nova Ocorrencia
+   - Historico
+   - Relatorio Tecnico
+   - Futura Integracao com IA
+
+### O que conferir antes de enviar o link
+
+- a aplicacao abre sem erro;
+- o aviso de diagnostico simulado aparece com clareza;
+- o cadastro de equipamento funciona;
+- o registro de ocorrencia gera diagnostico simulado;
+- o historico mostra os registros;
+- o relatorio tecnico esta acessivel;
+- o visual esta legivel em todas as telas.
+
 ## Como rodar em modo producao local
 
 1. Gere o build do frontend:
@@ -258,6 +291,7 @@ Streamlit:
 ```powershell
 python -m py_compile streamlit_app.py
 pip install -r requirements-streamlit.txt
+streamlit run streamlit_app.py
 ```
 
 Smoke test de producao local:
