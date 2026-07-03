@@ -24,25 +24,65 @@ def inject_css() -> None:
     st.markdown(
         """
         <style>
-            .stApp {
+            .stApp,
+            [data-testid="stAppViewContainer"] {
                 background: linear-gradient(180deg, #f4f7f8 0%, #eef3f5 100%);
+                color: #17323a;
+            }
+            [data-testid="stSidebar"] {
+                background: linear-gradient(180deg, #112b33 0%, #163843 100%);
+            }
+            [data-testid="stSidebar"] * {
+                color: #edf6f8;
+            }
+            [data-testid="stMainBlockContainer"] {
+                color: #17323a;
+            }
+            [data-testid="stMainBlockContainer"] h1,
+            [data-testid="stMainBlockContainer"] h2,
+            [data-testid="stMainBlockContainer"] h3,
+            [data-testid="stMainBlockContainer"] p,
+            [data-testid="stMainBlockContainer"] li,
+            [data-testid="stMainBlockContainer"] label,
+            [data-testid="stMainBlockContainer"] div,
+            [data-testid="stMainBlockContainer"] span,
+            [data-testid="stMainBlockContainer"] small {
+                color: #17323a;
+            }
+            [data-testid="stMetric"] {
+                background: #ffffff;
+                border: 1px solid rgba(21, 56, 67, 0.10);
+                border-radius: 16px;
+                padding: 0.9rem 1rem;
+                box-shadow: 0 10px 24px rgba(13, 37, 45, 0.06);
+            }
+            [data-testid="stMetricLabel"] {
+                color: #4d676f !important;
+                font-weight: 600;
+            }
+            [data-testid="stMetricValue"] {
+                color: #0f2d36 !important;
             }
             .hero-card {
-                padding: 1.4rem 1.6rem;
+                padding: 1.15rem 1.35rem;
                 border-radius: 18px;
-                border: 1px solid rgba(21, 56, 67, 0.12);
-                background: linear-gradient(135deg, #0f2d36 0%, #1d4c59 100%);
-                color: #f6fbfc;
-                margin-bottom: 1rem;
-                box-shadow: 0 12px 30px rgba(11, 35, 43, 0.12);
+                border: 1px solid rgba(21, 56, 67, 0.10);
+                background: linear-gradient(135deg, #eaf2f4 0%, #ffffff 100%);
+                color: #102c35;
+                margin-bottom: 0.8rem;
+                box-shadow: 0 12px 30px rgba(11, 35, 43, 0.08);
+            }
+            .hero-card h1,
+            .hero-card p,
+            .hero-card div {
+                color: #102c35 !important;
             }
             .hero-card h1 {
                 margin: 0;
-                font-size: 2.1rem;
+                font-size: 2rem;
             }
             .hero-card p {
                 margin: 0.35rem 0 0 0;
-                color: #d9ebef;
                 font-size: 1rem;
             }
             .notice-pill {
@@ -50,31 +90,37 @@ def inject_css() -> None:
                 margin-top: 0.9rem;
                 padding: 0.45rem 0.8rem;
                 border-radius: 999px;
-                background: rgba(255, 255, 255, 0.12);
-                border: 1px solid rgba(255, 255, 255, 0.16);
+                background: #143842;
+                border: 1px solid #143842;
+                color: #f4fbfc !important;
                 font-weight: 600;
                 font-size: 0.92rem;
+            }
+            .flow-card,
+            .block-card {
+                background: #ffffff;
+                color: #17323a;
+                border: 1px solid rgba(21, 56, 67, 0.10);
+                box-shadow: 0 8px 18px rgba(13, 37, 45, 0.05);
             }
             .flow-card {
                 padding: 1rem 1.1rem;
                 border-radius: 14px;
-                background: #ffffff;
-                border: 1px solid rgba(21, 56, 67, 0.10);
                 margin-top: 0.75rem;
             }
             .status-card {
                 padding: 0.9rem 1rem;
                 border-radius: 14px;
-                background: rgba(15, 45, 54, 0.06);
-                border: 1px solid rgba(15, 45, 54, 0.12);
+                background: rgba(255, 255, 255, 0.08);
+                border: 1px solid rgba(255, 255, 255, 0.12);
                 margin-top: 0.8rem;
             }
-            .status-card strong {
-                display: block;
-                margin-bottom: 0.45rem;
+            .status-card strong,
+            .status-card div {
+                color: #edf6f8 !important;
             }
             .mini-label {
-                color: #47626b;
+                color: #47626b !important;
                 text-transform: uppercase;
                 letter-spacing: 0.06em;
                 font-size: 0.75rem;
@@ -84,9 +130,12 @@ def inject_css() -> None:
             .block-card {
                 padding: 0.95rem 1rem;
                 border-radius: 14px;
-                background: #ffffff;
-                border: 1px solid rgba(21, 56, 67, 0.10);
                 min-height: 112px;
+            }
+            .block-card strong,
+            .block-card div,
+            .block-card span {
+                color: #17323a !important;
             }
         </style>
         """,
