@@ -28,7 +28,34 @@ def apply_custom_css() -> None:
                 background: linear-gradient(180deg, #112b33 0%, #163843 100%);
             }
             [data-testid="stSidebar"] > div:first-child {
-                padding-top: 1rem;
+                padding-top: 2.4rem;
+            }
+            [data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p,
+            [data-testid="stSidebar"] [data-testid="stMarkdownContainer"] li,
+            [data-testid="stSidebar"] label,
+            [data-testid="stSidebar"] label p,
+            [data-testid="stSidebar"] [role="radiogroup"] p {
+                color: #e7f0f2 !important;
+            }
+            .sidebar-shell {
+                margin-bottom: 1.2rem;
+            }
+            .sidebar-shell h2 {
+                margin: 0;
+                color: #f6fbfc;
+                font-size: 2rem;
+                line-height: 1.1;
+            }
+            .sidebar-shell p {
+                margin: 0.65rem 0 0 0;
+                color: #c9d8dd;
+                font-size: 1rem;
+            }
+            .sidebar-nav-label {
+                color: #f3fafc;
+                font-weight: 700;
+                margin: 0.4rem 0 0.35rem 0;
+                font-size: 1rem;
             }
             .status-box {
                 background: rgba(255, 255, 255, 0.08);
@@ -336,6 +363,19 @@ def render_sidebar_status() -> None:
     )
 
 
+def render_sidebar_intro() -> None:
+    st.markdown(
+        """
+        <div class="sidebar-shell">
+            <h2>DiagnoFlow AI</h2>
+            <p>Versão Streamlit para endpoint público da entrega intermediária.</p>
+        </div>
+        <div class="sidebar-nav-label">Navegação</div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
 def render_dashboard() -> None:
     render_hero()
     st.caption("Visão geral da demonstração funcional da triagem técnica industrial.")
@@ -621,8 +661,7 @@ def main() -> None:
     init_state()
 
     with st.sidebar:
-        st.title("DiagnoFlow AI")
-        st.caption("Versão Streamlit para endpoint público da entrega intermediária.")
+        render_sidebar_intro()
         page = st.radio(
             "Navegação",
             [
@@ -633,6 +672,7 @@ def main() -> None:
                 "Relatório Técnico",
                 "Futura Integração com IA",
             ],
+            label_visibility="collapsed",
         )
         render_sidebar_status()
 
