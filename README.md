@@ -89,11 +89,14 @@ diagnoflow-ai/
 |  |  `- services/
 |  `- tests/
 |- frontend/
-|  |- dist/
+|  |- publicacao via build em `dist/` (gerado, nao versionado)
 |  `- src/
 |- docs/
 |- prompts/
+|- .streamlit/
 |- render.yaml
+|- requirements-streamlit.txt
+|- streamlit_app.py
 |- README.md
 `- .gitignore
 ```
@@ -105,6 +108,7 @@ diagnoflow-ai/
 - React com TypeScript foi adotado para permitir interface navegavel, componentes reutilizaveis e tipagem explicita de `Equipment`, `Incident` e `Diagnostic`.
 - O diagnostico mockado foi isolado em `backend/app/services/mock_diagnostic_service.py`, facilitando a troca futura por uma integracao real com LLM.
 - Em producao, o FastAPI serve o build do frontend e faz fallback de rotas da SPA para `index.html`, preservando `/docs` e as rotas da API.
+- A versao Streamlit foi mantida em um unico arquivo `streamlit_app.py` de forma intencional, porque esta fase exige um prototipo simples, demonstravel e rapido de publicar; a modularizacao de estado, regras e views fica planejada para a fase 2.
 
 ## Como a IA sera integrada futuramente
 
@@ -131,7 +135,7 @@ As tools planejadas estao documentadas em [docs/future-llm-integration.md](docs/
 - Registro de nova ocorrencia com multiplos sintomas.
 - Diagnostico simulado com causa provavel, confianca, prioridade, risco, acoes, pecas e observacoes.
 - Historico com filtros por equipamento, criticidade e status.
-- Relatorio tecnico textual com botao de copia.
+- Relatorio tecnico textual com botao de copia na versao React e download de arquivo `.txt` na versao Streamlit.
 - Pagina explicando a futura integracao com IA.
 
 ## Como rodar o backend em desenvolvimento
