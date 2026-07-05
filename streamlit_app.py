@@ -371,7 +371,7 @@ def render_sidebar_intro() -> None:
         """
         <div class="sidebar-shell">
             <h2>DiagnoFlow AI</h2>
-            <p>Versão Streamlit para endpoint público da entrega intermediária.</p>
+            <p>Protótipo de triagem técnica com diagnóstico simulado</p>
         </div>
         <div class="sidebar-nav-label">Navegação</div>
         """,
