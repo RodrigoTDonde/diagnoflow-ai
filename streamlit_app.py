@@ -24,11 +24,14 @@ def apply_custom_css() -> None:
     st.markdown(
         """
         <style>
+            [data-testid="stAppViewBlockContainer"] {
+                padding-top: 1.8rem;
+            }
             [data-testid="stSidebar"] {
                 background: linear-gradient(180deg, #112b33 0%, #163843 100%);
             }
             [data-testid="stSidebar"] > div:first-child {
-                padding-top: 2.4rem;
+                padding-top: 1.9rem;
             }
             [data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p,
             [data-testid="stSidebar"] [data-testid="stMarkdownContainer"] li,
@@ -38,7 +41,7 @@ def apply_custom_css() -> None:
                 color: #e7f0f2 !important;
             }
             .sidebar-shell {
-                margin-bottom: 1.2rem;
+                margin-bottom: 0.9rem;
             }
             .sidebar-shell h2 {
                 margin: 0;
@@ -62,7 +65,7 @@ def apply_custom_css() -> None:
                 border: 1px solid rgba(255, 255, 255, 0.14);
                 border-radius: 14px;
                 padding: 0.9rem 1rem;
-                margin-top: 0.8rem;
+                margin-top: 0.45rem;
             }
             .status-box h4 {
                 margin: 0 0 0.45rem 0;
