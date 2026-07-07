@@ -9,6 +9,8 @@ DiagnoFlow AI é uma aplicação full stack para triagem técnica simulada de m�
 - Repositório GitHub:
   `https://github.com/rodrigodondesenai/diagnoflow-ai`
 
+Observação: por estar publicada no plano gratuito do Streamlit Community Cloud, a aplicação pode entrar em modo de inatividade após um período sem uso. Nesse caso, basta clicar em `Yes, get this app back up!` para reativá-la.
+
 ## Problema e solução
 
 Em rotinas de manutenção industrial, técnicos precisam registrar sinais iniciais de falha com rapidez, manter histórico organizado e produzir um parecer preliminar antes de uma análise aprofundada. O problema escolhido tem complexidade suficiente porque envolve contexto operacional, criticidade do ativo, múltiplos sintomas concorrentes e necessidade de priorização.

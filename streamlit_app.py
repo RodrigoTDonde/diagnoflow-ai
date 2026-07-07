@@ -353,12 +353,12 @@ def render_sidebar_status() -> None:
     st.markdown(
         """
         <div class="status-box">
-            <h4>Status da entrega</h4>
+            <h4>Status do protótipo</h4>
             <ul>
-                <li>Sem LLM real</li>
-                <li>Mocks ativos</li>
-                <li>Preparado para fase 2</li>
-                <li>Versão Streamlit para endpoint público</li>
+                <li>Diagnóstico simulado</li>
+                <li>Sem LLM integrado nesta fase</li>
+                <li>Dados mockados para demonstração</li>
+                <li>Arquitetura preparada para evolução futura</li>
             </ul>
         </div>
         """,
