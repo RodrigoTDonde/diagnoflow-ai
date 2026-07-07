@@ -2,6 +2,13 @@
 
 DiagnoFlow AI e uma aplicacao full stack para triagem tecnica simulada de maquinas rotativas industriais. A proposta da primeira entrega da disciplina e demonstrar uma jornada funcional de registro de sintomas, organizacao de ocorrencias e geracao de diagnostico tecnico mockado, sem integrar nenhum LLM nesta fase.
 
+## Acesso rapido
+
+- Endpoint publico da entrega intermediaria:
+  `https://diagnoflow-ai-ty4bspr76dgyzc8bsgpzje.streamlit.app/`
+- Repositorio GitHub:
+  `https://github.com/rodrigodondesenai/diagnoflow-ai`
+
 ## Problema e solucao
 
 Em rotinas de manutencao industrial, tecnicos precisam registrar sinais iniciais de falha com rapidez, manter historico organizado e produzir um parecer preliminar antes de uma analise aprofundada. O problema escolhido tem complexidade suficiente porque envolve contexto operacional, criticidade do ativo, multiplos sintomas concorrentes e necessidade de priorizacao.
