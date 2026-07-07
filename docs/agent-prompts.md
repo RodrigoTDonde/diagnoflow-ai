@@ -1,107 +1,107 @@
 # Agent Prompts
 
-Este documento registra evidencias do uso do agente de codificacao na construcao e revisao da entrega intermediaria do projeto DiagnoFlow AI.
+Este documento registra evidências do uso do agente de codificação na construção e revisão da entrega intermediária do projeto DiagnoFlow AI.
 
 ## Prompt inicial usado
 
-O agente recebeu como tarefa principal a criacao completa da aplicacao dentro do repositorio local, com os seguintes requisitos centrais:
+O agente recebeu como tarefa principal a criação completa da aplicação dentro do repositório local, com os seguintes requisitos centrais:
 
 - backend em Python com FastAPI;
 - frontend em React com Vite e TypeScript;
 - banco local SQLite;
-- multiplas telas navegaveis;
-- historico, formularios e visualizacoes;
+- múltiplas telas navegáveis;
+- histórico, formulários e visualizações;
 - endpoint funcional;
-- documentacao e README detalhados;
+- documentação e README detalhados;
 - nenhum LLM real nesta primeira fase;
-- diagnosticos exclusivamente simulados/mockados.
+- diagnósticos exclusivamente simulados/mockados.
 
-## Estrategia adotada pelo agente
+## Estratégia adotada pelo agente
 
 O trabalho foi dividido em etapas:
 
 1. leitura do enunciado anexado;
-2. criacao da estrutura base do backend;
-3. criacao da interface React com navegacao;
-4. adicao de documentacao da futura integracao com IA;
-5. validacoes locais;
-6. revisao final voltada para os criterios da disciplina.
+2. criação da estrutura base do backend;
+3. criação da interface React com navegação;
+4. adição de documentação da futura integração com IA;
+5. validações locais;
+6. revisão final voltada para os critérios da disciplina.
 
-## Iteracoes realizadas
+## Iterações realizadas
 
-### Iteracao 1 - Estrutura inicial
+### Iteração 1 - Estrutura inicial
 
-- criacao de `backend/app`, `backend/tests`, `frontend/src`, `docs` e `prompts`;
-- implementacao da API FastAPI com rotas de equipamentos, ocorrencias e diagnosticos;
-- criacao do servico `mock_diagnostic_service.py`;
-- criacao do frontend com dashboard, equipamentos, nova ocorrencia, historico e futura IA.
+- criação de `backend/app`, `backend/tests`, `frontend/src`, `docs` e `prompts`;
+- implementação da API FastAPI com rotas de equipamentos, ocorrências e diagnósticos;
+- criação do serviço `mock_diagnostic_service.py`;
+- criação do frontend com dashboard, equipamentos, nova ocorrência, histórico e futura IA.
 
-### Iteracao 2 - Validacao tecnica
+### Iteração 2 - Validação técnica
 
-- compilacao do backend com `python -m compileall`;
-- instalacao de dependencias do frontend;
-- instalacao de dependencias do backend;
-- execucao de `pytest`;
-- execucao de `npm run build`;
+- compilação do backend com `python -m compileall`;
+- instalação de dependências do frontend;
+- instalação de dependências do backend;
+- execução de `pytest`;
+- execução de `npm run build`;
 - smoke tests de endpoints com `TestClient`.
 
-### Iteracao 3 - Correcao apos validacao
+### Iteração 3 - Correção após validação
 
-- adicao de `frontend/src/vite-env.d.ts` para corrigir `import.meta.env`;
+- adição de `frontend/src/vite-env.d.ts` para corrigir `import.meta.env`;
 - ajuste dos testes do backend para usar `with TestClient(app)`;
-- troca de `datetime.utcnow()` por funcao auxiliar com `timezone.utc`;
-- limpeza de artefatos de build e atualizacao do `.gitignore`.
+- troca de `datetime.utcnow()` por função auxiliar com `timezone.utc`;
+- limpeza de artefatos de build e atualização do `.gitignore`.
 
-### Iteracao 4 - Revisao para a banca
+### Iteração 4 - Revisão para a banca
 
-- ampliacao do `README.md`;
-- reforco das evidencias de uso do agente;
-- revisao visual da interface com banners de mock;
-- checagem explicita de ausencia de integracao real com LLM.
+- ampliação do `README.md`;
+- reforço das evidências de uso do agente;
+- revisão visual da interface com banners de mock;
+- checagem explícita de ausência de integração real com LLM.
 
-### Iteracao 5 - Versao Streamlit paralela
+### Iteração 5 - Versão Streamlit paralela
 
-- decisao de criar uma segunda interface sem substituir FastAPI + React;
-- reaproveitamento do conceito de equipamentos, ocorrencias, diagnosticos e relatorio tecnico;
-- implementacao de `streamlit_app.py` com `st.session_state` e dados mockados iniciais;
-- manutencao explicita da restricao: nenhum LLM real integrado nesta fase;
-- preparacao de documentacao especifica para entrega online simplificada.
+- decisão de criar uma segunda interface sem substituir FastAPI + React;
+- reaproveitamento do conceito de equipamentos, ocorrências, diagnósticos e relatório técnico;
+- implementação de `streamlit_app.py` com `st.session_state` e dados mockados iniciais;
+- manutenção explícita da restrição: nenhum LLM real integrado nesta fase;
+- preparação de documentação específica para entrega online simplificada.
 
 ## Prompt atual para esta etapa
 
-O agente recebeu uma nova orientacao para criar uma versao Streamlit paralela do projeto, com as seguintes exigencias:
+O agente recebeu uma nova orientação para criar uma versão Streamlit paralela do projeto, com as seguintes exigências:
 
-- nao apagar, renomear ou substituir a versao full stack existente;
-- usar apenas diagnostico simulado/mockado;
+- não apagar, renomear ou substituir a versão full stack existente;
+- usar apenas diagnóstico simulado/mockado;
 - criar `streamlit_app.py`;
 - criar `requirements-streamlit.txt`;
-- criar documentacao de apoio para a entrega online;
-- atualizar `README.md` e este arquivo com a justificativa da nova versao;
-- validar a app Streamlit e garantir ausencia de integracao com LLM real.
+- criar documentação de apoio para a entrega online;
+- atualizar `README.md` e este arquivo com a justificativa da nova versão;
+- validar a app Streamlit e garantir ausência de integração com LLM real.
 
 ## Erros encontrados
 
 - `npm install` falhou inicialmente por indisponibilidade de cache/rede no ambiente restrito.
 - `python -m venv .venv` falhou inicialmente durante `ensurepip`.
 - `npm run build` falhou com o erro `Property 'env' does not exist on type 'ImportMeta'`.
-- `pytest` falhou porque o banco nao era inicializado quando o `lifespan` da app nao era acionado no teste.
-- O build do frontend gerou arquivos derivados que nao deveriam permanecer versionados.
+- `pytest` falhou porque o banco não era inicializado quando o `lifespan` da app não era acionado no teste.
+- O build do frontend gerou arquivos derivados que não deveriam permanecer versionados.
 
-## Nova decisao de arquitetura
+## Nova decisão de arquitetura
 
-Foi adicionada uma versao Streamlit paralela para reduzir o risco de deploy da primeira entrega. A decisao nao substitui a arquitetura principal; ela cria uma trilha de entrega online mais simples, adequada ao prazo e ao criterio de endpoint publico.
+Foi adicionada uma versão Streamlit paralela para reduzir o risco de deploy da primeira entrega. A decisão não substitui a arquitetura principal; ela cria uma trilha de entrega online mais simples, adequada ao prazo e ao critério de endpoint público.
 
-## Correcao feita
+## Correção feita
 
-- repeticao de comandos com permissao ampliada quando o bloqueio era do ambiente;
-- criacao do arquivo `frontend/src/vite-env.d.ts`;
-- atualizacao dos testes para contexto correto do `TestClient`;
-- limpeza de artefatos gerados e reforco do `.gitignore`;
-- reforco textual da interface para deixar claro que o diagnostico e simulado.
+- repetição de comandos com permissão ampliada quando o bloqueio era do ambiente;
+- criação do arquivo `frontend/src/vite-env.d.ts`;
+- atualização dos testes para contexto correto do `TestClient`;
+- limpeza de artefatos gerados e reforço do `.gitignore`;
+- reforço textual da interface para deixar claro que o diagnóstico é simulado.
 
 ## Comandos executados
 
-### Inspecao e estrutura
+### Inspeção e estrutura
 
 ```powershell
 Get-Content -Raw <arquivo>
@@ -148,14 +148,14 @@ git commit -m "docs: documenta arquitetura e limpa artefatos de build"
 
 ## Resultado do uso do agente
 
-O agente foi util para:
+O agente foi útil para:
 
-- acelerar a construcao do projeto end-to-end;
-- manter consistencia entre frontend e backend;
-- criar uma segunda interface mais simples sem desmontar a versao principal;
-- documentar a futura integracao com IA sem ferir a restricao de nao usar LLM nesta fase;
-- identificar e corrigir problemas de validacao antes da entrega.
+- acelerar a construção do projeto end-to-end;
+- manter consistência entre frontend e backend;
+- criar uma segunda interface mais simples sem desmontar a versão principal;
+- documentar a futura integração com IA sem ferir a restrição de não usar LLM nesta fase;
+- identificar e corrigir problemas de validação antes da entrega.
 
 ## Limite observado
 
-Parte dos erros iniciais nao estava no codigo do projeto, mas no ambiente de execucao restrito. Isso exigiu repeticao de alguns comandos com permissoes ampliadas e revisao manual dos resultados antes de seguir.
+Parte dos erros iniciais não estava no código do projeto, mas no ambiente de execução restrito. Isso exigiu repetição de alguns comandos com permissões ampliadas e revisão manual dos resultados antes de seguir.

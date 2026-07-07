@@ -1,70 +1,70 @@
 # DiagnoFlow AI
 
-DiagnoFlow AI e uma aplicacao full stack para triagem tecnica simulada de maquinas rotativas industriais. A proposta da primeira entrega da disciplina e demonstrar uma jornada funcional de registro de sintomas, organizacao de ocorrencias e geracao de diagnostico tecnico mockado, sem integrar nenhum LLM nesta fase.
+DiagnoFlow AI é uma aplicação full stack para triagem técnica simulada de máquinas rotativas industriais. A proposta da primeira entrega da disciplina é demonstrar uma jornada funcional de registro de sintomas, organização de ocorrências e geração de diagnóstico técnico mockado, sem integrar nenhum LLM nesta fase.
 
-## Acesso rapido
+## Acesso rápido
 
-- Endpoint publico da entrega intermediaria:
+- Endpoint público da entrega intermediária:
   `https://diagnoflow-ai-ty4bspr76dgyzc8bsgpzje.streamlit.app/`
-- Repositorio GitHub:
+- Repositório GitHub:
   `https://github.com/rodrigodondesenai/diagnoflow-ai`
 
-## Problema e solucao
+## Problema e solução
 
-Em rotinas de manutencao industrial, tecnicos precisam registrar sinais iniciais de falha com rapidez, manter historico organizado e produzir um parecer preliminar antes de uma analise aprofundada. O problema escolhido tem complexidade suficiente porque envolve contexto operacional, criticidade do ativo, multiplos sintomas concorrentes e necessidade de priorizacao.
+Em rotinas de manutenção industrial, técnicos precisam registrar sinais iniciais de falha com rapidez, manter histórico organizado e produzir um parecer preliminar antes de uma análise aprofundada. O problema escolhido tem complexidade suficiente porque envolve contexto operacional, criticidade do ativo, múltiplos sintomas concorrentes e necessidade de priorização.
 
-A solucao entregue foi uma aplicacao com:
+A solução entregue foi uma aplicação com:
 
 - cadastro de equipamentos;
-- abertura de ocorrencia com sintomas operacionais;
-- diagnostico simulado baseado em regras;
-- historico filtravel;
-- relatorio tecnico textual;
-- documentacao da futura integracao com IA generativa.
+- abertura de ocorrência com sintomas operacionais;
+- diagnóstico simulado baseado em regras;
+- histórico filtrável;
+- relatório técnico textual;
+- documentação da futura integração com IA generativa.
 
 ## O que esta fase entrega
 
-- Endpoint funcional em FastAPI.
-- Frontend React com multiplas telas navegaveis.
-- Dados simulados persistidos em SQLite.
-- Interacoes de cadastro, listagem, historico e geracao de diagnostico mockado.
-- Avisos explicitos na interface e na API de que nao ha LLM integrado nesta etapa.
-- Suporte para publicacao em endpoint unico, com FastAPI servindo o build do frontend.
-- Versao paralela em Streamlit para entrega online simplificada.
+- endpoint funcional em FastAPI;
+- frontend React com múltiplas telas navegáveis;
+- dados simulados persistidos em SQLite;
+- interações de cadastro, listagem, histórico e geração de diagnóstico mockado;
+- avisos explícitos na interface e na API de que não há LLM integrado nesta etapa;
+- suporte para publicação em endpoint único, com FastAPI servindo o build do frontend;
+- versão paralela em Streamlit para entrega online simplificada.
 
-## O que nao existe nesta fase
+## O que não existe nesta fase
 
-- Nenhuma chamada para OpenAI, Anthropic, Gemini, Ollama, LangChain ou outro provedor.
-- Nenhuma inferencia real com modelo generativo.
-- Nenhuma autenticacao.
-- Nenhum deploy com Docker.
+- nenhuma chamada para OpenAI, Anthropic, Gemini, Ollama, LangChain ou outro provedor;
+- nenhuma inferência real com modelo generativo;
+- nenhuma autenticação;
+- nenhum deploy com Docker.
 
-## Versoes disponiveis
+## Versões disponíveis
 
-O repositorio agora possui duas formas de entrega da mesma proposta:
+O repositório possui duas formas de entrega da mesma proposta:
 
 1. **Full stack FastAPI + React + SQLite**
-   - versao principal e mais completa;
-   - inclui API, frontend separado, testes e preparo para deploy publico.
+   - versão principal e mais completa;
+   - inclui API, frontend separado, testes e preparo para deploy público.
 
 2. **Streamlit para entrega online simplificada**
-   - versao paralela em `streamlit_app.py`;
+   - versão paralela em `streamlit_app.py`;
    - usa `st.session_state` e dados mockados iniciais;
-   - reduz o risco de deploy para um endpoint publico unico na primeira entrega.
+   - reduz o risco de deploy para um endpoint público único na primeira entrega.
 
 ## Por que Streamlit foi adicionado
 
-A versao Streamlit foi criada para reduzir risco operacional na publicacao online da primeira entrega. Em vez de depender da combinacao entre build React, API FastAPI e configuracao de deploy em producao, a banca pode acessar uma versao unica e simples com:
+A versão Streamlit foi criada para reduzir risco operacional na publicação online da primeira entrega. Em vez de depender da combinação entre build React, API FastAPI e configuração de deploy em produção, a banca pode acessar uma versão única e simples com:
 
 - dashboard;
 - cadastro de equipamentos;
-- registro de ocorrencias;
-- diagnostico simulado;
-- historico;
-- relatorio tecnico;
-- pagina de futura integracao com IA.
+- registro de ocorrências;
+- diagnóstico simulado;
+- histórico;
+- relatório técnico;
+- página de futura integração com IA.
 
-Essa decisao atende ao objetivo de colocar a entrega em um endpoint publico rapidamente, sem mudar o escopo funcional e sem integrar LLM real.
+Essa decisão atende ao objetivo de colocar a entrega em um endpoint público rapidamente, sem mudar o escopo funcional e sem integrar LLM real.
 
 ## Arquitetura
 
@@ -72,7 +72,7 @@ Essa decisao atende ao objetivo de colocar a entrega em um endpoint publico rapi
 frontend (React + Vite + TypeScript)
         |
         v
-build estatico (frontend/dist)
+build estático do frontend
         |
         v
 backend (FastAPI + SQLAlchemy)
@@ -81,7 +81,7 @@ backend (FastAPI + SQLAlchemy)
 SQLite local
 ```
 
-### Estrutura do repositorio
+### Estrutura do repositório
 
 ```text
 diagnoflow-ai/
@@ -96,7 +96,7 @@ diagnoflow-ai/
 |  |  `- services/
 |  `- tests/
 |- frontend/
-|  |- publicacao via build em `dist/` (gerado, nao versionado)
+|  |- build em `dist/` (gerado, não versionado)
 |  `- src/
 |- docs/
 |- prompts/
@@ -110,40 +110,54 @@ diagnoflow-ai/
 
 ## Escolhas de design
 
-- FastAPI foi escolhida para entregar API REST clara, documentacao automatica em `/docs` e validacao simples com Pydantic.
-- SQLite foi usado para reduzir complexidade de setup na avaliacao intermediaria.
-- React com TypeScript foi adotado para permitir interface navegavel, componentes reutilizaveis e tipagem explicita de `Equipment`, `Incident` e `Diagnostic`.
-- O diagnostico mockado foi isolado em `backend/app/services/mock_diagnostic_service.py`, facilitando a troca futura por uma integracao real com LLM.
-- Em producao, o FastAPI serve o build do frontend e faz fallback de rotas da SPA para `index.html`, preservando `/docs` e as rotas da API.
-- A versao Streamlit foi mantida em um unico arquivo `streamlit_app.py` de forma intencional, porque esta fase exige um prototipo simples, demonstravel e rapido de publicar; a modularizacao de estado, regras e views fica planejada para a fase 2.
+- FastAPI foi escolhida para entregar API REST clara, documentação automática em `/docs` e validação simples com Pydantic.
+- SQLite foi usado para reduzir complexidade de setup na avaliação intermediária.
+- React com TypeScript foi adotado para permitir interface navegável, componentes reutilizáveis e tipagem explícita de `Equipment`, `Incident` e `Diagnostic`.
+- O diagnóstico mockado foi isolado em `backend/app/services/mock_diagnostic_service.py`, facilitando a troca futura por uma integração real com LLM.
+- Em produção, o FastAPI serve o build do frontend e faz fallback de rotas da SPA para `index.html`, preservando `/docs` e as rotas da API.
+- A versão Streamlit foi mantida em um único arquivo `streamlit_app.py` de forma intencional, porque esta fase exige um protótipo simples, demonstrável e rápido de publicar. A modularização de estado, regras e views fica planejada para a fase 2.
 
-## Como a IA sera integrada futuramente
+## Tecnologias e IA utilizadas nesta fase
 
-Na segunda fase, a regra deterministica atual podera ser substituida por um fluxo de orquestracao com:
+- FastAPI: backend e API REST com documentação automática.
+- React + Vite + TypeScript: interface navegável, componentização e tipagem explícita.
+- SQLite: persistência local simples para a entrega intermediária.
+- Streamlit: versão paralela para publicação pública simplificada.
+- Codex: agente de codificação usado para acelerar implementação, revisão e documentação.
 
-1. coleta da ocorrencia e do contexto do equipamento;
+Importante:
+
+- nenhum modelo de IA generativa foi integrado à aplicação nesta fase;
+- não houve uso de OpenAI, Anthropic, Gemini, Ollama, LangChain ou outro provedor dentro do produto entregue;
+- o uso de IA nesta etapa ocorreu apenas como suporte ao desenvolvimento, por meio do agente de codificação.
+
+## Como a IA será integrada futuramente
+
+Na segunda fase, a regra determinística atual poderá ser substituída por um fluxo de orquestração com:
+
+1. coleta da ocorrência e do contexto do equipamento;
 2. consulta a tools internas;
-3. chamada a um LLM com prompt tecnico controlado;
-4. validacao de saida estruturada;
-5. revisao humana antes de decisoes criticas.
+3. chamada a um LLM com prompt técnico controlado;
+4. validação de saída estruturada;
+5. revisão humana antes de decisões críticas.
 
-As tools planejadas estao documentadas em [docs/future-llm-integration.md](docs/future-llm-integration.md) e incluem:
+As tools planejadas estão documentadas em [docs/future-llm-integration.md](docs/future-llm-integration.md) e incluem:
 
-- consultar historico da maquina;
+- consultar histórico da máquina;
 - consultar base de falhas conhecidas;
 - calcular criticidade;
-- gerar checklist tecnico;
-- gerar relatorio estruturado.
+- gerar checklist técnico;
+- gerar relatório estruturado.
 
 ## Funcionalidades implementadas
 
-- Dashboard com totais operacionais e ultimas ocorrencias.
-- Cadastro de equipamentos com criticidade e status.
-- Registro de nova ocorrencia com multiplos sintomas.
-- Diagnostico simulado com causa provavel, confianca, prioridade, risco, acoes, pecas e observacoes.
-- Historico com filtros por equipamento, criticidade e status.
-- Relatorio tecnico textual com botao de copia na versao React e download de arquivo `.txt` na versao Streamlit.
-- Pagina explicando a futura integracao com IA.
+- dashboard com totais operacionais e últimas ocorrências;
+- cadastro de equipamentos com criticidade e status;
+- registro de nova ocorrência com múltiplos sintomas;
+- diagnóstico simulado com causa provável, confiança, prioridade, risco, ações, peças e observações;
+- histórico com filtros por equipamento, criticidade e status;
+- relatório técnico textual com botão de cópia na versão React e download de arquivo `.txt` na versão Streamlit;
+- página explicando a futura integração com IA.
 
 ## Como rodar o backend em desenvolvimento
 
@@ -167,49 +181,49 @@ npm install
 npm run dev
 ```
 
-## Como rodar a versao Streamlit
+## Como rodar a versão Streamlit
 
 ```powershell
 pip install -r requirements-streamlit.txt
 streamlit run streamlit_app.py
 ```
 
-Essa versao nao substitui a full stack. Ela existe apenas como alternativa de publicacao online simplificada para a avaliacao intermediaria.
+Essa versão não substitui a full stack. Ela existe apenas como alternativa de publicação online simplificada para a avaliação intermediária.
 
-## Publicacao recomendada para a entrega intermediaria
+## Publicação recomendada para a entrega intermediária
 
-Para reduzir risco na avaliacao, a recomendacao e publicar a versao `Streamlit` como endpoint oficial da primeira entrega.
+Para reduzir risco na avaliação, a recomendação é publicar a versão `Streamlit` como endpoint oficial da primeira entrega.
 
-### Opcao recomendada: Streamlit Community Cloud
+### Opção recomendada: Streamlit Community Cloud
 
-1. Garanta que o repositorio no GitHub esteja atualizado.
+1. Garanta que o repositório no GitHub esteja atualizado.
 2. Acesse o painel do Streamlit Community Cloud.
 3. Escolha `New app`.
-4. Selecione este repositorio.
+4. Selecione este repositório.
 5. Configure:
    - `Main file path`: `streamlit_app.py`
    - `Python requirements`: `requirements-streamlit.txt`
-6. Publique a aplicacao.
-7. Abra o link gerado em janela anonima.
+6. Publique a aplicação.
+7. Abra o link gerado em janela anônima.
 8. Valide rapidamente as telas:
    - Dashboard
    - Equipamentos
-   - Nova Ocorrencia
-   - Historico
-   - Relatorio Tecnico
-   - Futura Integracao com IA
+   - Nova Ocorrência
+   - Histórico
+   - Relatório Técnico
+   - Futura Integração com IA
 
 ### O que conferir antes de enviar o link
 
-- a aplicacao abre sem erro;
-- o aviso de diagnostico simulado aparece com clareza;
+- a aplicação abre sem erro;
+- o aviso de diagnóstico simulado aparece com clareza;
 - o cadastro de equipamento funciona;
-- o registro de ocorrencia gera diagnostico simulado;
-- o historico mostra os registros;
-- o relatorio tecnico esta acessivel;
-- o visual esta legivel em todas as telas.
+- o registro de ocorrência gera diagnóstico simulado;
+- o histórico mostra os registros;
+- o relatório técnico está acessível;
+- o visual está legível em todas as telas.
 
-## Como rodar em modo producao local
+## Como rodar em modo produção local
 
 1. Gere o build do frontend:
 
@@ -230,23 +244,23 @@ uvicorn app.main:app --host 0.0.0.0 --port 8000
 3. Acesse:
 
 - `http://127.0.0.1:8000/` para a interface React;
-- `http://127.0.0.1:8000/docs` para a documentacao da API;
+- `http://127.0.0.1:8000/docs` para a documentação da API;
 - `http://127.0.0.1:8000/dashboard` para uma rota principal da API.
 
 ## Deploy no Render
 
-O repositorio inclui `render.yaml` para facilitar a configuracao.
+O repositório inclui `render.yaml` para facilitar a configuração.
 
-### Opcao 1 - Blueprint
+### Opção 1 - Blueprint
 
-1. No Render, escolha criar um servico via Blueprint.
-2. Aponte para este repositorio.
-3. O arquivo `render.yaml` configurara:
+1. No Render, escolha criar um serviço via Blueprint.
+2. Aponte para este repositório.
+3. O arquivo `render.yaml` configurará:
    - build do frontend com `npm ci && npm run build`;
-   - instalacao das dependencias Python do backend;
-   - start em producao com `uvicorn`.
+   - instalação das dependências Python do backend;
+   - start em produção com `uvicorn`.
 
-### Opcao 2 - Configuracao manual
+### Opção 2 - Configuração manual
 
 Crie um Web Service com:
 
@@ -275,13 +289,13 @@ cd backend && uvicorn app.main:app --host 0.0.0.0 --port $PORT
 
 ## Dados iniciais
 
-Ao iniciar a API, o banco local e criado automaticamente e um seed adiciona:
+Ao iniciar a API, o banco local é criado automaticamente e um seed adiciona:
 
 - equipamentos de exemplo;
-- uma ocorrencia inicial;
-- um diagnostico simulado ja associado ao historico.
+- uma ocorrência inicial;
+- um diagnóstico simulado já associado ao histórico.
 
-## Comandos de validacao
+## Comandos de validação
 
 Backend:
 
@@ -305,65 +319,65 @@ pip install -r requirements-streamlit.txt
 streamlit run streamlit_app.py
 ```
 
-Smoke test de producao local:
+Smoke test de produção local:
 
 ```powershell
 cd backend
 .\.venv\Scripts\python -c "from fastapi.testclient import TestClient; from app.main import app; client=TestClient(app); client.__enter__(); print(client.get('/docs').status_code); print(client.get('/dashboard').status_code); print(client.get('/').status_code); print(client.get('/historico').status_code); client.__exit__(None,None,None)"
 ```
 
-Repositorio:
+Repositório:
 
 ```powershell
 git status --short
 ```
 
-## Evidencia de uso do Codex
+## Evidência de uso do Codex
 
-O uso do agente de codificacao esta documentado em [docs/agent-prompts.md](docs/agent-prompts.md), incluindo:
+O uso do agente de codificação está documentado em [docs/agent-prompts.md](docs/agent-prompts.md), incluindo:
 
 - prompt inicial da tarefa;
-- iteracoes de implementacao;
-- erros encontrados na validacao;
-- correcoes aplicadas;
+- iterações de implementação;
+- erros encontrados na validação;
+- correções aplicadas;
 - comandos executados;
-- decisoes tomadas para estabilizar a entrega.
+- decisões tomadas para estabilizar a entrega.
 
 ## O que funcionou bem com o Codex
 
-- Geracao rapida da estrutura completa de backend, frontend e documentacao.
-- Criacao coerente de contratos entre API e interface.
-- Organizacao do repositorio em commits separados por backend, frontend e documentacao.
-- Execucao iterativa de validacao local para encontrar e corrigir falhas antes da revisao final.
+- geração rápida da estrutura completa de backend, frontend e documentação;
+- criação coerente de contratos entre API e interface;
+- organização do repositório em commits separados por backend, frontend e documentação;
+- execução iterativa de validação local para encontrar e corrigir falhas antes da revisão final.
 
-## O que nao funcionou de primeira e precisou de correcao
+## O que não funcionou de primeira e precisou de correção
 
-- `npm install` falhou inicialmente por restricao de rede/cache do ambiente.
-- A criacao da `venv` falhou no `ensurepip` e precisou ser refeita com permissao ampliada.
-- O build do frontend falhou por ausencia da tipagem de `import.meta.env`.
-- Os testes do backend falharam inicialmente porque o `TestClient` nao estava disparando o `lifespan` da aplicacao fora de contexto.
-- A adaptacao para SPA exigiu revisar a rota `/` e incluir fallback para rotas internas do React.
+- `npm install` falhou inicialmente por restrição de rede/cache do ambiente;
+- a criação da `venv` falhou no `ensurepip` e precisou ser refeita com permissão ampliada;
+- o build do frontend falhou por ausência da tipagem de `import.meta.env`;
+- os testes do backend falharam inicialmente porque o `TestClient` não estava disparando o `lifespan` da aplicação fora de contexto;
+- a adaptação para SPA exigiu revisar a rota `/` e incluir fallback para rotas internas do React.
 
-## Limitacoes da primeira fase
+## Limitações da primeira fase
 
-- Diagnostico inteiramente mockado por regras simples.
-- Sem consumo de APIs externas.
-- Sem autenticacao e sem controle de perfis.
-- Sem auditoria avancada das acoes do usuario.
-- Sem observabilidade de producao.
-- Sem deploy automatizado alem da configuracao basica para Render.
+- diagnóstico inteiramente mockado por regras simples;
+- sem consumo de APIs externas;
+- sem autenticação e sem controle de perfis;
+- sem auditoria avançada das ações do usuário;
+- sem observabilidade de produção;
+- sem deploy automatizado além da configuração básica para Render.
 
-## Estado atual para a avaliacao intermediaria
+## Estado atual para a avaliação intermediária
 
-- Aplicacao funcional localmente.
-- Backend validado com `pytest`.
-- Frontend validado com `npm run build`.
-- Versao Streamlit criada para publicacao online simplificada.
-- Repositorio organizado e documentado.
-- Mensagem explicita de que nao ha LLM nesta fase.
-- Endpoint unico pronto para demonstracao publica.
+- aplicação funcional localmente;
+- backend validado com `pytest`;
+- frontend validado com `npm run build`;
+- versão Streamlit criada para publicação online simplificada;
+- repositório organizado e documentado;
+- mensagem explícita de que não há LLM nesta fase;
+- endpoint único pronto para demonstração pública.
 
-## Documentacao complementar
+## Documentação complementar
 
 - [docs/agent-prompts.md](docs/agent-prompts.md)
 - [docs/design-decisions.md](docs/design-decisions.md)

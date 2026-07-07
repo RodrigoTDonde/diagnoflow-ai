@@ -1,22 +1,22 @@
 # Streamlit Delivery
 
-Esta versao paralela em Streamlit foi criada para reduzir o risco de deploy da primeira entrega e facilitar a publicacao em um endpoint publico unico.
+Esta versão paralela em Streamlit foi criada para reduzir o risco de deploy da primeira entrega e facilitar a publicação em um endpoint público único.
 
-## Motivacao
+## Motivação
 
-- evitar dependencia de deploy separado para frontend e backend;
+- evitar dependência de deploy separado para frontend e backend;
 - manter a narrativa do projeto DiagnoFlow AI;
-- reaproveitar regras mockadas de diagnostico ja definidas;
-- simplificar a demonstracao online para a disciplina.
+- reaproveitar regras mockadas de diagnóstico já definidas;
+- simplificar a demonstração online para a disciplina.
 
 ## O que foi reaproveitado
 
 - tema e objetivo do produto;
-- entidades principais: equipamentos, ocorrencias e diagnosticos;
-- sintomas tecnicos;
-- regras de diagnostico simulado;
-- pagina de futura integracao com IA;
-- aviso explicito de que nao ha LLM integrado nesta fase.
+- entidades principais: equipamentos, ocorrências e diagnósticos;
+- sintomas técnicos;
+- regras de diagnóstico simulado;
+- página de futura integração com IA;
+- aviso explícito de que não há LLM integrado nesta fase.
 
 ## Como rodar
 
@@ -31,23 +31,23 @@ streamlit run streamlit_app.py
 
 1. Enviar o estado final do projeto para o GitHub.
 2. Criar uma nova app no Streamlit Community Cloud.
-3. Apontar para este repositorio.
+3. Apontar para este repositório.
 4. Definir `streamlit_app.py` como arquivo principal.
-5. Usar `requirements-streamlit.txt` para as dependencias.
-6. Publicar e validar o link em janela anonima.
+5. Usar `requirements-streamlit.txt` para as dependências.
+6. Publicar e validar o link em janela anônima.
 
-## Checklist de validacao do endpoint
+## Checklist de validação do endpoint
 
-- abrir a aplicacao sem erro;
+- abrir a aplicação sem erro;
 - navegar por todas as telas;
 - cadastrar um equipamento;
-- registrar uma ocorrencia;
-- confirmar o diagnostico simulado;
-- abrir historico e relatorio tecnico;
-- confirmar o aviso explicito de que nao ha LLM nesta fase.
+- registrar uma ocorrência;
+- confirmar o diagnóstico simulado;
+- abrir histórico e relatório técnico;
+- confirmar o aviso explícito de que não há LLM nesta fase.
 
-## Limites desta versao
+## Limites desta versão
 
-- dados ficam em `st.session_state`, sem persistencia de banco;
-- foco em simplicidade para avaliacao online;
-- nenhuma integracao real com OpenAI, Anthropic, Gemini, Ollama, LangChain ou qualquer LLM.
+- dados ficam em `st.session_state`, sem persistência de banco;
+- foco em simplicidade para avaliação online;
+- nenhuma integração real com OpenAI, Anthropic, Gemini, Ollama, LangChain ou qualquer LLM.

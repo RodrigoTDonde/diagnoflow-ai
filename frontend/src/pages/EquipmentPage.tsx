@@ -35,7 +35,7 @@ export function EquipmentPage() {
       setForm(emptyForm);
       loadEquipment();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Nao foi possivel cadastrar o equipamento.");
+      setError(err instanceof Error ? err.message : "Não foi possível cadastrar o equipamento.");
     }
   };
 

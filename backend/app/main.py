@@ -41,7 +41,7 @@ async def lifespan(_: FastAPI):
 app = FastAPI(
     title="DiagnoFlow AI API",
     version="0.1.0",
-    description="API para triagem tecnica simulada de maquinas rotativas industriais.",
+    description="API para triagem técnica simulada de máquinas rotativas industriais.",
     lifespan=lifespan,
 )
 
@@ -66,7 +66,7 @@ def serve_spa() -> FileResponse:
     if not index_file.exists():
         raise HTTPException(
             status_code=503,
-            detail="Frontend build nao encontrado. Execute `cd frontend && npm run build` antes de iniciar o modo de producao.",
+            detail="Frontend build não encontrado. Execute `cd frontend && npm run build` antes de iniciar o modo de produção.",
         )
     return FileResponse(index_file)
 
