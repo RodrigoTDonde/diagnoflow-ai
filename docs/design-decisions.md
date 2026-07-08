@@ -5,7 +5,7 @@
 - Backend em FastAPI com SQLAlchemy e SQLite para simplicidade local.
 - Frontend em React + Vite + TypeScript para navegação fluida e tipagem explícita.
 - Serviço de diagnóstico isolado em `mock_diagnostic_service.py` para facilitar substituição futura por LLM.
-- Versão Streamlit mantida em `streamlit_app.py` como arquivo único nesta fase para reduzir complexidade, acelerar deploy e manter a revisão mais direta para a entrega intermediária.
+- Versão Streamlit mantida em `streamlit_app.py` como arquivo único nesta fase para reduzir complexidade, acelerar a publicação e manter a revisão mais direta para a entrega intermediária.
 
 ## Produto
 

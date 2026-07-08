@@ -103,7 +103,6 @@ diagnoflow-ai/
 |- docs/
 |- prompts/
 |- .streamlit/
-|- render.yaml
 |- requirements-streamlit.txt
 |- streamlit_app.py
 |- README.md
@@ -225,7 +224,7 @@ Para reduzir risco na avaliação, a recomendação é publicar a versão `Strea
 - o relatório técnico está acessível;
 - o visual está legível em todas as telas.
 
-## Como rodar em modo produção local
+## Como rodar a versão full stack localmente
 
 1. Gere o build do frontend:
 
@@ -248,35 +247,6 @@ uvicorn app.main:app --host 0.0.0.0 --port 8000
 - `http://127.0.0.1:8000/` para a interface React;
 - `http://127.0.0.1:8000/docs` para a documentação da API;
 - `http://127.0.0.1:8000/dashboard` para uma rota principal da API.
-
-## Deploy no Render
-
-O repositório inclui `render.yaml` para facilitar a configuração.
-
-### Opção 1 - Blueprint
-
-1. No Render, escolha criar um serviço via Blueprint.
-2. Aponte para este repositório.
-3. O arquivo `render.yaml` configurará:
-   - build do frontend com `npm ci && npm run build`;
-   - instalação das dependências Python do backend;
-   - start em produção com `uvicorn`.
-
-### Opção 2 - Configuração manual
-
-Crie um Web Service com:
-
-- Build Command:
-
-```bash
-cd frontend && npm ci && npm run build && cd ../backend && pip install -r requirements.txt
-```
-
-- Start Command:
-
-```bash
-cd backend && uvicorn app.main:app --host 0.0.0.0 --port $PORT
-```
 
 ## Endpoints principais
 
@@ -321,13 +291,6 @@ pip install -r requirements-streamlit.txt
 streamlit run streamlit_app.py
 ```
 
-Smoke test de produção local:
-
-```powershell
-cd backend
-.\.venv\Scripts\python -c "from fastapi.testclient import TestClient; from app.main import app; client=TestClient(app); client.__enter__(); print(client.get('/docs').status_code); print(client.get('/dashboard').status_code); print(client.get('/').status_code); print(client.get('/historico').status_code); client.__exit__(None,None,None)"
-```
-
 Repositório:
 
 ```powershell
@@ -367,7 +330,7 @@ O uso do agente de codificação está documentado em [docs/agent-prompts.md](do
 - sem autenticação e sem controle de perfis;
 - sem auditoria avançada das ações do usuário;
 - sem observabilidade de produção;
-- sem deploy automatizado além da configuração básica para Render.
+- sem integração real com modelo generativo nesta etapa.
 
 ## Estado atual para a avaliação intermediária
 

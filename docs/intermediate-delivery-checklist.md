@@ -5,16 +5,14 @@ Este documento transforma os critérios da primeira avaliação em um plano obje
 ## Status geral
 
 - `Pronto`: item validado tecnicamente ou documentado com clareza.
-- `Em andamento`: item com base pronta, mas ainda exige confirmação final.
-- `Pendente`: item que ainda depende de ação antes da entrega.
+- `Observação`: item que merece acompanhamento, mas não bloqueia a entrega.
 
 ## 1. Endpoint público
 
-- `Pendente` Definir o endpoint oficial da entrega.
-- `Recomendado` Usar a versão Streamlit como endpoint público principal.
+- `Pronto` Endpoint oficial definido na versão Streamlit publicada.
 - `Pronto` Instruções de publicação rápida documentadas em `README.md` e `docs/streamlit-delivery.md`.
-- `Pendente` Publicar o link e validar abertura em janela anônima.
-- `Pendente` Testar acesso em outra rede ou dispositivo.
+- `Pronto` Link público publicado e validado.
+- `Observação` Revalidar abertura rapidamente antes da apresentação final.
 
 ## 2. Fluxo funcional da aplicação
 
@@ -24,13 +22,13 @@ Este documento transforma os critérios da primeira avaliação em um plano obje
 - `Pronto` Histórico implementado.
 - `Pronto` Relatório técnico implementado.
 - `Pronto` Página de futura integração com IA implementada.
-- `Em andamento` Validação manual completa do fluxo na versão que será publicada.
+- `Pronto` Fluxo principal validado na versão publicada.
 
 ## 3. Validação visual
 
-- `Em andamento` Melhorias de contraste e tema da versão Streamlit aplicadas.
-- `Pendente` Confirmar visual final em todas as telas no navegador.
-- `Pendente` Confirmar leitura adequada em largura menor de tela.
+- `Pronto` Melhorias de contraste e tema da versão Streamlit aplicadas.
+- `Pronto` Visual final conferido nas telas principais.
+- `Observação` Em telas muito estreitas, vale sempre uma checagem rápida antes da demonstração.
 - `Pronto` Aviso explícito de diagnóstico simulado presente na interface.
 
 ## 4. Restrições da primeira fase
@@ -47,8 +45,8 @@ Este documento transforma os critérios da primeira avaliação em um plano obje
 - `Pronto` Documentação de decisões de design presente.
 - `Pronto` Documentação da futura integração com IA presente.
 - `Pronto` Rascunho do futuro system prompt presente.
-- `Pronto` Arquivo de suporte para deploy presente.
-- `Em andamento` Fechar com `git status` limpo antes da submissão.
+- `Pronto` Documentação de publicação em Streamlit presente.
+- `Pronto` Repositório finalizado com `git status` limpo.
 
 ## 6. README
 
@@ -76,22 +74,22 @@ Este documento transforma os critérios da primeira avaliação em um plano obje
 - `Pronto` `cd backend && .\\.venv\\Scripts\\python -m pytest`
 - `Pronto` `cd frontend && npm run build`
 - `Pronto` `git grep -n "\\u00" -- README.md docs prompts streamlit_app.py frontend/src backend/app`
-- `Em andamento` Rodar `git status --short` novamente após o fechamento final.
+- `Pronto` `git status --short` conferido no fechamento final.
 
 ## 9. Fechamento para entrega
 
-- `Pendente` Escolher e publicar o endpoint oficial.
-- `Pendente` Fazer a rodada final de validação manual como avaliador.
-- `Pendente` Revisar se os links finais do GitHub e do endpoint estão prontos para envio.
-- `Pendente` Criar o commit final da entrega quando tudo estiver estabilizado.
+- `Pronto` Endpoint oficial definido e publicado.
+- `Pronto` Rodada final de validação manual concluída.
+- `Pronto` Links finais do GitHub e do endpoint preparados.
+- `Pronto` Commits finais realizados com repositório limpo.
 
 ## Próximas ações prioritárias
 
-1. Publicar a versão Streamlit em um endpoint público.
-2. Validar manualmente todas as telas da versão publicada.
-3. Revisar o README apenas se a publicação exigir ajuste de link ou instruções.
-4. Criar o commit final com o tema do Streamlit estabilizado.
-5. Confirmar `git status` limpo e preparar os links para submissão.
+1. Reabrir o link publicado pouco antes da apresentação para evitar tela de inatividade.
+2. Validar rapidamente Dashboard, Equipamentos e Nova Ocorrência.
+3. Confirmar que o aviso de diagnóstico simulado continua visível.
+4. Ter em mãos o link do GitHub e o link da aplicação.
+5. Não fazer novas mudanças estruturais sem necessidade.
 
 ## Roteiro de validação em 1 minuto
 

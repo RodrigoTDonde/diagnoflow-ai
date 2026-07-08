@@ -1,10 +1,10 @@
 # Streamlit Delivery
 
-Esta versão paralela em Streamlit foi criada para reduzir o risco de deploy da primeira entrega e facilitar a publicação em um endpoint público único.
+Esta versão paralela em Streamlit foi criada para reduzir o risco operacional da primeira entrega e facilitar a publicação em um endpoint público único.
 
 ## Motivação
 
-- evitar dependência de deploy separado para frontend e backend;
+- evitar dependência de publicação separada para frontend e backend;
 - manter a narrativa do projeto DiagnoFlow AI;
 - reaproveitar regras mockadas de diagnóstico já definidas;
 - simplificar a demonstração online para a disciplina.
