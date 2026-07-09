@@ -50,6 +50,9 @@ export type Diagnostic = {
   involved_parts: string[];
   observations: string;
   technical_report: string;
+  evidence_summary?: string[];
+  missing_information?: string[];
+  requires_human_validation?: boolean;
   created_at: string;
 };
 

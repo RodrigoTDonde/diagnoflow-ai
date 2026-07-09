@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 
 from . import models
-from .services.mock_diagnostic_service import build_mock_diagnostic
+from .llm_orchestrator import generate_diagnostic_payload
 from .schemas import IncidentCreate, SymptomFlags
 
 
@@ -69,7 +69,7 @@ def seed_data(db: Session):
 
     diagnostic = models.Diagnostic(
         incident_id=incident.id,
-        **build_mock_diagnostic(incident_payload, equipment_items[0].name, equipment_items[0].type),
+        **generate_diagnostic_payload(equipment_items[0], incident_payload),
     )
     db.add(diagnostic)
     db.commit()

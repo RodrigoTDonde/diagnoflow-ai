@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session, joinedload
 
 from .. import models, schemas
 from ..database import get_db
-from ..services.mock_diagnostic_service import build_mock_diagnostic
+from ..llm_orchestrator import generate_diagnostic_payload, serialize_diagnostic_record
 
 router = APIRouter(prefix="/incidents", tags=["incidents"])
 
@@ -31,7 +31,14 @@ def list_incidents(
         query = query.filter(func.lower(models.Incident.status) == status_filter.lower())
 
     incidents = query.all()
-    return [{"incident": incident, "diagnostic": incident.diagnostic} for incident in incidents if incident.diagnostic]
+    return [
+        {
+            "incident": incident,
+            "diagnostic": serialize_diagnostic_record(incident.equipment, incident, incident.diagnostic),
+        }
+        for incident in incidents
+        if incident.diagnostic
+    ]
 
 
 @router.post("", response_model=schemas.IncidentWithDiagnostic, status_code=status.HTTP_201_CREATED)
@@ -46,7 +53,7 @@ def create_incident(payload: schemas.IncidentCreate, db: Session = Depends(get_d
     db.add(incident)
     db.flush()
 
-    diagnostic_data = build_mock_diagnostic(payload, equipment.name, equipment.type)
+    diagnostic_data = generate_diagnostic_payload(equipment, payload)
     diagnostic = models.Diagnostic(incident_id=incident.id, **diagnostic_data)
     db.add(diagnostic)
     db.commit()
@@ -59,4 +66,7 @@ def create_incident(payload: schemas.IncidentCreate, db: Session = Depends(get_d
         .filter(models.Incident.id == incident.id)
         .first()
     )
-    return {"incident": incident, "diagnostic": incident.diagnostic}
+    return {
+        "incident": incident,
+        "diagnostic": serialize_diagnostic_record(incident.equipment, incident, incident.diagnostic),
+    }

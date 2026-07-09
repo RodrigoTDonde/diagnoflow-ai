@@ -9,6 +9,7 @@ from sqlalchemy.orm import Session, joinedload
 
 from . import models, schemas
 from .database import Base, SessionLocal, engine, get_db
+from .llm_orchestrator import serialize_diagnostic_record
 from .routes import diagnostics, equipment, incidents
 from .seed import seed_data
 
@@ -93,7 +94,14 @@ def dashboard(db: Session = Depends(get_db)):
     )
     return {
         "summary": summary,
-        "latest_incidents": [{"incident": incident, "diagnostic": incident.diagnostic} for incident in latest if incident.diagnostic],
+        "latest_incidents": [
+            {
+                "incident": incident,
+                "diagnostic": serialize_diagnostic_record(incident.equipment, incident, incident.diagnostic),
+            }
+            for incident in latest
+            if incident.diagnostic
+        ],
     }
 
 

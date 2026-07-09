@@ -4,6 +4,20 @@
 
 Substituir ou complementar o mecanismo determinístico atual por um orquestrador com LLM capaz de produzir triagem técnica mais rica, mantendo validação humana.
 
+## Abordagem recomendada
+
+A recomendação para a entrega final é começar com um agente único e controlado, com tools delimitadas, structured output e guardrails, em vez de iniciar por multiagente. Essa estratégia reduz risco, facilita demonstração e conversa melhor com o escopo da avaliação final.
+
+## Arquitetura escolhida
+
+Para iniciar a fase 2, a direção escolhida é:
+
+- FastAPI como backend principal;
+- LangGraph como orquestrador do agente;
+- tools locais implementadas no backend;
+- output estruturado validado por schema;
+- validação humana para recomendações críticas.
+
 ## Fluxo previsto
 
 1. Coletar ocorrência, contexto do equipamento e histórico.
@@ -19,6 +33,15 @@ Substituir ou complementar o mecanismo determinístico atual por um orquestrador
 - calcular criticidade;
 - gerar checklist técnico;
 - gerar relatório estruturado.
+
+## Ordem sugerida de implementação
+
+1. definir modelo e framework;
+2. criar schema do diagnóstico estruturado;
+3. implementar o novo serviço de diagnóstico no backend;
+4. conectar 2 ou 3 tools principais;
+5. validar saída, risco e necessidade de revisão humana;
+6. só depois avaliar MCP, RAG ou multiagente.
 
 ## Riscos e mitigação
 

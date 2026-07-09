@@ -142,6 +142,10 @@ Na segunda fase, a regra determinística atual poderá ser substituída por um f
 4. validação de saída estruturada;
 5. revisão humana antes de decisões críticas.
 
+Direção escolhida para iniciar a fase 2:
+
+- FastAPI + LangGraph + tools locais + output estruturado + validação humana.
+
 As tools planejadas estão documentadas em [docs/future-llm-integration.md](docs/future-llm-integration.md) e incluem:
 
 - consultar histórico da máquina;
@@ -346,5 +350,6 @@ O uso do agente de codificação está documentado em [docs/agent-prompts.md](do
 
 - [docs/agent-prompts.md](docs/agent-prompts.md)
 - [docs/design-decisions.md](docs/design-decisions.md)
+- [docs/final-delivery-implementation-plan.md](docs/final-delivery-implementation-plan.md)
 - [docs/future-llm-integration.md](docs/future-llm-integration.md)
 - [prompts/future-system-prompt.txt](prompts/future-system-prompt.txt)

@@ -77,6 +77,9 @@ class DiagnosticRead(BaseModel):
     involved_parts: List[str]
     observations: str
     technical_report: str
+    evidence_summary: List[str] = Field(default_factory=list)
+    missing_information: List[str] = Field(default_factory=list)
+    requires_human_validation: bool = True
     created_at: datetime
 
     model_config = ConfigDict(from_attributes=True)
