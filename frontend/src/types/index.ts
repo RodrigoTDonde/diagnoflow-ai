@@ -75,3 +75,22 @@ export type DashboardResponse = {
   };
   latest_incidents: IncidentWithDiagnostic[];
 };
+
+export type AgentTool = {
+  name: string;
+  purpose: string;
+};
+
+export type AgentRuntime = {
+  runtime_label: string;
+  runtime_mode: string;
+  provider: string;
+  model: string;
+  temperature: number;
+  top_p: number;
+  agent_strategy: string;
+  use_langgraph: boolean;
+  require_human_validation_for_high_risk: boolean;
+  system_prompt: string;
+  tools: AgentTool[];
+};

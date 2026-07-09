@@ -111,3 +111,22 @@ class HistoryFilters(BaseModel):
     equipment_id: Optional[int] = None
     criticality: Optional[str] = None
     status: Optional[str] = None
+
+
+class AgentToolRead(BaseModel):
+    name: str
+    purpose: str
+
+
+class AgentRuntimeRead(BaseModel):
+    runtime_label: str
+    runtime_mode: str
+    provider: str
+    model: str
+    temperature: float
+    top_p: float
+    agent_strategy: str
+    use_langgraph: bool
+    require_human_validation_for_high_risk: bool
+    system_prompt: str
+    tools: List[AgentToolRead]

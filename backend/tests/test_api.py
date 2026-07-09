@@ -37,6 +37,22 @@ def test_spa_fallback():
         assert "DiagnoFlow AI" in response.text
 
 
+def test_agent_runtime_endpoint():
+    with TestClient(app) as client:
+        response = client.get("/agent/runtime")
+
+    assert response.status_code == 200
+    payload = response.json()
+    assert payload["runtime_label"] in {"fallback-local", "langgraph"}
+    assert payload["runtime_mode"] == "fallback-local"
+    assert payload["provider"] == "not-configured"
+    assert payload["model"] == "diagnoflow-mock-agent"
+    assert payload["use_langgraph"] is True
+    assert payload["require_human_validation_for_high_risk"] is True
+    assert "triagem técnica" in payload["system_prompt"].lower()
+    assert len(payload["tools"]) >= 5
+
+
 def test_create_incident_returns_structured_diagnostic():
     payload = {
         "equipment_id": 1,

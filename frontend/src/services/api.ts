@@ -1,4 +1,4 @@
-import { DashboardResponse, Equipment, IncidentWithDiagnostic, SymptomFlags } from "../types";
+import { AgentRuntime, DashboardResponse, Equipment, IncidentWithDiagnostic, SymptomFlags } from "../types";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL ?? "http://127.0.0.1:8000";
 
@@ -20,6 +20,7 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
 }
 
 export const api = {
+  getAgentRuntime: () => request<AgentRuntime>("/agent/runtime"),
   getDashboard: () => request<DashboardResponse>("/dashboard"),
   listEquipment: () => request<Equipment[]>("/equipment"),
   createEquipment: (payload: Omit<Equipment, "id" | "created_at">) =>

@@ -10,7 +10,7 @@ from sqlalchemy.orm import Session, joinedload
 from . import models, schemas
 from .database import Base, SessionLocal, engine, get_db
 from .llm_orchestrator import serialize_diagnostic_record
-from .routes import diagnostics, equipment, incidents
+from .routes import agent, diagnostics, equipment, incidents
 from .seed import seed_data
 
 
@@ -21,6 +21,7 @@ SPA_EXCLUDED_PREFIXES = (
     "/equipment",
     "/incidents",
     "/diagnostics",
+    "/agent",
     "/dashboard",
     "/docs",
     "/openapi.json",
@@ -57,6 +58,7 @@ app.add_middleware(
 app.include_router(equipment.router)
 app.include_router(incidents.router)
 app.include_router(diagnostics.router)
+app.include_router(agent.router)
 
 if FRONTEND_ASSETS_DIR.exists():
     app.mount("/assets", StaticFiles(directory=FRONTEND_ASSETS_DIR), name="frontend-assets")

@@ -233,3 +233,28 @@ def gerar_relatorio_tecnico(
         technical_report=report,
         summary="Relatório técnico montado a partir das tools de criticidade, falhas conhecidas e checklist.",
     )
+
+
+def describe_available_tools() -> list[dict[str, str]]:
+    return [
+        {
+            "name": "consultar_historico_maquina",
+            "purpose": "Busca contexto de ocorrências anteriores do equipamento para apoiar a análise atual.",
+        },
+        {
+            "name": "calcular_criticidade_ocorrencia",
+            "purpose": "Classifica prioridade e risco operacional com base nos sintomas e na criticidade do ativo.",
+        },
+        {
+            "name": "consultar_base_falhas",
+            "purpose": "Sugere hipóteses, evidências e ações com base em falhas frequentes conhecidas.",
+        },
+        {
+            "name": "gerar_checklist_inspecao",
+            "purpose": "Monta um checklist inicial de inspeção coerente com a hipótese principal.",
+        },
+        {
+            "name": "gerar_relatorio_tecnico",
+            "purpose": "Consolida um relatório técnico textual com contexto, prioridade e recomendações.",
+        },
+    ]
