@@ -48,11 +48,16 @@ export type Diagnostic = {
   operational_risk: string;
   recommended_actions: string[];
   involved_parts: string[];
+  inspection_checklist?: string[];
   observations: string;
   technical_report: string;
   evidence_summary?: string[];
   missing_information?: string[];
   requires_human_validation?: boolean;
+  runtime_label?: string;
+  runtime_provider?: string;
+  runtime_model?: string;
+  runtime_mode?: string;
   created_at: string;
 };
 

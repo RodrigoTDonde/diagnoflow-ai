@@ -75,11 +75,16 @@ class DiagnosticRead(BaseModel):
     operational_risk: str
     recommended_actions: List[str]
     involved_parts: List[str]
+    inspection_checklist: List[str] = Field(default_factory=list)
     observations: str
     technical_report: str
     evidence_summary: List[str] = Field(default_factory=list)
     missing_information: List[str] = Field(default_factory=list)
     requires_human_validation: bool = True
+    runtime_label: str = "fallback-local"
+    runtime_provider: str = "not-configured"
+    runtime_model: str = "diagnoflow-mock-agent"
+    runtime_mode: str = "fallback-local"
     created_at: datetime
 
     model_config = ConfigDict(from_attributes=True)

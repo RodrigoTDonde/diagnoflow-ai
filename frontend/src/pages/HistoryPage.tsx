@@ -61,6 +61,7 @@ export function HistoryPage() {
                 <th>Status</th>
                 <th>Prioridade</th>
                 <th>Revisão humana</th>
+                <th>Checklist</th>
                 <th>Data</th>
               </tr>
             </thead>
@@ -73,6 +74,7 @@ export function HistoryPage() {
                   <td>{incident.status}</td>
                   <td>{diagnostic.priority}</td>
                   <td>{diagnostic.requires_human_validation ? "Recomendada" : "Não"}</td>
+                  <td>{diagnostic.inspection_checklist?.length ? `${diagnostic.inspection_checklist.length} itens` : "-"}</td>
                   <td>{new Date(incident.created_at).toLocaleDateString("pt-BR")}</td>
                 </tr>
               ))}

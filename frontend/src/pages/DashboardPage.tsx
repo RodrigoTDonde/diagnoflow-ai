@@ -36,6 +36,22 @@ export function DashboardPage() {
         <p>Aplicação pronta para demonstração local, com regras mockadas e navegação completa.</p>
       </section>
 
+      {data.latest_incidents[0]?.diagnostic ? (
+        <section className="phase2-card">
+          <div className="phase2-card-head">
+            <strong>Camada de evolução da fase 2</strong>
+            <span className="badge badge-info">{data.latest_incidents[0].diagnostic.runtime_mode ?? "fallback-local"}</span>
+          </div>
+          <p>
+            Runtime atual: <strong>{data.latest_incidents[0].diagnostic.runtime_label ?? "fallback-local"}</strong>
+          </p>
+          <p>
+            Provider: <strong>{data.latest_incidents[0].diagnostic.runtime_provider ?? "not-configured"}</strong> • Modelo:{" "}
+            <strong>{data.latest_incidents[0].diagnostic.runtime_model ?? "diagnoflow-mock-agent"}</strong>
+          </p>
+        </section>
+      ) : null}
+
       <MockNotice
         title="Diagnóstico simulado"
         description="Nenhum LLM foi integrado nesta fase. As respostas exibidas nesta aplicação são geradas por regras estáticas para fins de demonstração da entrega intermediária."

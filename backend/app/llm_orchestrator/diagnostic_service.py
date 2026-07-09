@@ -97,8 +97,13 @@ def generate_diagnostic_payload(equipment: models.Equipment, incident: IncidentC
         "operational_risk": draft.operational_risk,
         "recommended_actions": draft.recommended_actions,
         "involved_parts": draft.involved_parts,
+        "inspection_checklist": draft.inspection_checklist,
         "observations": observations,
         "technical_report": draft.technical_report,
+        "runtime_label": get_agent_runtime_label(),
+        "runtime_provider": settings.provider,
+        "runtime_model": settings.model,
+        "runtime_mode": settings.runtime_mode,
     }
 
 
@@ -118,6 +123,7 @@ def serialize_diagnostic_record(
         "operational_risk": diagnostic.operational_risk,
         "recommended_actions": diagnostic.recommended_actions,
         "involved_parts": diagnostic.involved_parts,
+        "inspection_checklist": draft.inspection_checklist,
         "observations": (
             f"{diagnostic.observations} Runtime atual: {get_agent_runtime_label()} | "
             f"provider={settings.provider} | model={settings.model} | mode={settings.runtime_mode}."
@@ -126,5 +132,9 @@ def serialize_diagnostic_record(
         "evidence_summary": draft.evidence_summary,
         "missing_information": draft.missing_information,
         "requires_human_validation": draft.requires_human_validation,
+        "runtime_label": get_agent_runtime_label(),
+        "runtime_provider": settings.provider,
+        "runtime_model": settings.model,
+        "runtime_mode": settings.runtime_mode,
         "created_at": diagnostic.created_at,
     }

@@ -47,6 +47,16 @@ class KnownFailureSignal(BaseModel):
     involved_parts: list[str] = Field(default_factory=list)
 
 
+class InspectionChecklistSignal(BaseModel):
+    checklist_items: list[str] = Field(default_factory=list)
+    rationale: str
+
+
+class TechnicalReportSignal(BaseModel):
+    technical_report: str
+    summary: str
+
+
 class StructuredDiagnosticDraft(BaseModel):
     probable_cause: str
     confidence_level: float = Field(ge=0.0, le=1.0)
@@ -54,6 +64,7 @@ class StructuredDiagnosticDraft(BaseModel):
     operational_risk: RiskLevel
     recommended_actions: list[str] = Field(default_factory=list)
     involved_parts: list[str] = Field(default_factory=list)
+    inspection_checklist: list[str] = Field(default_factory=list)
     evidence_summary: list[str] = Field(default_factory=list)
     missing_information: list[str] = Field(default_factory=list)
     observations: str

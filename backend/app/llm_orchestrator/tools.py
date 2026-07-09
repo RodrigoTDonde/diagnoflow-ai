@@ -1,7 +1,14 @@
 from __future__ import annotations
 
 from .. import models
-from .schemas import CriticalitySignal, HistoricalSignal, IncidentContext, KnownFailureSignal
+from .schemas import (
+    CriticalitySignal,
+    HistoricalSignal,
+    IncidentContext,
+    InspectionChecklistSignal,
+    KnownFailureSignal,
+    TechnicalReportSignal,
+)
 
 
 def consultar_historico_maquina(
@@ -143,4 +150,86 @@ def consultar_base_falhas(
             "Registrar tendência de vibração para comparação na próxima rodada",
         ],
         involved_parts=["acoplamento", "rolamentos", "base de fixação"],
+    )
+
+
+def gerar_checklist_inspecao(
+    current_incident: IncidentContext,
+    known_failure: KnownFailureSignal,
+) -> InspectionChecklistSignal:
+    checklist_items = [
+        "Confirmar bloqueio e liberação segura do equipamento antes da inspeção.",
+        "Registrar condição visual inicial do ativo e da área ao redor.",
+    ]
+
+    if current_incident.symptoms.get("electrical_failure"):
+        checklist_items.extend(
+            [
+                "Medir continuidade elétrica e reaperto de bornes no painel.",
+                "Verificar aquecimento anormal em contatores, inversor e cabos de potência.",
+            ]
+        )
+    elif current_incident.symptoms.get("overheating") and current_incident.symptoms.get("vibration"):
+        checklist_items.extend(
+            [
+                "Coletar vibração e temperatura em mancais e rolamentos.",
+                "Verificar lubrificação, folga e ruído em rolamentos.",
+            ]
+        )
+    elif current_incident.symptoms.get("leakage"):
+        checklist_items.extend(
+            [
+                "Identificar ponto exato do vazamento e documentar evidência fotográfica.",
+                "Inspecionar vedação, selos, juntas e conexões próximas.",
+            ]
+        )
+    elif current_incident.symptoms.get("total_stop"):
+        checklist_items.extend(
+            [
+                "Validar atuação de proteções, intertravamentos e alarmes de parada.",
+                "Executar checklist de retorno somente após liberação técnica formal.",
+            ]
+        )
+    else:
+        checklist_items.extend(
+            [
+                "Verificar alinhamento, fixação de base e condição geral do acoplamento.",
+                "Comparar ruído, vibração e temperatura com histórico operacional.",
+            ]
+        )
+
+    checklist_items.append(f"Conferir componentes associados: {', '.join(known_failure.involved_parts)}.")
+    return InspectionChecklistSignal(
+        checklist_items=checklist_items,
+        rationale="Checklist inicial gerado com base nos sintomas atuais e na hipótese principal da base local de falhas.",
+    )
+
+
+def gerar_relatorio_tecnico(
+    equipment: models.Equipment,
+    current_incident: IncidentContext,
+    criticality: CriticalitySignal,
+    known_failure: KnownFailureSignal,
+    checklist: InspectionChecklistSignal,
+) -> TechnicalReportSignal:
+    report = (
+        "Relatório técnico preliminar\n\n"
+        f"Equipamento: {equipment.name}\n"
+        f"Tipo: {equipment.type}\n"
+        f"Setor: {equipment.sector}\n"
+        f"Sintoma principal: {current_incident.main_symptom}\n"
+        f"Descrição operacional: {current_incident.description}\n"
+        f"Turno informado: {current_incident.shift}\n"
+        f"Urgência percebida: {current_incident.perceived_urgency}\n\n"
+        f"Causa provável: {known_failure.probable_cause_hint}\n"
+        f"Prioridade: {criticality.priority}\n"
+        f"Risco operacional: {criticality.operational_risk}\n"
+        f"Peças potencialmente envolvidas: {', '.join(known_failure.involved_parts)}\n"
+        f"Ações recomendadas: {'; '.join(known_failure.recommended_actions)}\n"
+        f"Checklist inicial: {'; '.join(checklist.checklist_items)}\n\n"
+        "Observação: fluxo preparado para fase 2, ainda sem chamada real para LLM."
+    )
+    return TechnicalReportSignal(
+        technical_report=report,
+        summary="Relatório técnico montado a partir das tools de criticidade, falhas conhecidas e checklist.",
     )

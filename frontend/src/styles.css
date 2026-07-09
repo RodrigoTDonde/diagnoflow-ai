@@ -355,6 +355,30 @@ th {
   background: rgba(255, 255, 255, 0.03);
 }
 
+.phase2-card {
+  padding: 18px 20px;
+  border-radius: 20px;
+  border: 1px solid rgba(142, 224, 221, 0.24);
+  background: rgba(142, 224, 221, 0.08);
+}
+
+.phase2-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.phase2-card strong {
+  color: var(--text-main);
+}
+
+.phase2-card p {
+  margin: 6px 0 0 0;
+  color: var(--text-soft);
+}
+
 .insight-box strong {
   display: block;
   margin-bottom: 8px;

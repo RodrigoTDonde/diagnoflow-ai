@@ -135,6 +135,19 @@ export function NewIncidentPage() {
         {result ? (
           <>
             <span className="badge badge-warning">Diagnóstico simulado - nenhum LLM foi integrado nesta fase.</span>
+            <div className="phase2-card">
+              <div className="phase2-card-head">
+                <strong>Modo da fase 2</strong>
+                <span className="badge badge-info">{result.diagnostic.runtime_mode ?? "fallback-local"}</span>
+              </div>
+              <p>
+                Runtime: <strong>{result.diagnostic.runtime_label ?? "fallback-local"}</strong>
+              </p>
+              <p>
+                Provider: <strong>{result.diagnostic.runtime_provider ?? "not-configured"}</strong> • Modelo:{" "}
+                <strong>{result.diagnostic.runtime_model ?? "diagnoflow-mock-agent"}</strong>
+              </p>
+            </div>
             <h4>{result.diagnostic.probable_cause}</h4>
             <p>
               Equipamento: <strong>{selectedEquipment?.name ?? result.incident.equipment.name}</strong>
@@ -176,6 +189,16 @@ export function NewIncidentPage() {
                 <strong>Lacunas de contexto</strong>
                 <ul>
                   {result.diagnostic.missing_information.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
+            {result.diagnostic.inspection_checklist?.length ? (
+              <div className="insight-box">
+                <strong>Checklist de inspeção</strong>
+                <ul>
+                  {result.diagnostic.inspection_checklist.map((item) => (
                     <li key={item}>{item}</li>
                   ))}
                 </ul>

@@ -5,8 +5,8 @@ const tools = [
   "consultar histórico da máquina",
   "consultar base de falhas conhecidas",
   "calcular criticidade",
-  "gerar checklist técnico",
-  "gerar relatório estruturado",
+  "gerar checklist de inspeção",
+  "gerar relatório técnico estruturado",
 ];
 
 export function FutureIntegrationPage() {
@@ -26,6 +26,10 @@ export function FutureIntegrationPage() {
         <p>
           A arquitetura atual já separa serviço de diagnóstico, rotas e tipos, permitindo substituir a lógica mockada por
           uma chamada para LLM sem reescrever o restante do produto.
+        </p>
+        <p>
+          Na branch da fase 2, o backend já foi preparado com orquestrador, tools especializadas, structured output e
+          sinalização de validação humana para evoluir o fluxo sem desmontar a base atual.
         </p>
 
         <h3>Tools previstas</h3>

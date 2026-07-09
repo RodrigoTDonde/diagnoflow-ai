@@ -8,8 +8,23 @@ from ..schemas import IncidentCreate
 from .guardrails import validate_structured_diagnostic
 from .prompt import SYSTEM_PROMPT_TEMPLATE
 from .provider import LLMInvocationContext, build_provider
-from .schemas import EquipmentContext, HistoricalSignal, IncidentContext, KnownFailureSignal, StructuredDiagnosticDraft
-from .tools import CriticalitySignal, calcular_criticidade_ocorrencia, consultar_base_falhas, consultar_historico_maquina
+from .schemas import (
+    CriticalitySignal,
+    EquipmentContext,
+    HistoricalSignal,
+    IncidentContext,
+    InspectionChecklistSignal,
+    KnownFailureSignal,
+    StructuredDiagnosticDraft,
+    TechnicalReportSignal,
+)
+from .tools import (
+    calcular_criticidade_ocorrencia,
+    consultar_base_falhas,
+    consultar_historico_maquina,
+    gerar_checklist_inspecao,
+    gerar_relatorio_tecnico,
+)
 
 try:
     from langgraph.graph import END, START, StateGraph  # type: ignore
@@ -25,6 +40,8 @@ class DiagnosticAgentState(TypedDict, total=False):
     historical_signal: HistoricalSignal
     criticality_signal: CriticalitySignal
     known_failure_signal: KnownFailureSignal
+    inspection_checklist_signal: InspectionChecklistSignal
+    technical_report_signal: TechnicalReportSignal
     evidence_summary: list[str]
     missing_information: list[str]
     draft: StructuredDiagnosticDraft
@@ -79,11 +96,33 @@ def failure_knowledge_tool_node(state: DiagnosticAgentState) -> DiagnosticAgentS
     return {**state, "known_failure_signal": signal, "evidence_summary": evidence}
 
 
+def inspection_checklist_tool_node(state: DiagnosticAgentState) -> DiagnosticAgentState:
+    signal = gerar_checklist_inspecao(state["incident"], state["known_failure_signal"])
+    evidence = list(state.get("evidence_summary", []))
+    evidence.append(signal.rationale)
+    return {**state, "inspection_checklist_signal": signal, "evidence_summary": evidence}
+
+
+def technical_report_tool_node(state: DiagnosticAgentState, equipment_model: models.Equipment) -> DiagnosticAgentState:
+    signal = gerar_relatorio_tecnico(
+        equipment_model,
+        state["incident"],
+        state["criticality_signal"],
+        state["known_failure_signal"],
+        state["inspection_checklist_signal"],
+    )
+    evidence = list(state.get("evidence_summary", []))
+    evidence.append(signal.summary)
+    return {**state, "technical_report_signal": signal, "evidence_summary": evidence}
+
+
 def compose_draft_node(state: DiagnosticAgentState) -> DiagnosticAgentState:
     incident = state["incident"]
     equipment = state["equipment"]
     criticality = state["criticality_signal"]
     known_failure = state["known_failure_signal"]
+    checklist = state["inspection_checklist_signal"]
+    report_signal = state["technical_report_signal"]
 
     probable_cause = known_failure.probable_cause_hint
     involved_parts = known_failure.involved_parts
@@ -94,22 +133,6 @@ def compose_draft_node(state: DiagnosticAgentState) -> DiagnosticAgentState:
         f"Diagnóstico estruturado para {equipment.name} ({equipment.type}) com fluxo preparado para agente. "
         "Nesta etapa, a composição usa histórico, criticidade e base local de falhas conhecidas."
     )
-    technical_report = (
-        "Relatório técnico preliminar\n\n"
-        f"Equipamento: {equipment.name}\n"
-        f"Tipo: {equipment.type}\n"
-        f"Sintoma principal: {incident.main_symptom}\n"
-        f"Descrição operacional: {incident.description}\n"
-        f"Turno informado: {incident.shift}\n"
-        f"Urgência percebida: {incident.perceived_urgency}\n\n"
-        f"Causa provável: {probable_cause}\n"
-        f"Prioridade: {criticality.priority}\n"
-        f"Risco operacional: {criticality.operational_risk}\n"
-        f"Peças potencialmente envolvidas: {', '.join(involved_parts)}\n"
-        f"Ações recomendadas: {'; '.join(recommended_actions)}\n\n"
-        "Observação: fluxo preparado para fase 2, ainda sem chamada real para LLM."
-    )
-
     draft = StructuredDiagnosticDraft(
         probable_cause=probable_cause,
         confidence_level=round(confidence_level, 2),
@@ -117,10 +140,11 @@ def compose_draft_node(state: DiagnosticAgentState) -> DiagnosticAgentState:
         operational_risk=criticality.operational_risk,
         recommended_actions=recommended_actions,
         involved_parts=involved_parts,
+        inspection_checklist=checklist.checklist_items,
         evidence_summary=state["evidence_summary"],
         missing_information=state["missing_information"],
         observations=observations,
-        technical_report=technical_report,
+        technical_report=report_signal.technical_report,
         requires_human_validation=criticality.priority in {"high", "critical"},
     )
     return {**state, "draft": draft}
@@ -165,6 +189,8 @@ def _run_fallback_agent(equipment_model: models.Equipment, incident_payload: Inc
     state = historical_tool_node(state, equipment_model)
     state = criticality_tool_node(state, equipment_model)
     state = failure_knowledge_tool_node(state)
+    state = inspection_checklist_tool_node(state)
+    state = technical_report_tool_node(state, equipment_model)
     state = compose_draft_node(state)
     state = llm_provider_node(state)
     state = guardrail_node(state)
@@ -181,6 +207,8 @@ def _build_langgraph_app(equipment_model: models.Equipment):
     graph.add_node("historical_tool", lambda state: historical_tool_node(state, equipment_model))
     graph.add_node("criticality_tool", lambda state: criticality_tool_node(state, equipment_model))
     graph.add_node("failure_knowledge_tool", failure_knowledge_tool_node)
+    graph.add_node("inspection_checklist_tool", inspection_checklist_tool_node)
+    graph.add_node("technical_report_tool", lambda state: technical_report_tool_node(state, equipment_model))
     graph.add_node("compose_draft", compose_draft_node)
     graph.add_node("llm_provider", llm_provider_node)
     graph.add_node("guardrail", guardrail_node)
@@ -189,7 +217,9 @@ def _build_langgraph_app(equipment_model: models.Equipment):
     graph.add_edge("collect_context", "historical_tool")
     graph.add_edge("historical_tool", "criticality_tool")
     graph.add_edge("criticality_tool", "failure_knowledge_tool")
-    graph.add_edge("failure_knowledge_tool", "compose_draft")
+    graph.add_edge("failure_knowledge_tool", "inspection_checklist_tool")
+    graph.add_edge("inspection_checklist_tool", "technical_report_tool")
+    graph.add_edge("technical_report_tool", "compose_draft")
     graph.add_edge("compose_draft", "llm_provider")
     graph.add_edge("llm_provider", "guardrail")
     graph.add_edge("guardrail", END)
