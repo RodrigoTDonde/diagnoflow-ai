@@ -6,7 +6,13 @@ from ..schemas import IncidentCreate
 from .guardrails import validate_structured_diagnostic
 from .graph import get_agent_runtime_label, run_diagnostic_agent
 from .schemas import EquipmentContext, IncidentContext, StructuredDiagnosticDraft
-from .tools import calcular_criticidade_ocorrencia, consultar_historico_maquina
+from .tools import (
+    calcular_criticidade_ocorrencia,
+    consultar_base_falhas,
+    consultar_historico_maquina,
+    gerar_checklist_inspecao,
+    gerar_relatorio_tecnico,
+)
 
 
 def _build_context(equipment: models.Equipment, incident: IncidentCreate) -> IncidentContext:
@@ -56,11 +62,23 @@ def build_structured_mock_diagnostic_from_models(
     incident_context = _build_model_context(equipment, incident)
     historical_signal = consultar_historico_maquina(equipment, incident_context)
     criticality_signal = calcular_criticidade_ocorrencia(equipment, incident_context)
+    known_failure_signal = consultar_base_falhas(incident_context)
+    inspection_checklist_signal = gerar_checklist_inspecao(incident_context, known_failure_signal)
+    technical_report_signal = gerar_relatorio_tecnico(
+        equipment,
+        incident_context,
+        criticality_signal,
+        known_failure_signal,
+        inspection_checklist_signal,
+    )
 
     evidence_summary = [
         f"Sintoma principal informado: {incident_context.main_symptom}",
         historical_signal.summary,
         criticality_signal.justification,
+        *known_failure_signal.evidence,
+        inspection_checklist_signal.rationale,
+        technical_report_signal.summary,
     ]
     missing_information = [
         "Não há leitura instrumental anexada para vibração, temperatura ou corrente.",
@@ -74,6 +92,7 @@ def build_structured_mock_diagnostic_from_models(
         operational_risk=criticality_signal.operational_risk,
         recommended_actions=list(diagnostic.recommended_actions),
         involved_parts=list(diagnostic.involved_parts),
+        inspection_checklist=inspection_checklist_signal.checklist_items,
         evidence_summary=evidence_summary,
         missing_information=missing_information,
         observations=diagnostic.observations,
@@ -97,13 +116,8 @@ def generate_diagnostic_payload(equipment: models.Equipment, incident: IncidentC
         "operational_risk": draft.operational_risk,
         "recommended_actions": draft.recommended_actions,
         "involved_parts": draft.involved_parts,
-        "inspection_checklist": draft.inspection_checklist,
         "observations": observations,
         "technical_report": draft.technical_report,
-        "runtime_label": get_agent_runtime_label(),
-        "runtime_provider": settings.provider,
-        "runtime_model": settings.model,
-        "runtime_mode": settings.runtime_mode,
     }
 
 
