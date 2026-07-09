@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from .. import models
-from .schemas import CriticalitySignal, HistoricalSignal, IncidentContext
+from .schemas import CriticalitySignal, HistoricalSignal, IncidentContext, KnownFailureSignal
 
 
 def consultar_historico_maquina(
@@ -64,3 +64,83 @@ def calcular_criticidade_ocorrencia(
         justification = "Urgência percebida alta elevou a criticidade operacional."
 
     return CriticalitySignal(priority=priority, operational_risk=risk, justification=justification)
+
+
+def consultar_base_falhas(
+    current_incident: IncidentContext,
+) -> KnownFailureSignal:
+    symptoms = current_incident.symptoms
+
+    if symptoms.get("electrical_failure") or "elétr" in current_incident.main_symptom.lower():
+        return KnownFailureSignal(
+            probable_cause_hint="Intermitência elétrica no conjunto de acionamento",
+            evidence=[
+                "Base local associa falha elétrica a painéis, inversores ou conexões aquecidas.",
+                "Sintoma principal ou flags indicam falha elétrica.",
+            ],
+            recommended_actions=[
+                "Bloquear equipamento e medir continuidade dos circuitos",
+                "Inspecionar bornes, contatores e aquecimento no painel",
+                "Validar parâmetros do inversor antes do retorno operacional",
+            ],
+            involved_parts=["painel de comando", "inversor de frequência", "cabos de potência"],
+        )
+
+    if symptoms.get("overheating") and symptoms.get("vibration"):
+        return KnownFailureSignal(
+            probable_cause_hint="Rolamento em degradação com geração de calor e vibração",
+            evidence=[
+                "Combinação de aquecimento e vibração é recorrente em degradação de rolamentos.",
+                "Base local de falhas indica risco de dano progressivo quando ambos sintomas coexistem.",
+            ],
+            recommended_actions=[
+                "Executar inspeção termográfica e coleta de vibração",
+                "Planejar troca de rolamentos no menor intervalo possível",
+                "Verificar contaminação ou falta de lubrificante",
+            ],
+            involved_parts=["rolamentos", "mancais", "sistema de lubrificação"],
+        )
+
+    if symptoms.get("leakage"):
+        return KnownFailureSignal(
+            probable_cause_hint="Falha de vedação ou desgaste em retentor",
+            evidence=[
+                "Vazamento em ativo rotativo costuma indicar desgaste de selagem ou retentores.",
+                "Base local sugere inspecionar ponto de vedação antes de ampliar a intervenção.",
+            ],
+            recommended_actions=[
+                "Identificar ponto exato do vazamento",
+                "Verificar integridade de selos, juntas e conexões",
+                "Avaliar impacto do vazamento sobre segurança e processo",
+            ],
+            involved_parts=["selos", "retentores", "tubulações de vedação"],
+        )
+
+    if symptoms.get("total_stop"):
+        return KnownFailureSignal(
+            probable_cause_hint="Parada total associada a proteção operacional ou falha crítica",
+            evidence=[
+                "Parada total costuma envolver lógica de proteção, acionamento ou falha mecânica severa.",
+                "Base local sugere retenção do ativo até confirmação técnica.",
+            ],
+            recommended_actions=[
+                "Manter equipamento indisponível até liberação técnica",
+                "Executar checklist de retorno com foco em proteção e acionamento",
+                "Documentar causa raiz preliminar antes da retomada",
+            ],
+            involved_parts=["sistema de proteção", "motor", "acoplamento"],
+        )
+
+    return KnownFailureSignal(
+        probable_cause_hint="Desalinhamento mecânico e desgaste progressivo",
+        evidence=[
+            "Sem combinação crítica específica na base local; hipótese padrão recai sobre desalinhamento e desgaste.",
+            "Sinais operacionais indicam necessidade de inspeção mecânica inicial.",
+        ],
+        recommended_actions=[
+            "Inspecionar alinhamento a laser e reaperto da base",
+            "Verificar condição dos rolamentos e lubrificação",
+            "Registrar tendência de vibração para comparação na próxima rodada",
+        ],
+        involved_parts=["acoplamento", "rolamentos", "base de fixação"],
+    )

@@ -65,6 +65,12 @@ export function DashboardPage() {
                 <span className={`badge badge-${diagnostic.priority}`}>{diagnostic.priority}</span>
               </div>
               <p>{diagnostic.probable_cause}</p>
+              {diagnostic.requires_human_validation ? (
+                <p className="incident-note">Requer validação humana antes de ação crítica.</p>
+              ) : null}
+              {diagnostic.evidence_summary?.length ? (
+                <p className="incident-note">Baseado em: {diagnostic.evidence_summary[0]}</p>
+              ) : null}
               <small>{new Date(incident.created_at).toLocaleString("pt-BR")}</small>
             </article>
           ))}

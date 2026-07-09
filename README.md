@@ -146,6 +146,12 @@ Direção escolhida para iniciar a fase 2:
 
 - FastAPI + LangGraph + tools locais + output estruturado + validação humana.
 
+Estratégia recomendada:
+
+- desenvolvimento com fallback local;
+- demonstração gratuita com Ollama, se a máquina suportar;
+- uso de API paga apenas se for necessário aumentar previsibilidade da demo final.
+
 As tools planejadas estão documentadas em [docs/future-llm-integration.md](docs/future-llm-integration.md) e incluem:
 
 - consultar histórico da máquina;

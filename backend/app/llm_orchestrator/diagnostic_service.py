@@ -1,9 +1,10 @@
 from __future__ import annotations
 
 from .. import models
+from ..config import get_llm_runtime_settings
 from ..schemas import IncidentCreate
-from ..services.mock_diagnostic_service import build_mock_diagnostic
 from .guardrails import validate_structured_diagnostic
+from .graph import get_agent_runtime_label, run_diagnostic_agent
 from .schemas import EquipmentContext, IncidentContext, StructuredDiagnosticDraft
 from .tools import calcular_criticidade_ocorrencia, consultar_historico_maquina
 
@@ -43,35 +44,7 @@ def build_structured_mock_diagnostic(
     equipment: models.Equipment,
     incident: IncidentCreate,
 ) -> StructuredDiagnosticDraft:
-    incident_context = _build_context(equipment, incident)
-    equipment_context = EquipmentContext.model_validate(equipment, from_attributes=True)
-    historical_signal = consultar_historico_maquina(equipment, incident_context)
-    criticality_signal = calcular_criticidade_ocorrencia(equipment, incident_context)
-    legacy_payload = build_mock_diagnostic(incident, equipment_context.name, equipment_context.type)
-
-    evidence_summary = [
-        f"Sintoma principal informado: {incident_context.main_symptom}",
-        historical_signal.summary,
-        criticality_signal.justification,
-    ]
-    missing_information = [
-        "Não há leitura instrumental anexada para vibração, temperatura ou corrente.",
-        "A confirmação final depende de inspeção técnica presencial.",
-    ]
-
-    draft = StructuredDiagnosticDraft(
-        probable_cause=legacy_payload["probable_cause"],
-        confidence_level=legacy_payload["confidence_level"],
-        priority=criticality_signal.priority,
-        operational_risk=criticality_signal.operational_risk,
-        recommended_actions=legacy_payload["recommended_actions"],
-        involved_parts=legacy_payload["involved_parts"],
-        evidence_summary=evidence_summary,
-        missing_information=missing_information,
-        observations=legacy_payload["observations"],
-        technical_report=legacy_payload["technical_report"],
-        requires_human_validation=criticality_signal.priority in {"high", "critical"},
-    )
+    draft = run_diagnostic_agent(equipment, incident)
     return validate_structured_diagnostic(draft)
 
 
@@ -112,6 +85,11 @@ def build_structured_mock_diagnostic_from_models(
 
 def generate_diagnostic_payload(equipment: models.Equipment, incident: IncidentCreate) -> dict:
     draft = build_structured_mock_diagnostic(equipment, incident)
+    settings = get_llm_runtime_settings()
+    observations = (
+        f"{draft.observations} Runtime atual: {get_agent_runtime_label()} | "
+        f"provider={settings.provider} | model={settings.model} | mode={settings.runtime_mode}."
+    )
     return {
         "probable_cause": draft.probable_cause,
         "confidence_level": draft.confidence_level,
@@ -119,7 +97,7 @@ def generate_diagnostic_payload(equipment: models.Equipment, incident: IncidentC
         "operational_risk": draft.operational_risk,
         "recommended_actions": draft.recommended_actions,
         "involved_parts": draft.involved_parts,
-        "observations": draft.observations,
+        "observations": observations,
         "technical_report": draft.technical_report,
     }
 
@@ -130,6 +108,7 @@ def serialize_diagnostic_record(
     diagnostic: models.Diagnostic,
 ) -> dict:
     draft = build_structured_mock_diagnostic_from_models(equipment, incident, diagnostic)
+    settings = get_llm_runtime_settings()
     return {
         "id": diagnostic.id,
         "incident_id": diagnostic.incident_id,
@@ -139,7 +118,10 @@ def serialize_diagnostic_record(
         "operational_risk": diagnostic.operational_risk,
         "recommended_actions": diagnostic.recommended_actions,
         "involved_parts": diagnostic.involved_parts,
-        "observations": diagnostic.observations,
+        "observations": (
+            f"{diagnostic.observations} Runtime atual: {get_agent_runtime_label()} | "
+            f"provider={settings.provider} | model={settings.model} | mode={settings.runtime_mode}."
+        ),
         "technical_report": diagnostic.technical_report,
         "evidence_summary": draft.evidence_summary,
         "missing_information": draft.missing_information,

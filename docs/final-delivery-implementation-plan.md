@@ -219,6 +219,88 @@ O primeiro ciclo da fase 2 deve ser pequeno e demonstrável:
 5. integrar esse agente ao backend atual sem quebrar o frontend;
 6. marcar saídas críticas como dependentes de validação humana.
 
+Status atual deste repositório:
+
+- schema estruturado iniciado;
+- tools iniciais implementadas;
+- grafo-base do agente criado com fallback local;
+- configuração de provider/modelo preparada por ambiente.
+- adapter do provider criado para futura integração real com LLM.
+- primeiro adapter concreto preparado para OpenAI Responses API em modo opcional.
+- adapter adicional preparado para Ollama local, com foco em custo zero.
+
+## Primeiro provider escolhido para a fase 2
+
+O primeiro provider escolhido para iniciar a integração real será a OpenAI Responses API, pelos seguintes motivos:
+
+- boa aderência a structured outputs com JSON Schema;
+- documentação e ecossistema maduros para demonstração acadêmica;
+- boa narrativa para explicar modelo, parâmetros, tools e output estruturado;
+- facilidade de manter fallback local enquanto a integração real não estiver ativa.
+
+## Opção gratuita priorizada
+
+Como alternativa prática para evitar custo por API, a arquitetura também foi preparada para Ollama local.
+
+Essa opção é interessante quando:
+
+- o objetivo é manter custo de inferência em zero;
+- a máquina disponível suporta o modelo local;
+- a qualidade do modelo aberto for suficiente para a demonstração;
+- a banca valorizar a justificativa técnica de uso local e controle de dados.
+
+Se a qualidade do modelo local não for suficiente, a arquitetura continua pronta para ativar OpenAI depois com mínimo retrabalho.
+
+## Estratégia recomendada de ativação
+
+### 1. Desenvolvimento diário
+
+Usar fallback local:
+
+- `DIAGNOFLOW_LLM_PROVIDER=not-configured`
+- `DIAGNOFLOW_LLM_MODEL=diagnoflow-mock-agent`
+
+Motivo:
+
+- custo zero;
+- estabilidade;
+- foco em arquitetura, tools e guardrails antes da inferência real.
+
+### 2. Demonstração local gratuita
+
+Usar Ollama:
+
+- `DIAGNOFLOW_LLM_PROVIDER=ollama`
+- `DIAGNOFLOW_LLM_MODEL=qwen3:8b`
+- `DIAGNOFLOW_OLLAMA_BASE_URL=http://127.0.0.1:11434`
+
+Motivo:
+
+- custo zero por inferência;
+- boa narrativa para uso local;
+- permite provar integração real sem depender de API paga.
+
+### 3. Demonstração final com maior previsibilidade
+
+Usar OpenAI apenas se necessário:
+
+- `DIAGNOFLOW_LLM_PROVIDER=openai`
+- `DIAGNOFLOW_LLM_MODEL=gpt-5-mini`
+
+Motivo:
+
+- maior robustez para structured outputs;
+- melhor consistência para demo curta;
+- custo controlável se usado só na reta final.
+
+### Recomendação geral
+
+O caminho mais econômico e seguro é:
+
+1. desenvolver com fallback local;
+2. testar integração real com Ollama;
+3. ativar OpenAI apenas se o modelo local não atingir a qualidade esperada para a apresentação.
+
 ## O que fica para o segundo ciclo
 
 - adicionar `consultar_base_falhas`;

@@ -216,6 +216,12 @@ textarea {
   border: 1px solid var(--border);
 }
 
+.incident-note {
+  margin: 8px 0 0 0;
+  color: var(--text-soft);
+  font-size: 0.92rem;
+}
+
 .badge {
   display: inline-flex;
   align-items: center;
@@ -339,6 +345,45 @@ th {
 
 .prose ul {
   padding-left: 20px;
+}
+
+.insight-box {
+  margin-top: 14px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.insight-box strong {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--text-main);
+}
+
+.insight-box p,
+.insight-box li {
+  color: var(--text-soft);
+}
+
+.insight-box ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.insight-warning {
+  border-color: rgba(245, 185, 113, 0.28);
+  background: rgba(245, 185, 113, 0.08);
+}
+
+.history-summary {
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1px solid var(--border);
+}
+
+.history-summary strong {
+  color: var(--text-main);
 }
 
 @media (max-width: 1024px) {

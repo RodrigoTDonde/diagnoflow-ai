@@ -40,6 +40,13 @@ class CriticalitySignal(BaseModel):
     justification: str
 
 
+class KnownFailureSignal(BaseModel):
+    probable_cause_hint: str
+    evidence: list[str] = Field(default_factory=list)
+    recommended_actions: list[str] = Field(default_factory=list)
+    involved_parts: list[str] = Field(default_factory=list)
+
+
 class StructuredDiagnosticDraft(BaseModel):
     probable_cause: str
     confidence_level: float = Field(ge=0.0, le=1.0)

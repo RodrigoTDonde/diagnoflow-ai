@@ -142,6 +142,12 @@ export function NewIncidentPage() {
             <p>Confiança simulada: {Math.round(result.diagnostic.confidence_level * 100)}%</p>
             <p>Prioridade: {result.diagnostic.priority}</p>
             <p>Risco operacional: {result.diagnostic.operational_risk}</p>
+            {result.diagnostic.requires_human_validation ? (
+              <div className="insight-box insight-warning">
+                <strong>Validação humana recomendada</strong>
+                <p>Este caso deve ser revisado por um responsável técnico antes de qualquer decisão crítica.</p>
+              </div>
+            ) : null}
             <p>Observações: {result.diagnostic.observations}</p>
             <div>
               <strong>Ações recomendadas</strong>
@@ -155,6 +161,26 @@ export function NewIncidentPage() {
               <strong>Peças possivelmente envolvidas</strong>
               <p>{result.diagnostic.involved_parts.join(", ")}</p>
             </div>
+            {result.diagnostic.evidence_summary?.length ? (
+              <div className="insight-box">
+                <strong>Evidências consideradas</strong>
+                <ul>
+                  {result.diagnostic.evidence_summary.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
+            {result.diagnostic.missing_information?.length ? (
+              <div className="insight-box">
+                <strong>Lacunas de contexto</strong>
+                <ul>
+                  {result.diagnostic.missing_information.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
             <button
               type="button"
               className="secondary-button"

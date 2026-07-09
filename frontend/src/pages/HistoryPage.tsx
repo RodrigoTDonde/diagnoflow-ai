@@ -60,6 +60,7 @@ export function HistoryPage() {
                 <th>Criticidade</th>
                 <th>Status</th>
                 <th>Prioridade</th>
+                <th>Revisão humana</th>
                 <th>Data</th>
               </tr>
             </thead>
@@ -71,12 +72,23 @@ export function HistoryPage() {
                   <td>{incident.equipment.criticality}</td>
                   <td>{incident.status}</td>
                   <td>{diagnostic.priority}</td>
+                  <td>{diagnostic.requires_human_validation ? "Recomendada" : "Não"}</td>
                   <td>{new Date(incident.created_at).toLocaleDateString("pt-BR")}</td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
+
+        {items.length > 0 ? (
+          <div className="history-summary">
+            <strong>Leitura estruturada disponível</strong>
+            <p>
+              Os diagnósticos já podem expor evidências consideradas, lacunas de contexto e indicação de validação humana
+              para a fase 2 da aplicação.
+            </p>
+          </div>
+        ) : null}
       </section>
     </div>
   );
