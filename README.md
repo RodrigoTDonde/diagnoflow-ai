@@ -258,6 +258,42 @@ uvicorn app.main:app --host 0.0.0.0 --port 8000
 - `http://127.0.0.1:8000/docs` para a documentação da API;
 - `http://127.0.0.1:8000/dashboard` para uma rota principal da API.
 
+## Como ativar a arquitetura da fase 2 localmente
+
+Na branch `fase-2`, o backend já possui a estrutura do orquestrador com:
+
+- tools locais;
+- output estruturado;
+- guardrails;
+- fallback determinístico;
+- adapters opcionais para Ollama e OpenAI.
+
+Use o arquivo `backend/.env.example` como referência para as variáveis de ambiente.
+
+Modo padrão de desenvolvimento:
+
+```powershell
+$env:DIAGNOFLOW_LLM_PROVIDER="not-configured"
+$env:DIAGNOFLOW_LLM_MODEL="diagnoflow-mock-agent"
+```
+
+Modo de demonstração local gratuita com Ollama:
+
+```powershell
+$env:DIAGNOFLOW_LLM_PROVIDER="ollama"
+$env:DIAGNOFLOW_LLM_MODEL="qwen3:8b"
+$env:DIAGNOFLOW_OLLAMA_BASE_URL="http://127.0.0.1:11434"
+```
+
+Modo opcional com API:
+
+```powershell
+$env:DIAGNOFLOW_LLM_PROVIDER="openai"
+$env:DIAGNOFLOW_LLM_MODEL="gpt-5-mini"
+```
+
+Se nenhuma integração real estiver configurada, o sistema continua operando com fallback local estruturado, sem quebrar o fluxo da aplicação.
+
 ## Endpoints principais
 
 - `GET /`
