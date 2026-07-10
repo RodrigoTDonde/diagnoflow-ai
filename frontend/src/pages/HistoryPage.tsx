@@ -61,6 +61,7 @@ export function HistoryPage() {
                 <th>Status</th>
                 <th>Prioridade</th>
                 <th>Revisão humana</th>
+                <th>Responsável</th>
                 <th>Checklist</th>
                 <th>Data</th>
               </tr>
@@ -73,7 +74,8 @@ export function HistoryPage() {
                   <td>{incident.equipment.criticality}</td>
                   <td>{incident.status}</td>
                   <td>{diagnostic.priority}</td>
-                  <td>{diagnostic.requires_human_validation ? "Recomendada" : "Não"}</td>
+                  <td>{diagnostic.latest_review_status ?? (diagnostic.requires_human_validation ? "Pendente" : "Não necessária")}</td>
+                  <td>{diagnostic.latest_reviewed_by ?? "-"}</td>
                   <td>{diagnostic.inspection_checklist?.length ? `${diagnostic.inspection_checklist.length} itens` : "-"}</td>
                   <td>{new Date(incident.created_at).toLocaleDateString("pt-BR")}</td>
                 </tr>
@@ -87,7 +89,7 @@ export function HistoryPage() {
             <strong>Leitura estruturada disponível</strong>
             <p>
               Os diagnósticos já podem expor evidências consideradas, lacunas de contexto e indicação de validação humana
-              para a fase 2 da aplicação.
+              para a fase 2 da aplicação, incluindo trilha de revisão registrada por responsável técnico.
             </p>
           </div>
         ) : null}

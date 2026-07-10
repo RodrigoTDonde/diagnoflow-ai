@@ -58,6 +58,19 @@ export type Diagnostic = {
   runtime_provider?: string;
   runtime_model?: string;
   runtime_mode?: string;
+  latest_review_status?: string | null;
+  latest_reviewed_by?: string | null;
+  review_count?: number;
+  human_reviews?: HumanValidationReview[];
+  created_at: string;
+};
+
+export type HumanValidationReview = {
+  id: number;
+  diagnostic_id: number;
+  reviewer_name: string;
+  decision: string;
+  notes: string;
   created_at: string;
 };
 

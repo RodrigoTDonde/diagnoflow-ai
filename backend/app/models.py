@@ -65,3 +65,17 @@ class Diagnostic(Base):
     created_at = Column(DateTime, default=utcnow, nullable=False)
 
     incident = relationship("Incident", back_populates="diagnostic")
+    reviews = relationship("HumanValidationReview", back_populates="diagnostic", cascade="all, delete-orphan")
+
+
+class HumanValidationReview(Base):
+    __tablename__ = "human_validation_reviews"
+
+    id = Column(Integer, primary_key=True, index=True)
+    diagnostic_id = Column(Integer, ForeignKey("diagnostics.id"), nullable=False)
+    reviewer_name = Column(String(120), nullable=False)
+    decision = Column(String(30), nullable=False)
+    notes = Column(Text, nullable=False)
+    created_at = Column(DateTime, default=utcnow, nullable=False)
+
+    diagnostic = relationship("Diagnostic", back_populates="reviews")

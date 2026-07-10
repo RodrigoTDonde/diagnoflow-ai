@@ -49,4 +49,16 @@ export const api = {
       method: "POST",
       body: JSON.stringify(payload),
     }),
+  createHumanReview: (
+    incidentId: number,
+    payload: {
+      reviewer_name: string;
+      decision: string;
+      notes: string;
+    },
+  ) =>
+    request<IncidentWithDiagnostic["diagnostic"]>(`/diagnostics/${incidentId}/review`, {
+      method: "POST",
+      body: JSON.stringify(payload),
+    }),
 };

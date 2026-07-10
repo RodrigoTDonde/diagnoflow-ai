@@ -18,7 +18,10 @@ def list_incidents(
 ):
     query = (
         db.query(models.Incident)
-        .options(joinedload(models.Incident.equipment), joinedload(models.Incident.diagnostic))
+        .options(
+            joinedload(models.Incident.equipment),
+            joinedload(models.Incident.diagnostic).joinedload(models.Diagnostic.reviews),
+        )
         .join(models.Equipment)
         .order_by(models.Incident.created_at.desc())
     )
@@ -62,7 +65,10 @@ def create_incident(payload: schemas.IncidentCreate, db: Session = Depends(get_d
 
     incident = (
         db.query(models.Incident)
-        .options(joinedload(models.Incident.equipment), joinedload(models.Incident.diagnostic))
+        .options(
+            joinedload(models.Incident.equipment),
+            joinedload(models.Incident.diagnostic).joinedload(models.Diagnostic.reviews),
+        )
         .filter(models.Incident.id == incident.id)
         .first()
     )

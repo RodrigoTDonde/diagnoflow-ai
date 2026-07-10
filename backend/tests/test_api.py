@@ -105,3 +105,36 @@ def test_get_diagnostic_exposes_phase_two_fields():
     assert diagnostic["evidence_summary"]
     assert diagnostic["missing_information"]
     assert "Runtime atual:" in diagnostic["observations"]
+
+
+def test_create_human_review_updates_diagnostic_audit_trail():
+    payload = {
+        "equipment_id": 1,
+        "main_symptom": "Aquecimento com vibração",
+        "description": "Teste de auditoria com validação humana.",
+        "shift": "manhã",
+        "perceived_urgency": "alta",
+        "symptoms": {
+            "vibration": True,
+            "overheating": True,
+        },
+    }
+
+    with TestClient(app) as client:
+        created = client.post("/incidents", json=payload)
+        incident_id = created.json()["incident"]["id"]
+        review_response = client.post(
+            f"/diagnostics/{incident_id}/review",
+            json={
+                "reviewer_name": "Rodrigo Donde",
+                "decision": "approved-with-monitoring",
+                "notes": "Ação aprovada com inspeção complementar e monitoramento nas próximas 24 horas.",
+            },
+        )
+
+    assert review_response.status_code == 201
+    diagnostic = review_response.json()
+    assert diagnostic["review_count"] == 1
+    assert diagnostic["latest_review_status"] == "approved-with-monitoring"
+    assert diagnostic["latest_reviewed_by"] == "Rodrigo Donde"
+    assert diagnostic["human_reviews"][0]["notes"].startswith("Ação aprovada")

@@ -27,6 +27,11 @@ export function NewIncidentPage() {
     status: "open",
   });
   const [symptoms, setSymptoms] = useState<SymptomFlags>(initialSymptoms);
+  const [reviewForm, setReviewForm] = useState({
+    reviewer_name: "",
+    decision: "approved-with-monitoring",
+    notes: "",
+  });
 
   useEffect(() => {
     api.listEquipment().then(setEquipment).catch((err: Error) => setError(err.message));
@@ -52,8 +57,22 @@ export function NewIncidentPage() {
       };
       const response = await api.createIncident(payload);
       setResult(response);
+      setReviewForm({ reviewer_name: "", decision: "approved-with-monitoring", notes: "" });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Falha ao registrar ocorrencia.");
+    }
+  };
+
+  const handleReviewSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!result) return;
+    setError(null);
+    try {
+      const diagnostic = await api.createHumanReview(result.incident.id, reviewForm);
+      setResult({ ...result, diagnostic });
+      setReviewForm({ reviewer_name: "", decision: "approved-with-monitoring", notes: "" });
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Falha ao registrar revisão humana.");
     }
   };
 
@@ -161,6 +180,14 @@ export function NewIncidentPage() {
                 <p>Este caso deve ser revisado por um responsável técnico antes de qualquer decisão crítica.</p>
               </div>
             ) : null}
+            {result.diagnostic.latest_review_status ? (
+              <div className="insight-box">
+                <strong>Última revisão humana</strong>
+                <p>Status: {result.diagnostic.latest_review_status}</p>
+                <p>Responsável: {result.diagnostic.latest_reviewed_by ?? "Não informado"}</p>
+                <p>Registros de auditoria: {result.diagnostic.review_count ?? 0}</p>
+              </div>
+            ) : null}
             <p>Observações: {result.diagnostic.observations}</p>
             <div>
               <strong>Ações recomendadas</strong>
@@ -200,6 +227,42 @@ export function NewIncidentPage() {
                 <ul>
                   {result.diagnostic.inspection_checklist.map((item) => (
                     <li key={item}>{item}</li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
+            {result.diagnostic.requires_human_validation ? (
+              <form className="form-grid review-form" onSubmit={handleReviewSubmit}>
+                <strong>Registrar validação humana</strong>
+                <input
+                  placeholder="Nome do responsável técnico"
+                  value={reviewForm.reviewer_name}
+                  onChange={(e) => setReviewForm({ ...reviewForm, reviewer_name: e.target.value })}
+                  required
+                />
+                <select value={reviewForm.decision} onChange={(e) => setReviewForm({ ...reviewForm, decision: e.target.value })}>
+                  <option value="approved-with-monitoring">Aprovado com monitoramento</option>
+                  <option value="requires-onsite-inspection">Exige inspeção presencial</option>
+                  <option value="blocked-until-maintenance">Bloqueado até manutenção</option>
+                </select>
+                <textarea
+                  placeholder="Observações da validação humana"
+                  value={reviewForm.notes}
+                  onChange={(e) => setReviewForm({ ...reviewForm, notes: e.target.value })}
+                  rows={4}
+                  required
+                />
+                <button type="submit">Registrar revisão humana</button>
+              </form>
+            ) : null}
+            {result.diagnostic.human_reviews?.length ? (
+              <div className="insight-box">
+                <strong>Trilha de auditoria</strong>
+                <ul>
+                  {result.diagnostic.human_reviews.map((review) => (
+                    <li key={review.id}>
+                      {review.reviewer_name} • {review.decision} • {new Date(review.created_at).toLocaleString("pt-BR")}
+                    </li>
                   ))}
                 </ul>
               </div>

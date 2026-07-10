@@ -85,6 +85,10 @@ class DiagnosticRead(BaseModel):
     runtime_provider: str = "not-configured"
     runtime_model: str = "diagnoflow-mock-agent"
     runtime_mode: str = "fallback-local"
+    latest_review_status: str | None = None
+    latest_reviewed_by: str | None = None
+    review_count: int = 0
+    human_reviews: List["HumanValidationReviewRead"] = Field(default_factory=list)
     created_at: datetime
 
     model_config = ConfigDict(from_attributes=True)
@@ -111,6 +115,23 @@ class HistoryFilters(BaseModel):
     equipment_id: Optional[int] = None
     criticality: Optional[str] = None
     status: Optional[str] = None
+
+
+class HumanValidationReviewCreate(BaseModel):
+    reviewer_name: str
+    decision: str
+    notes: str
+
+
+class HumanValidationReviewRead(BaseModel):
+    id: int
+    diagnostic_id: int
+    reviewer_name: str
+    decision: str
+    notes: str
+    created_at: datetime
+
+    model_config = ConfigDict(from_attributes=True)
 
 
 class AgentToolRead(BaseModel):

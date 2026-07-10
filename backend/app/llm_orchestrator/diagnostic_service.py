@@ -128,6 +128,8 @@ def serialize_diagnostic_record(
 ) -> dict:
     draft = build_structured_mock_diagnostic_from_models(equipment, incident, diagnostic)
     settings = get_llm_runtime_settings()
+    ordered_reviews = sorted(diagnostic.reviews, key=lambda review: review.created_at, reverse=True)
+    latest_review = ordered_reviews[0] if ordered_reviews else None
     return {
         "id": diagnostic.id,
         "incident_id": diagnostic.incident_id,
@@ -150,5 +152,9 @@ def serialize_diagnostic_record(
         "runtime_provider": settings.provider,
         "runtime_model": settings.model,
         "runtime_mode": settings.runtime_mode,
+        "latest_review_status": latest_review.decision if latest_review else None,
+        "latest_reviewed_by": latest_review.reviewer_name if latest_review else None,
+        "review_count": len(ordered_reviews),
+        "human_reviews": ordered_reviews,
         "created_at": diagnostic.created_at,
     }
