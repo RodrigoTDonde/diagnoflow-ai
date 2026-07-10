@@ -1,6 +1,11 @@
 # DiagnoFlow AI
 
-DiagnoFlow AI é uma aplicação full stack para triagem técnica simulada de máquinas rotativas industriais. A proposta da primeira entrega da disciplina é demonstrar uma jornada funcional de registro de sintomas, organização de ocorrências e geração de diagnóstico técnico mockado, sem integrar nenhum LLM nesta fase.
+DiagnoFlow AI é uma aplicação full stack para triagem técnica de máquinas rotativas industriais. Na entrega intermediária, a proposta foi demonstrar uma jornada funcional de registro de sintomas, organização de ocorrências e geração de diagnóstico técnico mockado, sem integrar nenhum LLM real ao produto publicado.
+
+## Situação das entregas no repositório
+
+- `main`: versão estável da entrega intermediária, sem LLM real integrado.
+- `fase-2`: evolução da entrega final, com arquitetura de agente, runtime configurável, smoke test real com `Ollama` e trilha de auditoria humana.
 
 ## Acesso rápido
 
@@ -24,7 +29,7 @@ A solução entregue foi uma aplicação com:
 - relatório técnico textual;
 - documentação da futura integração com IA generativa.
 
-## O que esta fase entrega
+## O que a entrega intermediária oferece
 
 - endpoint funcional em FastAPI;
 - frontend React com múltiplas telas navegáveis;
@@ -34,7 +39,7 @@ A solução entregue foi uma aplicação com:
 - suporte para publicação em endpoint único, com FastAPI servindo o build do frontend;
 - versão paralela em Streamlit para entrega online simplificada.
 
-## O que não existe nesta fase
+## O que não existe na entrega intermediária publicada
 
 - nenhuma chamada para OpenAI, Anthropic, Gemini, Ollama, LangChain ou outro provedor;
 - nenhuma inferência real com modelo generativo;
@@ -118,7 +123,7 @@ diagnoflow-ai/
 - Em produção, o FastAPI serve o build do frontend e faz fallback de rotas da SPA para `index.html`, preservando `/docs` e as rotas da API.
 - A versão Streamlit foi mantida em um único arquivo `streamlit_app.py` de forma intencional, porque esta fase exige um protótipo simples, demonstrável e rápido de publicar. A modularização de estado, regras e views fica planejada para a fase 2.
 
-## Tecnologias e IA utilizadas nesta fase
+## Tecnologias e IA utilizadas na entrega intermediária
 
 - FastAPI: backend e API REST com documentação automática.
 - React + Vite + TypeScript: interface navegável, componentização e tipagem explícita.
@@ -163,6 +168,18 @@ As tools planejadas estão documentadas em [docs/future-llm-integration.md](docs
 Para a consolidação técnica da fase 2, consulte também:
 
 - [docs/final-delivery-technical-brief.md](docs/final-delivery-technical-brief.md)
+
+## Estado atual da entrega final na branch `fase-2`
+
+Na branch `fase-2`, o projeto já demonstra os principais elementos esperados para a entrega final:
+
+- runtime do agente exposto em `GET /agent/runtime`;
+- tools locais explícitas e documentadas;
+- output estruturado validado;
+- guardrails de saída e de revisão humana;
+- smoke test real com `Ollama + qwen3:0.6b`;
+- trilha de auditoria com revisão humana persistida no backend;
+- frontend refletindo runtime, evidências, lacunas e histórico de revisão.
 
 ## Funcionalidades implementadas
 

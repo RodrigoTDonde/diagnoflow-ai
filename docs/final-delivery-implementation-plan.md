@@ -229,14 +229,16 @@ Status atual deste repositório:
 - primeiro adapter concreto preparado para OpenAI Responses API em modo opcional.
 - adapter adicional preparado para Ollama local, com foco em custo zero.
 
-## Primeiro provider escolhido para a fase 2
+## Provider validado primeiro na prática
 
-O primeiro provider escolhido para iniciar a integração real será a OpenAI Responses API, pelos seguintes motivos:
+O primeiro provider validado de forma real nesta branch foi o `Ollama` local com `qwen3:0.6b`, pelos seguintes motivos:
 
-- boa aderência a structured outputs com JSON Schema;
-- documentação e ecossistema maduros para demonstração acadêmica;
-- boa narrativa para explicar modelo, parâmetros, tools e output estruturado;
-- facilidade de manter fallback local enquanto a integração real não estiver ativa.
+- custo zero por inferência;
+- implantação local simples para demonstração;
+- controle do ambiente e dos dados de teste;
+- capacidade de provar integração real sem depender de crédito em API paga.
+
+O provider `OpenAI` permanece como opção adicional de maior previsibilidade para uma demo final, caso o modelo local não entregue a qualidade desejada.
 
 ## Opção gratuita priorizada
 

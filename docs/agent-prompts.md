@@ -1,6 +1,6 @@
 # Agent Prompts
 
-Este documento registra evidências do uso do agente de codificação na construção e revisão da entrega intermediária do projeto DiagnoFlow AI.
+Este documento registra evidências do uso do agente de codificação na construção, revisão da entrega intermediária e evolução da entrega final do projeto DiagnoFlow AI.
 
 ## Prompt inicial usado
 
