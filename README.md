@@ -160,6 +160,10 @@ As tools planejadas estão documentadas em [docs/future-llm-integration.md](docs
 - gerar checklist técnico;
 - gerar relatório estruturado.
 
+Para a consolidação técnica da fase 2, consulte também:
+
+- [docs/final-delivery-technical-brief.md](docs/final-delivery-technical-brief.md)
+
 ## Funcionalidades implementadas
 
 - dashboard com totais operacionais e últimas ocorrências;
@@ -400,5 +404,6 @@ O uso do agente de codificação está documentado em [docs/agent-prompts.md](do
 - [docs/agent-prompts.md](docs/agent-prompts.md)
 - [docs/design-decisions.md](docs/design-decisions.md)
 - [docs/final-delivery-implementation-plan.md](docs/final-delivery-implementation-plan.md)
+- [docs/final-delivery-technical-brief.md](docs/final-delivery-technical-brief.md)
 - [docs/future-llm-integration.md](docs/future-llm-integration.md)
 - [prompts/future-system-prompt.txt](prompts/future-system-prompt.txt)

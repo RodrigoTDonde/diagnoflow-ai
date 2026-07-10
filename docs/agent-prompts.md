@@ -159,3 +159,40 @@ O agente foi útil para:
 ## Limite observado
 
 Parte dos erros iniciais não estava no código do projeto, mas no ambiente de execução restrito. Isso exigiu repetição de alguns comandos com permissões ampliadas e revisão manual dos resultados antes de seguir.
+
+## Extensão para a fase 2
+
+Na evolução da entrega final, o agente passou a receber orientações adicionais para:
+
+- preparar uma arquitetura real com `FastAPI + LangGraph + tools locais + output estruturado + guardrails`;
+- expor configuração do runtime do agente;
+- integrar provider local com `Ollama`;
+- validar smoke test real com modelo local;
+- adicionar trilha de auditoria de validação humana.
+
+### Iterações relevantes da fase 2
+
+- criação da pasta `backend/app/llm_orchestrator` com grafo, prompt, tools, guardrails e provider;
+- ampliação do frontend para expor runtime, evidências, lacunas e revisão humana;
+- criação do endpoint `GET /agent/runtime`;
+- instalação local do `Ollama` e teste real com `qwen3:0.6b`;
+- criação da tabela e do fluxo de `human_validation_reviews`.
+
+### Evidências adicionais de uso do agente
+
+- modelagem incremental com commits pequenos na branch `fase-2`;
+- validação repetida com `pytest` e `npm run build`;
+- ajustes de documentação após teste real com `Ollama`;
+- inclusão do fluxo human-in-the-loop com auditoria persistida.
+
+### Comandos relevantes da fase 2
+
+```powershell
+.\.venv\Scripts\python -m pytest
+npm run build
+winget install --id Ollama.Ollama -e --accept-package-agreements --accept-source-agreements
+Start-Process -FilePath "C:\Users\rodrigo.donde\AppData\Local\Programs\Ollama\ollama.exe" -ArgumentList "serve" -WindowStyle Hidden
+& "C:\Users\rodrigo.donde\AppData\Local\Programs\Ollama\ollama.exe" pull qwen3:0.6b
+.\.venv\Scripts\python -c "..."
+git log --oneline
+```
