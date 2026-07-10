@@ -57,6 +57,7 @@ export function FutureIntegrationPage() {
                   {runtime.provider_status}
                 </span>
               </p>
+              <p>CLI local disponível: {runtime.provider_cli_available ? "sim" : "não"}</p>
               <p>Modelo: {runtime.model}</p>
               <p>Temperature: {runtime.temperature}</p>
               <p>Top P: {runtime.top_p}</p>
@@ -75,6 +76,7 @@ export function FutureIntegrationPage() {
           <div className="insight-box">
             <strong>Diagnóstico de prontidão</strong>
             <p>{runtime.provider_reason}</p>
+            <p>{runtime.activation_hint}</p>
           </div>
 
           <div className="agent-runtime-grid agent-runtime-grid-wide">

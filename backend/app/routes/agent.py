@@ -20,6 +20,8 @@ def get_agent_runtime():
         "provider_status": readiness.status,
         "provider_ready": readiness.ready,
         "provider_reason": readiness.reason,
+        "provider_cli_available": readiness.cli_available,
+        "activation_hint": readiness.activation_hint,
         "model": settings.model,
         "temperature": settings.temperature,
         "top_p": settings.top_p,

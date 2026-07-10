@@ -95,6 +95,7 @@ def test_provider_readiness_reports_fallback_when_unconfigured():
     readiness = inspect_provider_readiness(settings)
     assert readiness.status == "fallback-active"
     assert readiness.ready is False
+    assert "DIAGNOFLOW_LLM_PROVIDER=ollama" in readiness.activation_hint
 
 
 def test_provider_readiness_reports_unreachable_ollama(monkeypatch):
@@ -124,3 +125,4 @@ def test_provider_readiness_reports_unreachable_ollama(monkeypatch):
     readiness = inspect_provider_readiness(settings)
     assert readiness.status == "unreachable"
     assert readiness.ready is False
+    assert "ollama serve" in readiness.activation_hint

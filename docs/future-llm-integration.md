@@ -43,6 +43,29 @@ Para iniciar a fase 2, a direção escolhida é:
 5. validar saída, risco e necessidade de revisão humana;
 6. só depois avaliar MCP, RAG ou multiagente.
 
+## Ativação local com Ollama
+
+Na branch `fase-2`, a aplicação já expõe um painel técnico em `Futura integração com IA` e um endpoint `GET /agent/runtime` para mostrar:
+
+- provider configurado;
+- status de prontidão;
+- motivo do fallback ou da disponibilidade;
+- dica de ativação local.
+
+Fluxo recomendado para ativação:
+
+1. instalar o Ollama no sistema operacional;
+2. iniciar o servidor local com `ollama serve`;
+3. baixar um modelo compatível, por exemplo `ollama pull qwen3:8b`;
+4. configurar no backend:
+   - `DIAGNOFLOW_LLM_PROVIDER=ollama`
+   - `DIAGNOFLOW_LLM_MODEL=qwen3:8b`
+   - `DIAGNOFLOW_OLLAMA_BASE_URL=http://127.0.0.1:11434`
+5. iniciar o backend e verificar `GET /agent/runtime`;
+6. confirmar na interface se o provider aparece como `reachable`.
+
+Enquanto o Ollama não estiver instalado ou acessível, o DiagnoFlow AI permanece em fallback estruturado local, sem quebrar a aplicação.
+
 ## Riscos e mitigação
 
 - Alucinação: exigir referências de evidência e revisão humana.

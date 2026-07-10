@@ -88,6 +88,8 @@ export type AgentRuntime = {
   provider_status: string;
   provider_ready: boolean;
   provider_reason: string;
+  provider_cli_available: boolean;
+  activation_hint: string;
   model: string;
   temperature: number;
   top_p: number;

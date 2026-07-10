@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 import importlib.util
+import shutil
 from typing import Any
 from typing import Protocol
 
@@ -23,6 +24,8 @@ class ProviderReadiness:
     status: str
     ready: bool
     reason: str
+    cli_available: bool
+    activation_hint: str
 
 
 class DiagnosticLLMProvider(Protocol):
@@ -173,6 +176,8 @@ def inspect_provider_readiness(settings: LLMRuntimeSettings) -> ProviderReadines
             status="fallback-active",
             ready=False,
             reason="Nenhum provider real foi configurado; o fallback local estruturado permanece ativo.",
+            cli_available=bool(shutil.which("ollama")),
+            activation_hint="Defina DIAGNOFLOW_LLM_PROVIDER=ollama e DIAGNOFLOW_LLM_MODEL=qwen3:8b quando quiser testar o modo local gratuito.",
         )
 
     if provider_name == "openai":
@@ -181,14 +186,19 @@ def inspect_provider_readiness(settings: LLMRuntimeSettings) -> ProviderReadines
                 status="sdk-missing",
                 ready=False,
                 reason="O runtime está apontado para OpenAI, mas o pacote `openai` não está instalado neste ambiente.",
+                cli_available=False,
+                activation_hint="Instale o pacote openai no backend e configure as credenciais antes de ativar esse provider.",
             )
         return ProviderReadiness(
             status="sdk-available",
             ready=True,
             reason="SDK da OpenAI encontrado; a integração depende apenas das credenciais e da chamada do provider.",
+            cli_available=False,
+            activation_hint="Configure a credencial do provider e mantenha o schema estruturado ativo para preservar o controle do output.",
         )
 
     if provider_name == "ollama":
+        cli_available = bool(shutil.which("ollama"))
         try:
             with httpx.Client(base_url=settings.ollama_base_url, timeout=2.0) as client:
                 response = client.get("/api/tags")
@@ -197,16 +207,22 @@ def inspect_provider_readiness(settings: LLMRuntimeSettings) -> ProviderReadines
                 status="reachable",
                 ready=True,
                 reason="Servidor Ollama local acessível e pronto para receber chamadas.",
+                cli_available=cli_available,
+                activation_hint="Mantenha o servidor Ollama ativo e confirme que o modelo configurado já foi baixado antes da demonstração.",
             )
         except Exception:
             return ProviderReadiness(
                 status="unreachable",
                 ready=False,
                 reason="O runtime está configurado para Ollama, mas o servidor local não respondeu no endpoint esperado.",
+                cli_available=cli_available,
+                activation_hint="Instale o Ollama, execute `ollama serve` e baixe o modelo configurado, por exemplo `ollama pull qwen3:8b`.",
             )
 
     return ProviderReadiness(
         status="unknown-provider",
         ready=False,
         reason="O provider configurado não corresponde aos modos suportados pelo DiagnoFlow AI nesta fase.",
+        cli_available=False,
+        activation_hint="Use apenas os providers suportados nesta fase: not-configured, ollama ou openai.",
     )
