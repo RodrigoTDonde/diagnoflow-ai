@@ -271,7 +271,7 @@ Motivo:
 Usar Ollama:
 
 - `DIAGNOFLOW_LLM_PROVIDER=ollama`
-- `DIAGNOFLOW_LLM_MODEL=qwen3:8b`
+- `DIAGNOFLOW_LLM_MODEL=qwen3:0.6b`
 - `DIAGNOFLOW_OLLAMA_BASE_URL=http://127.0.0.1:11434`
 
 Motivo:
@@ -279,6 +279,12 @@ Motivo:
 - custo zero por inferência;
 - boa narrativa para uso local;
 - permite provar integração real sem depender de API paga.
+
+Status atualizado:
+
+- smoke test local já validado com `Ollama + qwen3:0.6b`;
+- runtime detectado como `reachable`;
+- fluxo de criação de ocorrência preservado com resposta `201`.
 
 ### 3. Demonstração final com maior previsibilidade
 

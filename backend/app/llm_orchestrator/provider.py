@@ -177,7 +177,7 @@ def inspect_provider_readiness(settings: LLMRuntimeSettings) -> ProviderReadines
             ready=False,
             reason="Nenhum provider real foi configurado; o fallback local estruturado permanece ativo.",
             cli_available=bool(shutil.which("ollama")),
-            activation_hint="Defina DIAGNOFLOW_LLM_PROVIDER=ollama e DIAGNOFLOW_LLM_MODEL=qwen3:8b quando quiser testar o modo local gratuito.",
+            activation_hint="Defina DIAGNOFLOW_LLM_PROVIDER=ollama e DIAGNOFLOW_LLM_MODEL=qwen3:0.6b quando quiser testar o modo local gratuito.",
         )
 
     if provider_name == "openai":
@@ -216,7 +216,7 @@ def inspect_provider_readiness(settings: LLMRuntimeSettings) -> ProviderReadines
                 ready=False,
                 reason="O runtime está configurado para Ollama, mas o servidor local não respondeu no endpoint esperado.",
                 cli_available=cli_available,
-                activation_hint="Instale o Ollama, execute `ollama serve` e baixe o modelo configurado, por exemplo `ollama pull qwen3:8b`.",
+                activation_hint="Instale o Ollama, execute `ollama serve` e baixe o modelo configurado, por exemplo `ollama pull qwen3:0.6b`.",
             )
 
     return ProviderReadiness(

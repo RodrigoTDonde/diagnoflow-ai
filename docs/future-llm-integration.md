@@ -56,15 +56,23 @@ Fluxo recomendado para ativação:
 
 1. instalar o Ollama no sistema operacional;
 2. iniciar o servidor local com `ollama serve`;
-3. baixar um modelo compatível, por exemplo `ollama pull qwen3:8b`;
+3. baixar um modelo compatível, por exemplo `ollama pull qwen3:0.6b`;
 4. configurar no backend:
    - `DIAGNOFLOW_LLM_PROVIDER=ollama`
-   - `DIAGNOFLOW_LLM_MODEL=qwen3:8b`
+   - `DIAGNOFLOW_LLM_MODEL=qwen3:0.6b`
    - `DIAGNOFLOW_OLLAMA_BASE_URL=http://127.0.0.1:11434`
 5. iniciar o backend e verificar `GET /agent/runtime`;
 6. confirmar na interface se o provider aparece como `reachable`.
 
 Enquanto o Ollama não estiver instalado ou acessível, o DiagnoFlow AI permanece em fallback estruturado local, sem quebrar a aplicação.
+
+## Smoke test validado na branch `fase-2`
+
+- instalação do `Ollama` concluída com sucesso no Windows;
+- servidor local respondendo em `127.0.0.1:11434`;
+- modelo `qwen3:0.6b` baixado;
+- endpoint `GET /agent/runtime` retornando `provider=ollama`, `provider_status=reachable` e `provider_ready=true`;
+- `POST /incidents` retornando `201` com `runtime_provider=ollama`.
 
 ## Riscos e mitigação
 

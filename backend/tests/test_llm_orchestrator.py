@@ -96,12 +96,13 @@ def test_provider_readiness_reports_fallback_when_unconfigured():
     assert readiness.status == "fallback-active"
     assert readiness.ready is False
     assert "DIAGNOFLOW_LLM_PROVIDER=ollama" in readiness.activation_hint
+    assert "qwen3:0.6b" in readiness.activation_hint
 
 
 def test_provider_readiness_reports_unreachable_ollama(monkeypatch):
     settings = LLMRuntimeSettings(
         provider="ollama",
-        model="qwen3:8b",
+        model="qwen3:0.6b",
         temperature=0.2,
         top_p=0.9,
         agent_strategy="single-agent",

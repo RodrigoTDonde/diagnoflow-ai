@@ -281,9 +281,16 @@ Modo de demonstração local gratuita com Ollama:
 
 ```powershell
 $env:DIAGNOFLOW_LLM_PROVIDER="ollama"
-$env:DIAGNOFLOW_LLM_MODEL="qwen3:8b"
+$env:DIAGNOFLOW_LLM_MODEL="qwen3:0.6b"
 $env:DIAGNOFLOW_OLLAMA_BASE_URL="http://127.0.0.1:11434"
 ```
+
+Smoke test já validado nesta branch:
+
+- `Ollama` instalado localmente;
+- servidor respondendo em `http://127.0.0.1:11434`;
+- modelo `qwen3:0.6b` baixado com sucesso;
+- criação de ocorrência funcionando com `runtime_provider=ollama`.
 
 Modo opcional com API:
 

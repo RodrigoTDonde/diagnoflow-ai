@@ -32,7 +32,7 @@ DEVELOPMENT_RUNTIME_PRESET = {
 
 LOCAL_DEMO_RUNTIME_PRESET = {
     "provider": "ollama",
-    "model": "qwen3:8b",
+    "model": "qwen3:0.6b",
     "notes": "Modo recomendado para demonstração local gratuita, usando Ollama.",
 }
 

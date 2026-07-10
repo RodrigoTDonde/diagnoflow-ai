@@ -51,6 +51,7 @@ def test_agent_runtime_endpoint():
     assert "fallback local" in payload["provider_reason"].lower()
     assert isinstance(payload["provider_cli_available"], bool)
     assert "DIAGNOFLOW_LLM_PROVIDER=ollama" in payload["activation_hint"]
+    assert "qwen3:0.6b" in payload["activation_hint"]
     assert payload["model"] == "diagnoflow-mock-agent"
     assert payload["use_langgraph"] is True
     assert payload["require_human_validation_for_high_risk"] is True
