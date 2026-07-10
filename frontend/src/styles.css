@@ -413,6 +413,27 @@ th {
   color: var(--text-soft);
 }
 
+.inline-status {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  border: 1px solid var(--border);
+}
+
+.inline-status-ready {
+  color: var(--success);
+  border-color: rgba(119, 212, 165, 0.26);
+  background: rgba(119, 212, 165, 0.08);
+}
+
+.inline-status-pending {
+  color: var(--warning);
+  border-color: rgba(245, 185, 113, 0.26);
+  background: rgba(245, 185, 113, 0.08);
+}
+
 .insight-warning {
   border-color: rgba(245, 185, 113, 0.28);
   background: rgba(245, 185, 113, 0.08);

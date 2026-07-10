@@ -3,6 +3,7 @@ from app.llm_orchestrator.provider import (
     LLMInvocationContext,
     MockDiagnosticLLMProvider,
     build_provider,
+    inspect_provider_readiness,
 )
 from app.llm_orchestrator.schemas import StructuredDiagnosticDraft
 from app.config import LLMRuntimeSettings
@@ -77,3 +78,49 @@ def test_mock_provider_keeps_fallback_path_active():
     )
 
     assert provider.generate_structured_diagnostic(context) is None
+
+
+def test_provider_readiness_reports_fallback_when_unconfigured():
+    settings = LLMRuntimeSettings(
+        provider="not-configured",
+        model="diagnoflow-mock-agent",
+        temperature=0.2,
+        top_p=0.9,
+        agent_strategy="single-agent",
+        use_langgraph=True,
+        require_human_validation_for_high_risk=True,
+        ollama_base_url="http://127.0.0.1:11434",
+    )
+
+    readiness = inspect_provider_readiness(settings)
+    assert readiness.status == "fallback-active"
+    assert readiness.ready is False
+
+
+def test_provider_readiness_reports_unreachable_ollama(monkeypatch):
+    settings = LLMRuntimeSettings(
+        provider="ollama",
+        model="qwen3:8b",
+        temperature=0.2,
+        top_p=0.9,
+        agent_strategy="single-agent",
+        use_langgraph=True,
+        require_human_validation_for_high_risk=True,
+        ollama_base_url="http://127.0.0.1:11434",
+    )
+
+    class BrokenClient:
+        def __init__(self, *args, **kwargs):
+            pass
+
+        def __enter__(self):
+            raise RuntimeError("offline")
+
+        def __exit__(self, exc_type, exc, tb):
+            return False
+
+    monkeypatch.setattr("app.llm_orchestrator.provider.httpx.Client", BrokenClient)
+
+    readiness = inspect_provider_readiness(settings)
+    assert readiness.status == "unreachable"
+    assert readiness.ready is False

@@ -46,6 +46,9 @@ def test_agent_runtime_endpoint():
     assert payload["runtime_label"] in {"fallback-local", "langgraph"}
     assert payload["runtime_mode"] == "fallback-local"
     assert payload["provider"] == "not-configured"
+    assert payload["provider_status"] == "fallback-active"
+    assert payload["provider_ready"] is False
+    assert "fallback local" in payload["provider_reason"].lower()
     assert payload["model"] == "diagnoflow-mock-agent"
     assert payload["use_langgraph"] is True
     assert payload["require_human_validation_for_high_risk"] is True

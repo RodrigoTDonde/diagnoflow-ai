@@ -51,6 +51,12 @@ export function FutureIntegrationPage() {
             <article className="insight-box">
               <strong>Modelo e parâmetros</strong>
               <p>Provider: {runtime.provider}</p>
+              <p>
+                Status do provider:{" "}
+                <span className={`inline-status ${runtime.provider_ready ? "inline-status-ready" : "inline-status-pending"}`}>
+                  {runtime.provider_status}
+                </span>
+              </p>
               <p>Modelo: {runtime.model}</p>
               <p>Temperature: {runtime.temperature}</p>
               <p>Top P: {runtime.top_p}</p>
@@ -64,6 +70,11 @@ export function FutureIntegrationPage() {
               </p>
               <p>Esse guardrail impede recomendações críticas sem revisão técnica.</p>
             </article>
+          </div>
+
+          <div className="insight-box">
+            <strong>Diagnóstico de prontidão</strong>
+            <p>{runtime.provider_reason}</p>
           </div>
 
           <div className="agent-runtime-grid agent-runtime-grid-wide">

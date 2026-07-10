@@ -122,6 +122,9 @@ class AgentRuntimeRead(BaseModel):
     runtime_label: str
     runtime_mode: str
     provider: str
+    provider_status: str
+    provider_ready: bool
+    provider_reason: str
     model: str
     temperature: float
     top_p: float

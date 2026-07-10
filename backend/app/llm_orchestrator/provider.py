@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+import importlib.util
 from typing import Any
 from typing import Protocol
 
@@ -15,6 +16,13 @@ class LLMInvocationContext:
     system_prompt: str
     user_prompt: str
     settings: LLMRuntimeSettings
+
+
+@dataclass(frozen=True)
+class ProviderReadiness:
+    status: str
+    ready: bool
+    reason: str
 
 
 class DiagnosticLLMProvider(Protocol):
@@ -155,3 +163,50 @@ def build_provider(settings: LLMRuntimeSettings) -> DiagnosticLLMProvider:
     if settings.provider.lower() == "openai":
         return OpenAIDiagnosticLLMProvider(settings)
     return MockDiagnosticLLMProvider()
+
+
+def inspect_provider_readiness(settings: LLMRuntimeSettings) -> ProviderReadiness:
+    provider_name = settings.provider.lower()
+
+    if provider_name == "not-configured":
+        return ProviderReadiness(
+            status="fallback-active",
+            ready=False,
+            reason="Nenhum provider real foi configurado; o fallback local estruturado permanece ativo.",
+        )
+
+    if provider_name == "openai":
+        if importlib.util.find_spec("openai") is None:
+            return ProviderReadiness(
+                status="sdk-missing",
+                ready=False,
+                reason="O runtime está apontado para OpenAI, mas o pacote `openai` não está instalado neste ambiente.",
+            )
+        return ProviderReadiness(
+            status="sdk-available",
+            ready=True,
+            reason="SDK da OpenAI encontrado; a integração depende apenas das credenciais e da chamada do provider.",
+        )
+
+    if provider_name == "ollama":
+        try:
+            with httpx.Client(base_url=settings.ollama_base_url, timeout=2.0) as client:
+                response = client.get("/api/tags")
+                response.raise_for_status()
+            return ProviderReadiness(
+                status="reachable",
+                ready=True,
+                reason="Servidor Ollama local acessível e pronto para receber chamadas.",
+            )
+        except Exception:
+            return ProviderReadiness(
+                status="unreachable",
+                ready=False,
+                reason="O runtime está configurado para Ollama, mas o servidor local não respondeu no endpoint esperado.",
+            )
+
+    return ProviderReadiness(
+        status="unknown-provider",
+        ready=False,
+        reason="O provider configurado não corresponde aos modos suportados pelo DiagnoFlow AI nesta fase.",
+    )
