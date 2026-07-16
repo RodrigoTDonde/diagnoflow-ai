@@ -13,6 +13,8 @@ DiagnoFlow AI é uma aplicação full stack para triagem técnica de máquinas r
   `https://diagnoflow-ai-ty4bspr76dgyzc8bsgpzje.streamlit.app/`
 - Repositório GitHub:
   `https://github.com/rodrigodondesenai/diagnoflow-ai`
+- Branch da entrega final:
+  `https://github.com/rodrigodondesenai/diagnoflow-ai/tree/fase-2`
 
 Observação: por estar publicada no plano gratuito do Streamlit Community Cloud, a aplicação pode entrar em modo de inatividade após um período sem uso. Nesse caso, basta clicar em `Yes, get this app back up!` para reativá-la.
 
@@ -180,6 +182,23 @@ Na branch `fase-2`, o projeto já demonstra os principais elementos esperados pa
 - smoke test real com `Ollama + qwen3:0.6b`;
 - trilha de auditoria com revisão humana persistida no backend;
 - frontend refletindo runtime, evidências, lacunas e histórico de revisão.
+
+## Como o professor pode avaliar a entrega final
+
+Como a entrega final depende de runtime local com `Ollama`, a forma recomendada de avaliação é:
+
+1. abrir o repositório GitHub;
+2. acessar a branch `fase-2`;
+3. consultar este `README.md` e os documentos técnicos da pasta `docs/`;
+4. assistir ao vídeo curto da demonstração final;
+5. se desejar reproduzir localmente, seguir os comandos desta seção de ativação da fase 2.
+
+Links recomendados para envio:
+
+- repositório: `https://github.com/rodrigodondesenai/diagnoflow-ai`
+- branch final: `https://github.com/rodrigodondesenai/diagnoflow-ai/tree/fase-2`
+- aplicação pública da entrega intermediária: `https://diagnoflow-ai-ty4bspr76dgyzc8bsgpzje.streamlit.app/`
+- vídeo da entrega final: adicionar o link após a gravação
 
 ## O que a entrega final já demonstra
 
@@ -364,6 +383,35 @@ Critério de aceite esperado:
 - `use_langgraph=True`
 
 Esse fluxo reduz o risco de esquecer a ativação manual do runtime local antes da demonstração.
+
+### Passo a passo mínimo para reproduzir a entrega final
+
+1. abrir a branch `fase-2` do repositório;
+2. instalar as dependências do backend:
+
+```powershell
+cd backend
+.\.venv\Scripts\python -m pip install -r requirements.txt
+```
+
+3. executar a subida da demo local:
+
+```powershell
+cd ..
+powershell -ExecutionPolicy Bypass -File .\scripts\start_phase2_demo.ps1
+```
+
+4. em outro terminal, validar o runtime:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\check_phase2_runtime.ps1
+```
+
+5. abrir:
+
+- `http://127.0.0.1:8000/`
+- `http://127.0.0.1:8000/agent/runtime`
+- `http://127.0.0.1:8000/docs`
 
 ## O que funcionou bem na fase 2
 
