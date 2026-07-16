@@ -9,7 +9,18 @@ router = APIRouter(prefix="/equipment", tags=["equipment"])
 
 @router.get("", response_model=list[schemas.EquipmentRead])
 def list_equipment(db: Session = Depends(get_db)):
-    return db.query(models.Equipment).order_by(models.Equipment.created_at.desc()).all()
+    return (
+        db.query(models.Equipment)
+        .filter(
+            models.Equipment.name != "",
+            models.Equipment.type != "",
+            models.Equipment.sector != "",
+            models.Equipment.manufacturer != "",
+            models.Equipment.model != "",
+        )
+        .order_by(models.Equipment.created_at.desc())
+        .all()
+    )
 
 
 @router.post("", response_model=schemas.EquipmentRead, status_code=status.HTTP_201_CREATED)

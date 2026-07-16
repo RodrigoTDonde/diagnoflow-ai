@@ -31,7 +31,14 @@ export function EquipmentPage() {
     event.preventDefault();
     setError(null);
     try {
-      await api.createEquipment(form);
+      await api.createEquipment({
+        ...form,
+        name: form.name.trim(),
+        type: form.type.trim(),
+        sector: form.sector.trim(),
+        manufacturer: form.manufacturer.trim(),
+        model: form.model.trim(),
+      });
       setForm(emptyForm);
       loadEquipment();
     } catch (err) {
@@ -87,11 +94,16 @@ export function EquipmentPage() {
         </div>
         <form className="form-grid" onSubmit={handleSubmit}>
           {error ? <div className="form-error">{error}</div> : null}
-          <input placeholder="Nome do equipamento" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
-          <input placeholder="Tipo" value={form.type} onChange={(e) => setForm({ ...form, type: e.target.value })} />
-          <input placeholder="Setor" value={form.sector} onChange={(e) => setForm({ ...form, sector: e.target.value })} />
-          <input placeholder="Fabricante" value={form.manufacturer} onChange={(e) => setForm({ ...form, manufacturer: e.target.value })} />
-          <input placeholder="Modelo" value={form.model} onChange={(e) => setForm({ ...form, model: e.target.value })} />
+          <input placeholder="Nome do equipamento" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required />
+          <input placeholder="Tipo" value={form.type} onChange={(e) => setForm({ ...form, type: e.target.value })} required />
+          <input placeholder="Setor" value={form.sector} onChange={(e) => setForm({ ...form, sector: e.target.value })} required />
+          <input
+            placeholder="Fabricante"
+            value={form.manufacturer}
+            onChange={(e) => setForm({ ...form, manufacturer: e.target.value })}
+            required
+          />
+          <input placeholder="Modelo" value={form.model} onChange={(e) => setForm({ ...form, model: e.target.value })} required />
           <select value={form.criticality} onChange={(e) => setForm({ ...form, criticality: e.target.value })}>
             <option value="baixa">Baixa</option>
             <option value="média">Média</option>

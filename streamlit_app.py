@@ -315,6 +315,12 @@ def find_equipment(equipment_id: int) -> dict[str, Any]:
     raise ValueError("Equipamento não encontrado.")
 
 
+def next_equipment_id() -> int:
+    if not st.session_state.equipment:
+        return 1
+    return max(item["id"] for item in st.session_state.equipment) + 1
+
+
 def latest_incident_rows(limit: int = 5) -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
     for incident in reversed(st.session_state.incidents[-limit:]):
@@ -454,19 +460,24 @@ def render_equipment() -> None:
             status = st.selectbox("Status", ["operacional", "em observação", "operando com restrição", "parado"])
             submitted = st.form_submit_button("Cadastrar equipamento", use_container_width=True)
             if submitted:
+                if not all([name.strip(), equipment_type.strip(), sector.strip(), manufacturer.strip(), model.strip()]):
+                    st.error("Preencha todos os campos do equipamento antes de cadastrar.", icon=":material/error:")
+                    return
+
                 new_equipment = {
-                    "id": len(st.session_state.equipment) + 1,
-                    "name": name,
-                    "type": equipment_type,
-                    "sector": sector,
-                    "manufacturer": manufacturer,
-                    "model": model,
+                    "id": next_equipment_id(),
+                    "name": name.strip(),
+                    "type": equipment_type.strip(),
+                    "sector": sector.strip(),
+                    "manufacturer": manufacturer.strip(),
+                    "model": model.strip(),
                     "criticality": criticality,
                     "status": status,
                     "created_at": now_iso(),
                 }
-                st.session_state.equipment.append(new_equipment)
+                st.session_state.equipment = [*st.session_state.equipment, new_equipment]
                 st.success("Equipamento cadastrado com sucesso.", icon=":material/check_circle:")
+                st.rerun()
 
 
 def render_new_incident() -> None:

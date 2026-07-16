@@ -92,6 +92,23 @@ def test_create_incident_returns_structured_diagnostic():
     assert "Runtime atual:" in diagnostic["observations"]
 
 
+def test_create_equipment_rejects_blank_required_fields():
+    payload = {
+        "name": "   ",
+        "type": "Bomba",
+        "sector": "Utilidades",
+        "manufacturer": "WEG",
+        "model": "CPX-400",
+        "criticality": "média",
+        "status": "operacional",
+    }
+
+    with TestClient(app) as client:
+        response = client.post("/equipment", json=payload)
+
+    assert response.status_code == 422
+
+
 def test_get_diagnostic_exposes_phase_two_fields():
     with TestClient(app) as client:
         dashboard = client.get("/dashboard")

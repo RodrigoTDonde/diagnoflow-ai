@@ -1,4 +1,5 @@
 from app.llm_orchestrator.guardrails import validate_structured_diagnostic
+from app.llm_orchestrator.diagnostic_service import _append_runtime_metadata
 from app.llm_orchestrator import graph as graph_module
 from app.llm_orchestrator.provider import (
     LLMInvocationContext,
@@ -136,3 +137,10 @@ def test_get_agent_runtime_label_reports_langgraph_when_available(monkeypatch):
     monkeypatch.setenv("DIAGNOFLOW_LLM_PROVIDER", "not-configured")
 
     assert graph_module.get_agent_runtime_label() == "langgraph"
+
+
+def test_append_runtime_metadata_avoids_duplicate_runtime_suffix():
+    original = "Diagnóstico estruturado. Runtime atual: langgraph | provider=ollama | model=qwen3:0.6b | mode=local-free."
+    updated = _append_runtime_metadata(original, "langgraph", "ollama", "qwen3:0.6b", "local-free")
+
+    assert updated == original

@@ -13,7 +13,20 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
 
   if (!response.ok) {
     const error = await response.json().catch(() => ({ detail: "Erro inesperado." }));
-    throw new Error(error.detail ?? "Erro inesperado.");
+    const detail = error?.detail;
+
+    if (Array.isArray(detail) && detail.length > 0) {
+      const firstIssue = detail[0];
+      const field = Array.isArray(firstIssue?.loc) ? firstIssue.loc[firstIssue.loc.length - 1] : "campo";
+      const message = firstIssue?.msg ?? "valor inválido";
+      throw new Error(`Erro no campo ${field}: ${message}.`);
+    }
+
+    if (typeof detail === "string" && detail.trim()) {
+      throw new Error(detail);
+    }
+
+    throw new Error("Erro inesperado.");
   }
 
   return response.json() as Promise<T>;

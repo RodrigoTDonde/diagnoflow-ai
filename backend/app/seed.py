@@ -5,7 +5,27 @@ from .llm_orchestrator import generate_diagnostic_payload
 from .schemas import IncidentCreate, SymptomFlags
 
 
+def cleanup_invalid_equipment(db: Session):
+    invalid_items = (
+        db.query(models.Equipment)
+        .filter(
+            (models.Equipment.name == "")
+            | (models.Equipment.type == "")
+            | (models.Equipment.sector == "")
+            | (models.Equipment.manufacturer == "")
+            | (models.Equipment.model == "")
+        )
+        .all()
+    )
+    for item in invalid_items:
+        db.delete(item)
+    if invalid_items:
+        db.commit()
+
+
 def seed_data(db: Session):
+    cleanup_invalid_equipment(db)
+
     if db.query(models.Equipment).count() > 0:
         return
 

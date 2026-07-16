@@ -59,7 +59,7 @@ export function NewIncidentPage() {
       setResult(response);
       setReviewForm({ reviewer_name: "", decision: "approved-with-monitoring", notes: "" });
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Falha ao registrar ocorrencia.");
+      setError(err instanceof Error ? err.message : "Falha ao registrar ocorrência.");
     }
   };
 
@@ -81,11 +81,12 @@ export function NewIncidentPage() {
       <div>
         <SectionHeader
           title="Nova ocorrência"
-          description="Registre sintomas operacionais e receba um diagnóstico técnico simulado baseado em regras simples."
+          description="Registre sintomas operacionais e gere um diagnóstico técnico estruturado com o runtime ativo da aplicação."
         />
         <MockNotice
-          title="Fluxo mockado para demonstração"
-          description="Ao enviar a ocorrência, o sistema gera uma resposta determinística com base nos sintomas informados. Nenhum modelo generativo participa deste processo."
+          badgeLabel="Fase 2"
+          title="Fluxo estruturado de diagnóstico"
+          description="Ao enviar a ocorrência, o backend consolida contexto, criticidade, falhas conhecidas, checklist e relatório técnico no fluxo preparado para a entrega final."
         />
         <section className="panel">
           <form className="form-grid" onSubmit={handleSubmit}>
@@ -142,7 +143,7 @@ export function NewIncidentPage() {
                 </label>
               ))}
             </div>
-            <button type="submit">Gerar diagnóstico simulado</button>
+            <button type="submit">Gerar diagnóstico técnico</button>
           </form>
         </section>
       </div>
@@ -153,7 +154,7 @@ export function NewIncidentPage() {
         </div>
         {result ? (
           <>
-            <span className="badge badge-warning">Diagnóstico simulado - nenhum LLM foi integrado nesta fase.</span>
+            <span className="badge badge-warning">Diagnóstico estruturado com runtime da fase 2.</span>
             <div className="phase2-card">
               <div className="phase2-card-head">
                 <strong>Modo da fase 2</strong>
@@ -276,7 +277,7 @@ export function NewIncidentPage() {
             </button>
           </>
         ) : (
-          <p>Preencha o formulário para gerar uma análise mockada e um relatório textual reutilizável.</p>
+          <p>Preencha o formulário para gerar uma análise estruturada e um relatório técnico reutilizável.</p>
         )}
       </section>
     </div>

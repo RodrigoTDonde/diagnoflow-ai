@@ -25,15 +25,15 @@ export function DashboardPage() {
     <div className="page">
       <SectionHeader
         title="Painel operacional"
-        description="Visão rápida da planta, com alertas críticos, ocorrências abertas e diagnósticos simulados mais recentes."
+        description="Visão rápida da planta, com alertas críticos, ocorrências abertas e diagnósticos estruturados mais recentes."
       />
 
       <section className="hero-card">
         <div>
-          <span className="badge badge-info">Entrega intermediária funcional</span>
-          <h3>Diagnóstico simulado para triagem técnica de máquinas rotativas</h3>
+          <span className="badge badge-info">Entrega final em demonstração</span>
+          <h3>Triagem técnica assistida com runtime estruturado e validação humana</h3>
         </div>
-        <p>Aplicação pronta para demonstração local, com regras mockadas e navegação completa.</p>
+        <p>Aplicação pronta para demonstração local, com integração validada no runtime da fase 2.</p>
       </section>
 
       {data.latest_incidents[0]?.diagnostic ? (
@@ -53,15 +53,16 @@ export function DashboardPage() {
       ) : null}
 
       <MockNotice
-        title="Diagnóstico simulado"
-        description="Nenhum LLM foi integrado nesta fase. As respostas exibidas nesta aplicação são geradas por regras estáticas para fins de demonstração da entrega intermediária."
+        badgeLabel="Entrega final"
+        title="Fluxo assistido com arquitetura da fase 2"
+        description="A aplicação já expõe runtime, tools, output estruturado e revisão humana para demonstrar a evolução técnica da entrega final."
       />
 
       <section className="stat-grid">
         <StatCard label="Equipamentos cadastrados" value={data.summary.total_equipment} />
         <StatCard label="Ocorrências abertas" value={data.summary.open_incidents} tone="alert" />
         <StatCard label="Alertas críticos" value={data.summary.critical_alerts} tone="danger" />
-        <StatCard label="Diagnósticos simulados" value={data.summary.simulated_diagnostics} />
+        <StatCard label="Diagnósticos estruturados" value={data.summary.simulated_diagnostics} />
       </section>
 
       <section className="panel">
@@ -84,9 +85,7 @@ export function DashboardPage() {
               {diagnostic.requires_human_validation ? (
                 <p className="incident-note">Requer validação humana antes de ação crítica.</p>
               ) : null}
-              {diagnostic.evidence_summary?.length ? (
-                <p className="incident-note">Baseado em: {diagnostic.evidence_summary[0]}</p>
-              ) : null}
+              {diagnostic.evidence_summary?.length ? <p className="incident-note">Baseado em: {diagnostic.evidence_summary[0]}</p> : null}
               <small>{new Date(incident.created_at).toLocaleString("pt-BR")}</small>
             </article>
           ))}

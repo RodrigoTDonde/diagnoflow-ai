@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 
 class EquipmentBase(BaseModel):
@@ -12,6 +12,14 @@ class EquipmentBase(BaseModel):
     model: str
     criticality: str
     status: str
+
+    @field_validator("name", "type", "sector", "manufacturer", "model", "criticality", "status")
+    @classmethod
+    def validate_non_empty_text(cls, value: str) -> str:
+        cleaned = value.strip()
+        if not cleaned:
+            raise ValueError("Field cannot be empty.")
+        return cleaned
 
 
 class EquipmentCreate(EquipmentBase):

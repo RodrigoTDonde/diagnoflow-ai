@@ -15,6 +15,16 @@ from .tools import (
 )
 
 
+def _append_runtime_metadata(observations: str, runtime_label: str, provider: str, model: str, runtime_mode: str) -> str:
+    runtime_suffix = f"Runtime atual: {runtime_label} | provider={provider} | model={model} | mode={runtime_mode}."
+    cleaned = observations.strip()
+    if runtime_suffix in cleaned:
+        return cleaned
+    if cleaned.endswith("."):
+        return f"{cleaned} {runtime_suffix}"
+    return f"{cleaned}. {runtime_suffix}"
+
+
 def _build_context(equipment: models.Equipment, incident: IncidentCreate) -> IncidentContext:
     return IncidentContext(
         equipment_id=incident.equipment_id,
@@ -105,9 +115,12 @@ def build_structured_mock_diagnostic_from_models(
 def generate_diagnostic_payload(equipment: models.Equipment, incident: IncidentCreate) -> dict:
     draft = build_structured_mock_diagnostic(equipment, incident)
     settings = get_llm_runtime_settings()
-    observations = (
-        f"{draft.observations} Runtime atual: {get_agent_runtime_label()} | "
-        f"provider={settings.provider} | model={settings.model} | mode={settings.runtime_mode}."
+    observations = _append_runtime_metadata(
+        draft.observations,
+        get_agent_runtime_label(),
+        settings.provider,
+        settings.model,
+        settings.runtime_mode,
     )
     return {
         "probable_cause": draft.probable_cause,
@@ -140,9 +153,12 @@ def serialize_diagnostic_record(
         "recommended_actions": diagnostic.recommended_actions,
         "involved_parts": diagnostic.involved_parts,
         "inspection_checklist": draft.inspection_checklist,
-        "observations": (
-            f"{diagnostic.observations} Runtime atual: {get_agent_runtime_label()} | "
-            f"provider={settings.provider} | model={settings.model} | mode={settings.runtime_mode}."
+        "observations": _append_runtime_metadata(
+            diagnostic.observations,
+            get_agent_runtime_label(),
+            settings.provider,
+            settings.model,
+            settings.runtime_mode,
         ),
         "technical_report": diagnostic.technical_report,
         "evidence_summary": draft.evidence_summary,

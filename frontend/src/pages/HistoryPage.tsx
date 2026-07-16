@@ -24,8 +24,9 @@ export function HistoryPage() {
         description="Consulte ocorrências registradas e refine a leitura com filtros por ativo, criticidade e status."
       />
       <MockNotice
-        title="Histórico alimentado por dados simulados"
-        description="As ocorrências exibidas nesta etapa servem para comprovar o fluxo funcional da aplicação antes da integração com IA generativa."
+        badgeLabel="Auditoria"
+        title="Histórico com leitura estruturada"
+        description="As ocorrências exibidas nesta fase já mostram evidências, checklist e trilha de revisão humana para sustentar a demonstração final."
       />
 
       <section className="panel">
@@ -88,8 +89,8 @@ export function HistoryPage() {
           <div className="history-summary">
             <strong>Leitura estruturada disponível</strong>
             <p>
-              Os diagnósticos já podem expor evidências consideradas, lacunas de contexto e indicação de validação humana
-              para a fase 2 da aplicação, incluindo trilha de revisão registrada por responsável técnico.
+              Os diagnósticos já podem expor evidências consideradas, lacunas de contexto e indicação de validação humana para a fase 2
+              da aplicação, incluindo trilha de revisão registrada por responsável técnico.
             </p>
           </div>
         ) : null}

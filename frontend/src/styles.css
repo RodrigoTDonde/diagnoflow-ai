@@ -51,14 +51,27 @@ textarea {
 }
 
 .sidebar {
-  padding: 32px 24px;
+  padding: 28px 22px;
   border-right: 1px solid var(--border);
   background: rgba(5, 16, 22, 0.65);
   backdrop-filter: blur(20px);
+}
+
+.sidebar-stack {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  gap: 24px;
+  min-height: calc(100vh - 56px);
+  gap: 22px;
+}
+
+.sidebar-brand {
+  display: grid;
+  gap: 10px;
+}
+
+.sidebar h1 {
+  font-size: 2.15rem;
+  line-height: 1.08;
 }
 
 .sidebar h1,
@@ -77,6 +90,12 @@ textarea {
   color: var(--text-soft);
 }
 
+.sidebar-copy {
+  margin: 0;
+  font-size: 0.98rem;
+  line-height: 1.55;
+}
+
 .eyebrow {
   text-transform: uppercase;
   letter-spacing: 0.12em;
@@ -85,14 +104,27 @@ textarea {
   margin: 0 0 8px 0;
 }
 
+.sidebar-label {
+  margin: 0 0 10px 0;
+  color: var(--text-soft);
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.sidebar-section {
+  display: grid;
+  gap: 6px;
+}
+
 .nav {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
 }
 
 .nav-link {
-  padding: 12px 14px;
+  padding: 11px 14px;
   border-radius: 14px;
   border: 1px solid transparent;
   color: var(--text-soft);
@@ -104,6 +136,23 @@ textarea {
   color: var(--text-main);
   border-color: var(--border);
   background: rgba(142, 224, 221, 0.08);
+}
+
+.sidebar-footer {
+  margin-top: auto;
+  padding: 16px;
+  border-radius: 18px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.sidebar-footer .badge {
+  margin-bottom: 12px;
+}
+
+.sidebar-footer p {
+  margin: 0;
+  line-height: 1.55;
 }
 
 .content {
@@ -272,6 +321,18 @@ textarea {
   color: var(--text-main);
 }
 
+.form-grid select,
+.filter-row select {
+  color: var(--text-main);
+  background-color: rgba(7, 20, 27, 0.92);
+}
+
+.form-grid select option,
+.filter-row select option {
+  color: #10262f;
+  background: #f3f7f8;
+}
+
 .form-grid button,
 .secondary-button {
   border: none;
@@ -285,6 +346,7 @@ textarea {
 
 .secondary-button {
   margin-top: 12px;
+  width: fit-content;
 }
 
 .checkbox-grid {
@@ -318,6 +380,9 @@ td {
   padding: 14px 8px;
   border-bottom: 1px solid var(--border);
   color: var(--text-soft);
+  vertical-align: top;
+  white-space: normal;
+  word-break: break-word;
 }
 
 th {
@@ -449,6 +514,16 @@ th {
   margin-top: 18px;
   padding-top: 18px;
   border-top: 1px solid var(--border);
+}
+
+.report-textarea {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.02);
+  padding: 16px;
+  color: var(--text-main);
+  resize: vertical;
 }
 
 .history-summary strong {

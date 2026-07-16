@@ -24,11 +24,12 @@ export function FutureIntegrationPage() {
     <div className="page">
       <SectionHeader
         title="Futura integração com IA"
-        description="Esta tela documenta como a aplicação poderá evoluir para uma camada real de IA generativa na segunda entrega."
+        description="Esta tela consolida a arquitetura atual da fase 2 e a direção de evolução contínua do agente."
       />
       <MockNotice
-        title="Sem integração real nesta etapa"
-        description="Esta página continua descritiva na entrega intermediária, mas a branch da fase 2 já expõe a configuração real do orquestrador preparado para a evolução."
+        badgeLabel="Runtime ativo"
+        title="Arquitetura validada na fase 2"
+        description="A branch atual já expõe runtime, provider, tools, prompt e guardrails para demonstrar a integração estruturada da entrega final."
       />
 
       {error ? <section className="panel">Erro ao carregar configuração do agente: {error}</section> : null}
@@ -65,10 +66,7 @@ export function FutureIntegrationPage() {
 
             <article className="insight-box insight-warning">
               <strong>Segurança operacional</strong>
-              <p>
-                Validação humana para casos de alto risco:{" "}
-                {runtime.require_human_validation_for_high_risk ? "obrigatória" : "desativada"}
-              </p>
+              <p>Validação humana para casos de alto risco: {runtime.require_human_validation_for_high_risk ? "obrigatória" : "desativada"}</p>
               <p>Esse guardrail impede recomendações críticas sem revisão técnica.</p>
             </article>
           </div>
@@ -102,12 +100,12 @@ export function FutureIntegrationPage() {
       <section className="panel prose">
         <h3>Visão de evolução</h3>
         <p>
-          A arquitetura atual já separa serviço de diagnóstico, rotas e tipos, permitindo substituir a lógica mockada por
-          uma chamada para LLM sem reescrever o restante do produto.
+          A arquitetura atual já separa serviço de diagnóstico, rotas e tipos, permitindo substituir ou evoluir providers sem reescrever o
+          restante do produto.
         </p>
         <p>
-          Na branch da fase 2, o backend já foi preparado com orquestrador, tools especializadas, structured output e
-          sinalização de validação humana para evoluir o fluxo sem desmontar a base atual.
+          Na branch da fase 2, o backend já foi preparado com orquestrador, tools especializadas, structured output e sinalização de
+          validação humana para evoluir o fluxo sem desmontar a base atual.
         </p>
 
         <h3>Tools previstas</h3>
@@ -119,14 +117,14 @@ export function FutureIntegrationPage() {
 
         <h3>Cuidados obrigatórios</h3>
         <p>
-          A segunda fase deverá incluir validação humana, trilhas de auditoria, controle de contexto, proteção de dados
-          operacionais e mitigação de alucinação antes de qualquer recomendação ser tratada como orientação técnica.
+          A segunda fase deve manter validação humana, trilhas de auditoria, controle de contexto, proteção de dados operacionais e
+          mitigação de alucinação antes de qualquer recomendação ser tratada como orientação técnica.
         </p>
 
         <h3>Limitações atuais</h3>
         <p>
-          Nenhum modelo foi integrado nesta etapa. Todas as saídas seguem determinísticas no modo padrão e existem para
-          demonstrar a transição segura entre a entrega intermediária e a entrega final.
+          O projeto mantém fallback local para desenvolvimento, mas a demonstração final já pode operar com provider real local,
+          preservando guardrails e revisão humana.
         </p>
       </section>
     </div>
