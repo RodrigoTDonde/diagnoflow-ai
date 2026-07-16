@@ -1,4 +1,5 @@
 from app.llm_orchestrator.guardrails import validate_structured_diagnostic
+from app.llm_orchestrator import graph as graph_module
 from app.llm_orchestrator.provider import (
     LLMInvocationContext,
     MockDiagnosticLLMProvider,
@@ -127,3 +128,11 @@ def test_provider_readiness_reports_unreachable_ollama(monkeypatch):
     assert readiness.status == "unreachable"
     assert readiness.ready is False
     assert "ollama serve" in readiness.activation_hint
+
+
+def test_get_agent_runtime_label_reports_langgraph_when_available(monkeypatch):
+    monkeypatch.setattr(graph_module, "StateGraph", object)
+    monkeypatch.setenv("DIAGNOFLOW_USE_LANGGRAPH", "true")
+    monkeypatch.setenv("DIAGNOFLOW_LLM_PROVIDER", "not-configured")
+
+    assert graph_module.get_agent_runtime_label() == "langgraph"

@@ -173,7 +173,7 @@ Para a consolidação técnica da fase 2, consulte também:
 
 Na branch `fase-2`, o projeto já demonstra os principais elementos esperados para a entrega final:
 
-- runtime do agente exposto em `GET /agent/runtime`;
+- runtime do agente exposto em `GET /agent/runtime`, já validado com `runtime_label=langgraph`;
 - tools locais explícitas e documentadas;
 - output estruturado validado;
 - guardrails de saída e de revisão humana;

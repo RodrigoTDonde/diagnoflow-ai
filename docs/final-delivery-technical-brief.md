@@ -18,6 +18,7 @@ Evoluir o protótipo de triagem técnica industrial da primeira entrega para uma
 - `React + Vite + TypeScript` como interface;
 - `SQLite` para persistência local;
 - `LangGraph` como orquestrador preparado para o fluxo do agente;
+- `LangGraph` instalado no ambiente do backend e validado no runtime da fase 2;
 - tools locais implementadas no backend;
 - output estruturado validado por schema;
 - trilha de auditoria de validação humana.
