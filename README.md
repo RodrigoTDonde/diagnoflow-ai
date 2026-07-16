@@ -539,3 +539,4 @@ Para a entrega final, a documentação complementar da evolução técnica está
 - [docs/final-delivery-technical-brief.md](docs/final-delivery-technical-brief.md)
 - [docs/future-llm-integration.md](docs/future-llm-integration.md)
 - [prompts/future-system-prompt.txt](prompts/future-system-prompt.txt)
+- [backend/app/llm_orchestrator/prompt.py](backend/app/llm_orchestrator/prompt.py)
