@@ -12,7 +12,9 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
   });
 
   if (!response.ok) {
-    const error = await response.json().catch(() => ({ detail: "Erro inesperado." }));
+    const error = await response
+      .json()
+      .catch(async () => ({ detail: (await response.text().catch(() => "")) || "Erro inesperado." }));
     const detail = error?.detail;
 
     if (Array.isArray(detail) && detail.length > 0) {

@@ -18,6 +18,8 @@ export function NewIncidentPage() {
   const [equipment, setEquipment] = useState<Equipment[]>([]);
   const [result, setResult] = useState<IncidentWithDiagnostic | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isReviewSubmitting, setIsReviewSubmitting] = useState(false);
   const [form, setForm] = useState({
     equipment_id: "",
     main_symptom: "",
@@ -49,6 +51,8 @@ export function NewIncidentPage() {
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setError(null);
+    setIsSubmitting(true);
+    setResult(null);
     try {
       const payload = {
         ...form,
@@ -60,6 +64,8 @@ export function NewIncidentPage() {
       setReviewForm({ reviewer_name: "", decision: "approved-with-monitoring", notes: "" });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Falha ao registrar ocorrência.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -67,12 +73,15 @@ export function NewIncidentPage() {
     event.preventDefault();
     if (!result) return;
     setError(null);
+    setIsReviewSubmitting(true);
     try {
       const diagnostic = await api.createHumanReview(result.incident.id, reviewForm);
       setResult({ ...result, diagnostic });
       setReviewForm({ reviewer_name: "", decision: "approved-with-monitoring", notes: "" });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Falha ao registrar revisão humana.");
+    } finally {
+      setIsReviewSubmitting(false);
     }
   };
 
@@ -143,7 +152,9 @@ export function NewIncidentPage() {
                 </label>
               ))}
             </div>
-            <button type="submit">Gerar diagnóstico técnico</button>
+            <button type="submit" disabled={isSubmitting}>
+              {isSubmitting ? "Gerando diagnóstico..." : "Gerar diagnóstico técnico"}
+            </button>
           </form>
         </section>
       </div>
@@ -253,7 +264,9 @@ export function NewIncidentPage() {
                   rows={4}
                   required
                 />
-                <button type="submit">Registrar revisão humana</button>
+                <button type="submit" disabled={isReviewSubmitting}>
+                  {isReviewSubmitting ? "Registrando revisão..." : "Registrar revisão humana"}
+                </button>
               </form>
             ) : null}
             {result.diagnostic.human_reviews?.length ? (
@@ -277,7 +290,11 @@ export function NewIncidentPage() {
             </button>
           </>
         ) : (
-          <p>Preencha o formulário para gerar uma análise estruturada e um relatório técnico reutilizável.</p>
+          <p>
+            {isSubmitting
+              ? "Gerando diagnóstico com o runtime ativo. Aguarde alguns segundos enquanto o backend consolida contexto, tools e saída estruturada."
+              : "Preencha o formulário para gerar uma análise estruturada e um relatório técnico reutilizável."}
+          </p>
         )}
       </section>
     </div>

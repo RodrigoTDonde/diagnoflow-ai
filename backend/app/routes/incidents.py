@@ -1,3 +1,5 @@
+import logging
+
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy import func
 from sqlalchemy.orm import Session, joinedload
@@ -7,6 +9,7 @@ from ..database import get_db
 from ..llm_orchestrator import generate_diagnostic_payload, serialize_diagnostic_record
 
 router = APIRouter(prefix="/incidents", tags=["incidents"])
+logger = logging.getLogger(__name__)
 
 
 @router.get("", response_model=list[schemas.IncidentWithDiagnostic])
@@ -56,7 +59,19 @@ def create_incident(payload: schemas.IncidentCreate, db: Session = Depends(get_d
     db.add(incident)
     db.flush()
 
-    diagnostic_data = generate_diagnostic_payload(equipment, payload)
+    try:
+        diagnostic_data = generate_diagnostic_payload(equipment, payload)
+    except Exception as exc:
+        db.rollback()
+        logger.exception("Falha ao gerar diagnostico para a ocorrencia.")
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail=(
+                "Nao foi possivel gerar o diagnostico agora. "
+                "Verifique se o runtime local esta ativo e tente novamente em alguns segundos."
+            ),
+        ) from exc
+
     diagnostic = models.Diagnostic(incident_id=incident.id, **diagnostic_data)
     db.add(diagnostic)
     db.commit()
