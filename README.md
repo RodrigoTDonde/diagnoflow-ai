@@ -322,6 +322,39 @@ $env:DIAGNOFLOW_LLM_MODEL="gpt-5-mini"
 
 Se nenhuma integração real estiver configurada, o sistema continua operando com fallback local estruturado, sem quebrar o fluxo da aplicação.
 
+### Fluxo recomendado para apresentação da fase 2
+
+Para reduzir o risco operacional da demo local com IA real, o repositório inclui dois scripts:
+
+1. Subir a demo da fase 2 em um comando:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\start_phase2_demo.ps1
+```
+
+Esse script:
+
+- verifica se o `Ollama` está instalado;
+- sobe `ollama serve` se o servidor não estiver ativo;
+- garante que o modelo `qwen3:0.6b` esteja disponível;
+- configura o runtime com `provider=ollama` e `langgraph=true`;
+- inicia o backend da fase 2 já pronto para a apresentação.
+
+2. Validar se a aplicação realmente está no modo esperado antes da banca:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\check_phase2_runtime.ps1
+```
+
+Critério de aceite esperado:
+
+- `runtime_label=langgraph`
+- `provider=ollama`
+- `provider_ready=True`
+- `use_langgraph=True`
+
+Esse fluxo reduz o risco de esquecer a ativação manual do runtime local antes da demonstração.
+
 ## Endpoints principais
 
 - `GET /`

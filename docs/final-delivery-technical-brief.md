@@ -159,12 +159,22 @@ O smoke test local da fase 2 já foi validado nesta branch:
 - servidor local respondendo em `127.0.0.1:11434`;
 - modelo `qwen3:0.6b` baixado;
 - `GET /agent/runtime` retornando:
+  - `runtime_label=langgraph`
   - `provider=ollama`
   - `provider_status=reachable`
   - `provider_ready=true`
 - `POST /incidents` retornando `201` com:
   - `runtime_provider=ollama`
   - `runtime_model=qwen3:0.6b`
+
+## Mitigação do principal risco operacional
+
+Para reduzir a dependência de passos manuais antes da apresentação, o repositório agora inclui:
+
+- `scripts/start_phase2_demo.ps1`
+- `scripts/check_phase2_runtime.ps1`
+
+Esses scripts automatizam a preparação do `Ollama`, validam a presença do modelo e confirmam se o runtime da aplicação está realmente em `ollama + langgraph` antes da demonstração.
 
 ## O que a aplicação já demonstra na fase 2
 
