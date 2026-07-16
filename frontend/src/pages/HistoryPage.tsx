@@ -52,37 +52,45 @@ export function HistoryPage() {
           </select>
         </div>
 
-        <div className="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Equipamento</th>
-                <th>Sintoma</th>
-                <th>Criticidade</th>
-                <th>Status</th>
-                <th>Prioridade</th>
-                <th>Revisão humana</th>
-                <th>Responsável</th>
-                <th>Checklist</th>
-                <th>Data</th>
-              </tr>
-            </thead>
-            <tbody>
-              {items.map(({ incident, diagnostic }) => (
-                <tr key={incident.id}>
-                  <td>{incident.equipment.name}</td>
-                  <td>{incident.main_symptom}</td>
-                  <td>{incident.equipment.criticality}</td>
-                  <td>{incident.status}</td>
-                  <td>{diagnostic.priority}</td>
-                  <td>{diagnostic.latest_review_status ?? (diagnostic.requires_human_validation ? "Pendente" : "Não necessária")}</td>
-                  <td>{diagnostic.latest_reviewed_by ?? "-"}</td>
-                  <td>{diagnostic.inspection_checklist?.length ? `${diagnostic.inspection_checklist.length} itens` : "-"}</td>
-                  <td>{new Date(incident.created_at).toLocaleDateString("pt-BR")}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <div className="record-grid">
+          {items.map(({ incident, diagnostic }) => (
+            <article key={incident.id} className="record-card">
+              <div className="record-card-head">
+                <div>
+                  <h4>{incident.equipment.name}</h4>
+                  <p>{incident.main_symptom}</p>
+                </div>
+                <span className={`badge badge-${diagnostic.priority}`}>{diagnostic.priority}</span>
+              </div>
+
+              <div className="record-meta">
+                <div>
+                  <span>Criticidade</span>
+                  <strong>{incident.equipment.criticality}</strong>
+                </div>
+                <div>
+                  <span>Status</span>
+                  <strong>{incident.status}</strong>
+                </div>
+                <div>
+                  <span>Revisão humana</span>
+                  <strong>{diagnostic.latest_review_status ?? (diagnostic.requires_human_validation ? "Pendente" : "Não necessária")}</strong>
+                </div>
+                <div>
+                  <span>Responsável</span>
+                  <strong>{diagnostic.latest_reviewed_by ?? "-"}</strong>
+                </div>
+                <div>
+                  <span>Checklist</span>
+                  <strong>{diagnostic.inspection_checklist?.length ? `${diagnostic.inspection_checklist.length} itens` : "-"}</strong>
+                </div>
+                <div>
+                  <span>Data</span>
+                  <strong>{new Date(incident.created_at).toLocaleDateString("pt-BR")}</strong>
+                </div>
+              </div>
+            </article>
+          ))}
         </div>
 
         {items.length > 0 ? (

@@ -61,29 +61,38 @@ export function EquipmentPage() {
           <div className="panel-header">
             <h3>Ativos cadastrados</h3>
           </div>
-          <div className="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Nome</th>
-                  <th>Tipo</th>
-                  <th>Setor</th>
-                  <th>Criticidade</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {items.map((item) => (
-                  <tr key={item.id}>
-                    <td>{item.name}</td>
-                    <td>{item.type}</td>
-                    <td>{item.sector}</td>
-                    <td>{item.criticality}</td>
-                    <td>{item.status}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <div className="record-grid">
+            {items.map((item) => (
+              <article key={item.id} className="record-card">
+                <div className="record-card-head">
+                  <div>
+                    <h4>{item.name}</h4>
+                    <p>{item.type}</p>
+                  </div>
+                  <span className={`badge ${item.criticality === "alta" ? "badge-high" : item.criticality === "média" ? "badge-medium" : "badge-info"}`}>
+                    {item.criticality}
+                  </span>
+                </div>
+                <div className="record-meta">
+                  <div>
+                    <span>Setor</span>
+                    <strong>{item.sector}</strong>
+                  </div>
+                  <div>
+                    <span>Fabricante</span>
+                    <strong>{item.manufacturer}</strong>
+                  </div>
+                  <div>
+                    <span>Modelo</span>
+                    <strong>{item.model}</strong>
+                  </div>
+                  <div>
+                    <span>Status</span>
+                    <strong>{item.status}</strong>
+                  </div>
+                </div>
+              </article>
+            ))}
           </div>
         </section>
       </div>
