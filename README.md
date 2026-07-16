@@ -181,6 +181,16 @@ Na branch `fase-2`, o projeto já demonstra os principais elementos esperados pa
 - trilha de auditoria com revisão humana persistida no backend;
 - frontend refletindo runtime, evidências, lacunas e histórico de revisão.
 
+## O que a entrega final já demonstra
+
+- integração local real com `Ollama`;
+- orquestração com `LangGraph`;
+- provider, modelo e parâmetros expostos em `GET /agent/runtime`;
+- tools locais documentadas e visíveis na interface;
+- output estruturado com evidências, checklist e lacunas de contexto;
+- validação humana com trilha de auditoria persistida;
+- fluxo completo em React com `Painel`, `Equipamentos`, `Nova Ocorrência`, `Histórico`, `Relatório Técnico` e `Futura IA`.
+
 ## Funcionalidades implementadas
 
 - dashboard com totais operacionais e últimas ocorrências;
@@ -355,6 +365,24 @@ Critério de aceite esperado:
 
 Esse fluxo reduz o risco de esquecer a ativação manual do runtime local antes da demonstração.
 
+## O que funcionou bem na fase 2
+
+- a base da fase 1 foi reaproveitada sem reescrever backend e frontend do zero;
+- a arquitetura com `FastAPI + LangGraph + tools locais + output estruturado` encaixou bem no domínio do projeto;
+- o endpoint `GET /agent/runtime` facilitou muito a validação e a apresentação técnica;
+- o `Ollama` com `qwen3:0.6b` permitiu demonstração local com custo zero;
+- a trilha de revisão humana deixou a entrega final mais alinhada ao tema de segurança operacional;
+- os scripts `scripts/start_phase2_demo.ps1` e `scripts/check_phase2_runtime.ps1` reduziram o risco operacional da demo.
+
+## O que não funcionou de primeira na fase 2 e como foi corrigido
+
+- o `LangGraph` estava implementado no código, mas ainda não estava instalado no ambiente; isso foi corrigido adicionando a dependência ao backend e validando o runtime com `langgraph` ativo;
+- o build do frontend continuou sensível ao `spawn EPERM` do ambiente restrito; a validação foi repetida com permissão ampliada sempre que necessário;
+- o runtime local dependia de ativação manual do `Ollama`; isso foi corrigido com scripts de preflight e checagem automática;
+- a interface React da fase 2 ainda exibia textos herdados da entrega intermediária, como “sem LLM nesta fase”; essa copy foi revisada para refletir corretamente a demonstração final;
+- o fluxo da fase 2 havia perdido a tela dedicada de `Relatório Técnico`; a tela foi restaurada no frontend;
+- o cadastro de equipamentos permitia registros inválidos e podia poluir selects e tabelas; o frontend passou a exigir campos obrigatórios e o backend passou a validar e limpar registros quebrados.
+
 ## Endpoints principais
 
 - `GET /`
@@ -414,6 +442,12 @@ O uso do agente de codificação está documentado em [docs/agent-prompts.md](do
 - correções aplicadas;
 - comandos executados;
 - decisões tomadas para estabilizar a entrega.
+
+Para a entrega final, a documentação complementar da evolução técnica está em:
+
+- [docs/agent-prompts.md](docs/agent-prompts.md)
+- [docs/final-delivery-technical-brief.md](docs/final-delivery-technical-brief.md)
+- [docs/final-delivery-implementation-plan.md](docs/final-delivery-implementation-plan.md)
 
 ## O que funcionou bem com o Codex
 
