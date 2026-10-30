@@ -1,5 +1,16 @@
 # DiagnoFlow AI
 
+## Portfólio de IA
+
+Trabalho acadêmico da pós-graduação, preservado no portfólio de [Rodrigo Teles Dondé](https://github.com/RodrigoTDonde).
+
+**Competências:** FastAPI, React, TypeScript, SQLite, Streamlit e orquestração de agentes na branch fase-2.
+
+**Versões:** `main` preserva a primeira entrega; a branch [`fase-2`](https://github.com/RodrigoTDonde/diagnoflow-ai/tree/fase-2) contém a evolução para agentes. A migração não altera a configuração dos deploys existentes.
+
+**Origem acadêmica:** [rodrigodondesenai/diagnoflow-ai](https://github.com/rodrigodondesenai/diagnoflow-ai). [Registro da migração e créditos](PORTFOLIO.md).
+
+
 DiagnoFlow AI é uma aplicação full stack para triagem técnica de máquinas rotativas industriais. Na entrega intermediária, a proposta foi demonstrar uma jornada funcional de registro de sintomas, organização de ocorrências e geração de diagnóstico técnico mockado, sem integrar nenhum LLM real ao produto publicado.
 
 ## Situação das entregas no repositório
@@ -12,9 +23,9 @@ DiagnoFlow AI é uma aplicação full stack para triagem técnica de máquinas r
 - Endpoint público da entrega intermediária:
   `https://diagnoflow-ai-ty4bspr76dgyzc8bsgpzje.streamlit.app/`
 - Repositório GitHub:
-  `https://github.com/rodrigodondesenai/diagnoflow-ai`
+  `https://github.com/RodrigoTDonde/diagnoflow-ai`
 - Branch da entrega final:
-  `https://github.com/rodrigodondesenai/diagnoflow-ai/tree/fase-2`
+  `https://github.com/RodrigoTDonde/diagnoflow-ai/tree/fase-2`
 
 Observação: por estar publicada no plano gratuito do Streamlit Community Cloud, a aplicação pode entrar em modo de inatividade após um período sem uso. Nesse caso, basta clicar em `Yes, get this app back up!` para reativá-la.
 
@@ -195,8 +206,8 @@ Como a entrega final depende de runtime local com `Ollama`, a forma recomendada 
 
 Links recomendados para envio:
 
-- repositório: `https://github.com/rodrigodondesenai/diagnoflow-ai`
-- branch final: `https://github.com/rodrigodondesenai/diagnoflow-ai/tree/fase-2`
+- repositório: `https://github.com/RodrigoTDonde/diagnoflow-ai`
+- branch final: `https://github.com/RodrigoTDonde/diagnoflow-ai/tree/fase-2`
 - aplicação pública da entrega intermediária: `https://diagnoflow-ai-ty4bspr76dgyzc8bsgpzje.streamlit.app/`
 - vídeo da entrega final: adicionar o link após a gravação
 
