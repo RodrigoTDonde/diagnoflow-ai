@@ -1,5 +1,16 @@
 # DiagnoFlow AI
 
+## Portfólio de IA
+
+Trabalho acadêmico da pós-graduação, preservado no portfólio de [Rodrigo Teles Dondé](https://github.com/RodrigoTDonde).
+
+**Competências:** FastAPI, React, TypeScript, SQLite, Streamlit e orquestração de agentes na branch fase-2.
+
+**Versões:** `main` preserva a primeira entrega; a branch [`fase-2`](https://github.com/RodrigoTDonde/diagnoflow-ai/tree/fase-2) contém a evolução para agentes. A migração não altera a configuração dos deploys existentes.
+
+**Origem acadêmica:** [rodrigodondesenai/diagnoflow-ai](https://github.com/rodrigodondesenai/diagnoflow-ai). [Registro da migração e créditos](PORTFOLIO.md).
+
+
 DiagnoFlow AI é uma aplicação full stack para triagem técnica simulada de máquinas rotativas industriais. A proposta da primeira entrega da disciplina é demonstrar uma jornada funcional de registro de sintomas, organização de ocorrências e geração de diagnóstico técnico mockado, sem integrar nenhum LLM nesta fase.
 
 ## Acesso rápido
@@ -7,7 +18,7 @@ DiagnoFlow AI é uma aplicação full stack para triagem técnica simulada de m�
 - Endpoint público da entrega intermediária:
   `https://diagnoflow-ai-ty4bspr76dgyzc8bsgpzje.streamlit.app/`
 - Repositório GitHub:
-  `https://github.com/rodrigodondesenai/diagnoflow-ai`
+  `https://github.com/RodrigoTDonde/diagnoflow-ai`
 
 Observação: por estar publicada no plano gratuito do Streamlit Community Cloud, a aplicação pode entrar em modo de inatividade após um período sem uso. Nesse caso, basta clicar em `Yes, get this app back up!` para reativá-la.
 
